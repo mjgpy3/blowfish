@@ -1,0 +1,59 @@
+section_helpers:
+ident        -> [a-zA-Z0-9][a-zA-Z_]*
+char_inside  -> .|\\.
+holder_ident -> [lsd]
+
+section_tokens:
+identifier  -> {ident}
+[save_text]
+
+integer      -> [0-9]+
+[save_text]
+
+float        -> [0-9]*\.[0-9]+
+[save_text]
+
+char         -> '\''{char_inside}'\''
+
+white_space  -> [\t ]+
+[ignore]
+
+op_plus      -> '+'
+op_minus     -> '-'
+op_times     -> '*'
+op_divide    -> '/'
+op_modulus   -> '%'
+op_assign    -> ':='
+
+line_ending  -> \\n
+
+op_eq        -> '='
+op_lt        -> '<'
+op_leq       -> '<='
+op_gt        -> '>'
+op_geq       -> '>='
+
+kwd_module   -> 'module'
+kwd_class    -> 'class'
+kwd_meth     -> 'meth'
+kwd_if       -> 'if'
+kwd_elseif   -> 'elseif'
+kwd_else     -> 'else'
+kwd_is       -> 'is'
+kwd_isnow    -> 'is_now'
+kwd_not      -> 'not'
+kwd_forms    -> 'forms'
+kwd_are      -> 'are'
+kwd_or       -> 'or'
+kwd_and      -> 'and'
+kwd_for      -> 'for'
+kwd_enum     -> 'enum'
+
+holder_begin -> {holder_ident}'{'
+holder_end   -> '}'
+
+block_begin  -> '['
+block_end    -> ']'
+
+paren_begin  -> '('
+paren_end    -> ')'
