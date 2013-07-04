@@ -6,7 +6,6 @@
 """
 
 from sys import argv
-import re
 
 PARSE_MODES = {
     "none": 0,
@@ -92,7 +91,7 @@ class TokenFileParser(object):
     def get_options(self, line):
         return_line = line[1:-1]
 
-        return [i.strip() for i in return_line.split(',')]
+        return [o.strip() for o in return_line.split(',') if o in OPTIONS]
 
     def get_definition_parts(self, line):
         parts = line.split("->")
@@ -119,4 +118,5 @@ if __name__ == '__main__':
     parser = TokenFileParser()
     parser.parse(argv[1])
 
-    print parser.tokens
+    for token in parser.tokens:
+        print token.name, '->', token.match
