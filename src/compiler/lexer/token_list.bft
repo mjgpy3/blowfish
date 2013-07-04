@@ -7,6 +7,9 @@ section_tokens:
 identifier  -> {ident}
 [save_text]
 
+param_ident -> {ident}':'
+[save_text]
+
 integer      -> [0-9]+
 [save_text]
 
@@ -14,6 +17,8 @@ float        -> [0-9]*\.[0-9]+
 [save_text]
 
 char         -> '\''{char_inside}'\''
+
+string       -> '"'.'"'
 
 white_space  -> [\t ]+
 [ignore]
@@ -33,6 +38,8 @@ op_leq       -> '<='
 op_gt        -> '>'
 op_geq       -> '>='
 
+pipe         -> '|'
+
 kwd_module   -> 'module'
 kwd_class    -> 'class'
 kwd_meth     -> 'meth'
@@ -48,6 +55,8 @@ kwd_or       -> 'or'
 kwd_and      -> 'and'
 kwd_for      -> 'for'
 kwd_enum     -> 'enum'
+kwd_require  -> 'require'
+kwd_import   -> 'import'
 
 holder_begin -> {holder_ident}'{'
 holder_end   -> '}'
