@@ -24,6 +24,9 @@ class TestBflexer(unittest.TestCase):
         self.assertEqual("identifier", single_token.name)
         self.assertEqual("Something", single_token.match)
 
+    def test_parser_strips_single_quotes_unless_they_are_escaped(self):
+        pass
+
 def main():
     unittest.main()
 

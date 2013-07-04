@@ -67,7 +67,6 @@ class TokenFileParser(object):
     
             elif trim_line in PARSE_MODES:
                 current_mode = PARSE_MODES[trim_line]
-                print "In mode", trim_line
 
             elif current_mode == PARSE_MODES["section_helpers:"]:
                 if self.is_definition_line(trim_line):
@@ -79,6 +78,7 @@ class TokenFileParser(object):
                 if self.is_definition_line(trim_line):
                     name, match = self.get_definition_parts(trim_line)
                     match = self.replace_any_helpers(match)
+                    match = self.remove_single_quotes(match)
 
                     self.tokens.append(Token(name, match))
 
@@ -86,7 +86,10 @@ class TokenFileParser(object):
                     options = self.get_options(trim_line)
 
                     self.tokens[-1].options = options
-        print self.helpers
+
+    def remove_single_quotes(self, value):
+        return_line = value
+        return return_line.replace("'", '')
 
     def get_options(self, line):
         return_line = line[1:-1]
