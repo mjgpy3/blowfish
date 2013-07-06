@@ -32,6 +32,14 @@ class TestBflexergen(unittest.TestCase):
         self.assertEqual("identifier", single_token.name)
         self.assertEqual("Some\\'thing", single_token.match)
 
+    def test_parser_doesnt_need_double_quotes_to_be_escaped(self):
+        self.parser.parse("test_files/double_quote.bft")
+
+        single_token = self.parser.tokens[0]
+
+        self.assertEqual("identifier", single_token.name)
+        self.assertEqual('Some"thing', single_token.match)
+
 def main():
     unittest.main()
 
