@@ -79,6 +79,7 @@ class TokenFileParser(object):
                     name, match = self.get_definition_parts(trim_line)
                     match = self.replace_any_helpers(match)
                     match = self.remove_single_quotes(match)
+                    match = match.replace('"', '\\"')
 
                     self.tokens.append(Token(name, match))
 
@@ -114,6 +115,46 @@ class TokenFileParser(object):
 
         return return_line
 
+class TokensToCPlusPlus(object):
+    def write_tokens_to_file(self, tokens, definition_name, file_name):
+        with open(file_name, 'r') as file_reader:
+            text = file_reader.read()
+
+        resultant_lines = []
+        in_section = False
+
+        for line in text.split('\n'):
+            if not in_section:
+                resultant_lines.append(line)
+
+            if "#ifndef " + definition_name in line:
+                resultant_lines += self.get_token_structure_code(definition_name, tokens)
+                in_section = True
+
+            if "#endif" in line:
+                in_section = False
+                resultant_lines.append(line)
+
+        with open(file_name, 'w') as file_stream:
+            file_stream.write("\n".join(resultant_lines))
+
+    def get_token_structure_code(self, definition_name, tokens):
+        return [ self.get_token_section_definition(definition_name),
+                 self.get_token_struct() ]
+
+    def get_token_section_definition(self, definition_name):
+        return '#define ' + definition_name
+
+    def get_token_struct(self):
+        return """typedef struct
+{
+\tchar* name;
+\tchar* match;
+\tbool isKeyword;
+\tbool savesText;
+\tbool isIgnored;
+} Token;"""
+
 if __name__ == '__main__':
     validate_args()
     print "Input:", argv[1], "\nOutput:", argv[2]
@@ -121,5 +162,6 @@ if __name__ == '__main__':
     parser = TokenFileParser()
     parser.parse(argv[1])
 
-    for token in parser.tokens:
-        print token.name, '->', token.match
+    writer = TokensToCPlusPlus()
+
+    writer.write_tokens_to_file(parser.tokens, "BLOWFISH_TOKENS", argv[2])
