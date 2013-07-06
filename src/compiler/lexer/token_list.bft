@@ -41,22 +41,39 @@ op_geq       -> '>='
 pipe         -> '|'
 
 kwd_module   -> 'module'
+[keyword]
 kwd_class    -> 'class'
+[keyword]
 kwd_meth     -> 'meth'
+[keyword]
 kwd_if       -> 'if'
+[keyword]
 kwd_elseif   -> 'elseif'
+[keyword]
 kwd_else     -> 'else'
+[keyword]
 kwd_is       -> 'is'
+[keyword]
 kwd_isnow    -> 'is_now'
+[keyword]
 kwd_not      -> 'not'
+[keyword]
 kwd_forms    -> 'forms'
+[keyword]
 kwd_are      -> 'are'
+[keyword]
 kwd_or       -> 'or'
+[keyword]
 kwd_and      -> 'and'
+[keyword]
 kwd_for      -> 'for'
+[keyword]
 kwd_enum     -> 'enum'
+[keyword]
 kwd_require  -> 'require'
+[keyword]
 kwd_import   -> 'import'
+[keyword]
 
 holder_begin -> {holder_ident}'{'
 holder_end   -> '}'

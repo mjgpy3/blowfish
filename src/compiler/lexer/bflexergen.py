@@ -15,7 +15,8 @@ PARSE_MODES = {
 
 OPTIONS = [
     "save_text",
-    "ignore"
+    "ignore",
+    "keyword"
 ]
 
 class Token(object):
@@ -116,6 +117,11 @@ class TokenFileParser(object):
         return return_line
 
 class TokensToCPlusPlus(object):
+    def __init__(self):
+        self.struct_name = "Tokens"
+        self.array_name = "AllTokens"
+        self.array_size_name = "NUM_TOKENS"
+
     def write_tokens_to_file(self, tokens, definition_name, file_name):
         with open(file_name, 'r') as file_reader:
             text = file_reader.read()
@@ -139,11 +145,34 @@ class TokensToCPlusPlus(object):
             file_stream.write("\n".join(resultant_lines))
 
     def get_token_structure_code(self, definition_name, tokens):
-        return [ self.get_token_section_definition(definition_name),
-                 self.get_token_struct() ]
+        return [ self.get_token_section_definition(definition_name) + '\n',
+                 self.get_token_struct() + '\n',
+                 self.get_number_of_tokens_constant(tokens) + '\n',
+                 self.get_token_array_declaration(tokens) + '\n',
+                 self.get_token_array_filling_statements(tokens) + '\n']
+
+    def get_token_array_filling_statements(self, tokens):
+        result = ""
+
+        for i, token in enumerate(tokens):
+            result += self.assign_value_to_array_attribute(token.name, 
+
+        return result
+
+    def assign_value_to_array_attribute(value, attr, index):
+        return (self.array_name + "[" + str(index) + "]." +
+                attr + " = " + value + ";");
+
+    def get_token_array_declaration(self, tokens):
+        return (self.struct_name + " " + 
+                self.array_name +"[" + str(len(tokens)) + "];")
 
     def get_token_section_definition(self, definition_name):
         return '#define ' + definition_name
+
+    def get_number_of_tokens_constant(self, tokens):
+        return ('const int ' + self.array_size_name +
+                ' = ' + str(len(tokens)) + ';')
 
     def get_token_struct(self):
         return """typedef struct
