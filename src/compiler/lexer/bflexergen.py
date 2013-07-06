@@ -88,8 +88,8 @@ class TokenFileParser(object):
                     self.tokens[-1].options = options
 
     def remove_single_quotes(self, value):
-        return_line = value
-        return return_line.replace("'", '')
+        parts = [part.replace("'", "") for part in value.split("\\'")]
+        return "\\'".join(parts)
 
     def get_options(self, line):
         return_line = line[1:-1]
