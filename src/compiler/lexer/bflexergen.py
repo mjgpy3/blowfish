@@ -81,6 +81,7 @@ class TokenFileParser(object):
                     match = self.replace_any_helpers(match)
                     match = self.remove_single_quotes(match)
                     match = match.replace('"', '\\"')
+                    match = match.replace('\.', '\\\\.')
 
                     self.tokens.append(Token(name, match))
 
@@ -118,9 +119,10 @@ class TokenFileParser(object):
 
 class TokensToCPlusPlus(object):
     def __init__(self):
-        self.struct_name = "Tokens"
+        self.struct_name = "Token"
         self.array_name = "AllTokens"
         self.array_size_name = "NUM_TOKENS"
+        self.enum_name = "TokenName"
 
     def write_tokens_to_file(self, tokens, definition_name, file_name):
         with open(file_name, 'r') as file_reader:
@@ -146,6 +148,7 @@ class TokensToCPlusPlus(object):
 
     def get_token_structure_code(self, definition_name, tokens):
         return [ self.get_token_section_definition(definition_name) + '\n',
+                 self.get_token_enum(tokens) + '\n',
                  self.get_token_struct() + '\n',
                  self.get_number_of_tokens_constant(tokens) + '\n',
                  self.get_token_array_declaration(tokens) + '\n',
@@ -153,19 +156,45 @@ class TokensToCPlusPlus(object):
 
     def get_token_array_filling_statements(self, tokens):
         result = ""
+        tab = "\t"
+
+        result += "void setup_tokens()\n{\n"
 
         for i, token in enumerate(tokens):
-            result += self.assign_value_to_array_attribute(token.name, 
+            result += tab+self.assign_value_to_array_attribute('t_'+token.name, "type", i)
+            result += tab+self.assign_value_to_array_attribute('"'+token.match+'"', "match", i)
+
+            result += tab+self.first_part_of_assign("isKeyword", i) +\
+                      self.cpp_contains("keyword", token.options) + ';\n'
+            result += tab+self.first_part_of_assign("savesText", i) +\
+                      self.cpp_contains("save_text", token.options) + ';\n'
+            result += tab+self.first_part_of_assign("isIgnored", i) +\
+                      self.cpp_contains("ignore", token.options) + ';\n'
+
+            result += "\n"
+
+        result += "}"
 
         return result
 
-    def assign_value_to_array_attribute(value, attr, index):
+    def cpp_contains(self, thing, items):
+        if thing in items:
+            return "true"
+        return "false"
+
+    def assign_value_to_array_attribute(self, value, attr, index):
+        return (self.first_part_of_assign(attr, index) + value + ";\n")
+
+    def first_part_of_assign(self, attr, index):
         return (self.array_name + "[" + str(index) + "]." +
-                attr + " = " + value + ";");
+                attr + " = ")
+
+    def get_token_enum(self, tokens):
+        return "enum " + self.enum_name + " \n{\n" + ",\n".join("\tt_" + i.name for i in tokens) + "\n};"
 
     def get_token_array_declaration(self, tokens):
-        return (self.struct_name + " " + 
-                self.array_name +"[" + str(len(tokens)) + "];")
+        return (self.struct_name + " * " + self.array_name + " = new " + 
+               self.struct_name + "[" + self.array_size_name + "];")
 
     def get_token_section_definition(self, definition_name):
         return '#define ' + definition_name
@@ -175,14 +204,14 @@ class TokensToCPlusPlus(object):
                 ' = ' + str(len(tokens)) + ';')
 
     def get_token_struct(self):
-        return """typedef struct
+        return "struct " + self.struct_name + """ 
 {
-\tchar* name;
-\tchar* match;
+\t%s type;
+\tstring match;
 \tbool isKeyword;
 \tbool savesText;
 \tbool isIgnored;
-} Token;"""
+}; """ % self.enum_name
 
 if __name__ == '__main__':
     validate_args()
