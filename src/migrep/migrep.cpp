@@ -7,5 +7,9 @@ using namespace std;
 
 bool isMatch(string text, string pattern)
 {
-	return true;
+	if (text.compare(pattern) == 0)
+	{
+		return true;
+	}
+	return false;
 }

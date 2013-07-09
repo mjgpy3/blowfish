@@ -24,8 +24,29 @@ void MiTester::assertEqual(string a, string b)
 	}
 }
 
+void MiTester::assertFalse(bool a)
+{
+	MiTester::assertTrue(!a);
+}
+
+void MiTester::assertTrue(bool a)
+{
+	numTestsRun += 1;
+
+	if (a)
+	{
+		cout << ".";
+	}
+	else
+	{
+		cout << "E";
+		numFails += 1;
+	}
+}
+
 void MiTester::printResults()
 {
+        cout << endl;
 	cout << "Tests run: " << numTestsRun << endl;
 	cout << "Success:   " << numTestsRun - numFails << endl;
         cout << "Fail:      " << numFails << endl;
