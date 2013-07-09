@@ -4,6 +4,10 @@
 #include <string>
 using namespace std;
 
-bool isMatch(string text, string pattern);
+class MiGrep
+{
+public:
+	bool isMatch(string text, string pattern);
+};
 
 #endif

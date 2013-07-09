@@ -8,9 +8,9 @@ class MiTester
 {
 public:
 	MiTester();
-	void assertEqual(string a, string b);
-        void assertTrue(bool a);
-	void assertFalse(bool a);
+	void assertEqual(string a, string b, string message);
+        void assertTrue(bool a, string message);
+	void assertFalse(bool a, string message);
         void printResults();
 private:
 	int numTestsRun;

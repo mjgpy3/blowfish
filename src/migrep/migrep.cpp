@@ -5,11 +5,22 @@
 using namespace std;
 
 
-bool isMatch(string text, string pattern)
+bool MiGrep::isMatch(string text, string pattern)
 {
-	if (text.compare(pattern) == 0)
+	// TODO: Keep current, look for current and next
+
+	if (pattern.compare(".+") == 0)
 	{
 		return true;
 	}
-	return false;
+
+	for (int i = 0; i < text.length(); i += 1)
+	{
+		if (!(pattern[i] == text[i] || pattern[i] == '.'))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

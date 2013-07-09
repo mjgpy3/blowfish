@@ -9,7 +9,7 @@ MiTester::MiTester()
 	numFails = 0;
 }
 
-void MiTester::assertEqual(string a, string b)
+void MiTester::assertEqual(string a, string b, string message)
 {
 	numTestsRun += 1;
 
@@ -20,16 +20,18 @@ void MiTester::assertEqual(string a, string b)
 	else
 	{
 		cout << "E";
+                cout << endl;
+		cout << message << endl;
 		numFails += 1;
 	}
 }
 
-void MiTester::assertFalse(bool a)
+void MiTester::assertFalse(bool a, string message)
 {
-	MiTester::assertTrue(!a);
+	MiTester::assertTrue(!a, message);
 }
 
-void MiTester::assertTrue(bool a)
+void MiTester::assertTrue(bool a, string message)
 {
 	numTestsRun += 1;
 
@@ -40,6 +42,8 @@ void MiTester::assertTrue(bool a)
 	else
 	{
 		cout << "E";
+		cout << endl;
+		cout << message << endl;
 		numFails += 1;
 	}
 }
