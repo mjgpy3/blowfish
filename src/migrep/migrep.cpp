@@ -7,5 +7,5 @@ using namespace std;
 
 bool isMatch(string text, string pattern)
 {
-    return true;
+	return true;
 }
