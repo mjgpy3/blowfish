@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <cctype>
 #include "migrep.h"
 using namespace std;
 
@@ -115,15 +116,12 @@ bool isNumericCommaOrSpace(char me)
 
 int charsIntValue(char digit)
 {
-	result = 0;
-	if (digit == '1') result = 1;
-	if (digit == '2') result = 2;
-	if (digit == '3') result = 3;
+	return int(digit) - 48;
 }
 
-int MiAtoi(string thing)
+int MiAToI(string thing)
 {
-	result = 0;
+	int result = 0;
 	for (int i = 0; i < thing.length(); i += 1)
 	{
 		result = result*10 +  charsIntValue(thing[i]);
@@ -133,38 +131,34 @@ int MiAtoi(string thing)
 
 int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
 {
-	int numCharsParsed = 0,
-	    minVal = 0,
-	    maxVal = 0;
-	CardinalityType rest= numeric;
-	string buffer;
-	bool firstNumber = true;
+	int * ptr;
+	int min = 0, max = 0, i;
+	ptr = &min;
+	string b;
 
-	for (int i = 0; i < fromMe.length(); i += 1)
+	for (i = 1; i <= fromMe.length(); i += 1)
 	{
-		numCharsParsed += 1;
-		if (fromMe[i] == ' ')
+		if (isdigit(fromMe[i]))
 		{
-			continue;
+			b.push_back(fromMe[i]);
 		}
-		if (!isNumericCommaOrSpace(fromMe[i]))
+		else if (fromMe[i] == ',')
 		{
-			MiGrepError(string("Invalid character in cardinality range: \"") + fromMe + string("\""));
+			*ptr = MiAToI(b);
+			b = "";
+			ptr = &max;
 		}
-		if (firstNumber)
+		else if (fromMe[i] == '}')
 		{
-			if (fromMe[i] == ',')
-			{
-				firstNumber = false;
-			}
-			else
-			{
-				buffer.push_back(fromMe[i]);
-			}
+			*ptr = MiAToI(b);
+		}
+		else if (fromMe[i] != ' ')
+		{
+			MiGrepError("Cardinality block not formed properly");
 		}
 	}
-	miChar.setCardinality(rest, minVal, maxVal);
-	return numCharsParsed;
+	miChar.setCardinality(numeric, min, max);
+	return i;
 }
 
 MiGrepChar MiGrepCharFactory::buildNext()
@@ -175,67 +169,45 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	{
 		char currentChar = buildFrom[i];
 
-		if (isEngineToken(currentChar))
+		// The next spot exists and is a literal
+		if (locationExists(buildFrom, i+1) && !isEngineToken(buildFrom[i+1]))
 		{
-			if (currentChar == '}' || currentChar == ']' ||
-			    currentChar == '*' || currentChar == '+' ||
-			    currentChar == '|' || currentChar == ')')
-			{
-				MiGrepError(string("The character: '") + 
-					currentChar + string("' is incorrectly formatted") + 
-					string(" in \"") + buildFrom + string("\""));
-			}
-			else if (currentChar == '{')
-			{
-				// Begin numeric cardinality range
-			}
-			else if (currentChar == '[')
-			{
-				// Begin character range(s)
-			}
-			else if (currentChar == '.')
-			{
-				// Matches any character
-			}
-			else if (currentChar == '(')
-			{
-				// Begin some section of expression
-			}
-			else if (currentChar == '\\')
-			{
-				// The next thing is a literal, unless it's some special escape char
-			}
+			result.addRange(Range(currentChar, currentChar));
+			result.setCardinality(numeric, 1, 1);
+			buildFrom = buildFrom.substr(i+1);
+			break;
 		}
-		else
+		// The next spot exists and is '+'
+		else if (nextCharacterIs(buildFrom, i, '+'))
 		{
-			if (locationExists(buildFrom, i+1) && !isEngineToken(buildFrom[i+1]))
-			{
-				result.addRange(Range(currentChar, currentChar));
-				result.setCardinality(numeric, 1, 1);
-				buildFrom = buildFrom.substr(i+1);
-                                break;
-			}
-			else if (nextCharacterIs(buildFrom, i, '+'))
-			{
-				result.addRange(Range(currentChar, currentChar));
-				result.setCardinality(infinite, 1);
-				buildFrom = buildFrom.substr(i+2);
-				break;
-			}
-			else if (nextCharacterIs(buildFrom, i, '*'))
-			{
-				result.addRange(Range(currentChar, currentChar));
-				result.setCardinality(infinite);
-				buildFrom = buildFrom.substr(i+2);
-				break;
-			}
-			else if (i == buildFrom.length() - 1)
-			{
-				result.addRange(Range(currentChar, currentChar));
-				result.setCardinality(numeric, 1, 1);
-				buildFrom = "";
-				break;
-			}
+			result.addRange(Range(currentChar, currentChar));
+			result.setCardinality(infinite, 1);
+			buildFrom = buildFrom.substr(i+2);
+			break;
+		}
+		// The next spot exists and is '*'
+		else if (nextCharacterIs(buildFrom, i, '*'))
+		{
+			result.addRange(Range(currentChar, currentChar));
+			result.setCardinality(infinite);
+			buildFrom = buildFrom.substr(i+2);
+			break;
+		}
+		// The next spot exists and is '{'
+		else if (nextCharacterIs(buildFrom, i, '{'))
+		{
+			result.addRange(Range(currentChar, currentChar));
+			buildFrom = 
+				buildFrom.substr(parseCardinalityToMiGrepChar(result, buildFrom.substr(i)));
+			break;
+		}
+		// If at last character and is literal
+		else if (i == buildFrom.length()-1 && !isEngineToken(currentChar))
+		{
+			result.addRange(Range(currentChar, currentChar));
+			result.setCardinality(numeric, 1, 1);
+			buildFrom = "";
+			break;
 		}
 	}
 
