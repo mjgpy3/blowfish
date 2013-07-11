@@ -101,7 +101,7 @@ class TokenFileParser(object):
 
     def get_definition_parts(self, line):
         parts = line.split("->")
-        return (parts[0].strip(), parts[1].strip())
+        return (parts[0].strip(), "->".join(parts[1:]).strip())
 
     def is_definition_line(self, line):
         return "->" in line

@@ -40,6 +40,18 @@ class TestBflexergen(unittest.TestCase):
         self.assertEqual("identifier", single_token.name)
         self.assertEqual('Some\\"thing', single_token.match)
 
+    def test_get_definition_parts_splits_on_the_arrow_and_other_arrows_are_not_affected(self):
+        answer = self.parser.get_definition_parts("something -> dsaf-> + 5 ->7  ")
+        expected = ("something", "dsaf-> + 5 ->7")
+
+        self.assertEqual(expected, answer)
+
+    def test_get_definition_parts_works_for_the_odd_case_of_just_an_arrow(self):
+        answer = self.parser.get_definition_parts("arrow -> '->'")
+        expected = ("arrow", "'->'")
+
+        self.assertEqual(expected, answer)
+
 def main():
     unittest.main()
 
