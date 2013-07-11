@@ -91,7 +91,7 @@ void MiGrepChar::setCardinality(CardinalityType c, int min = 0, int max = 0)
 	card.mustMatch = min;
 }
 
-void miGrepError(string message)
+void MiGrepError(string message)
 {
 	cout << "MiGrep Error:" << endl;
 	cout << message << endl;
@@ -113,6 +113,60 @@ bool isNumericCommaOrSpace(char me)
 	return false;
 }
 
+int charsIntValue(char digit)
+{
+	result = 0;
+	if (digit == '1') result = 1;
+	if (digit == '2') result = 2;
+	if (digit == '3') result = 3;
+}
+
+int MiAtoi(string thing)
+{
+	result = 0;
+	for (int i = 0; i < thing.length(); i += 1)
+	{
+		result = result*10 +  charsIntValue(thing[i]);
+	}
+	return result;
+}
+
+int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
+{
+	int numCharsParsed = 0,
+	    minVal = 0,
+	    maxVal = 0;
+	CardinalityType rest= numeric;
+	string buffer;
+	bool firstNumber = true;
+
+	for (int i = 0; i < fromMe.length(); i += 1)
+	{
+		numCharsParsed += 1;
+		if (fromMe[i] == ' ')
+		{
+			continue;
+		}
+		if (!isNumericCommaOrSpace(fromMe[i]))
+		{
+			MiGrepError(string("Invalid character in cardinality range: \"") + fromMe + string("\""));
+		}
+		if (firstNumber)
+		{
+			if (fromMe[i] == ',')
+			{
+				firstNumber = false;
+			}
+			else
+			{
+				buffer.push_back(fromMe[i]);
+			}
+		}
+	}
+	miChar.setCardinality(rest, minVal, maxVal);
+	return numCharsParsed;
+}
+
 MiGrepChar MiGrepCharFactory::buildNext()
 {
 	MiGrepChar result = MiGrepChar();
@@ -127,7 +181,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 			    currentChar == '*' || currentChar == '+' ||
 			    currentChar == '|' || currentChar == ')')
 			{
-				miGrepError(string("The character: '") + 
+				MiGrepError(string("The character: '") + 
 					currentChar + string("' is incorrectly formatted") + 
 					string(" in \"") + buildFrom + string("\""));
 			}
