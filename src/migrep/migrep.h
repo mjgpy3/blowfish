@@ -24,6 +24,7 @@ class Range
 public:
 	Range(char b, char e);
 	bool includes(char me);
+        void print();
 private:
 	char begin;
 	char end;
@@ -36,6 +37,7 @@ public:
 	void addRange(Range r);
 	void setCardinality(CardinalityType c, int min, int max);
 	bool matches(char toMatch);
+	void print();
 private:
 	vector<Range> ranges;
         Cardinality card;

@@ -18,6 +18,14 @@ int main()
 	tester.assertTrue(b.matches('b'), "The second of two literals should be easily matchable");
 	tester.assertFalse(a.matches('b') || b.matches('a'), "The literals should only match their values");
 
+	MiGrepCharFactory fac2 = MiGrepCharFactory(string("\\[\\n\\]"));
+
+	MiGrepChar a1 = fac2.buildNext();
+	tester.assertTrue(a1.matches('['), "Escaped special chars worked like expected");
+
+	MiGrepChar a2 = fac2.buildNext();
+	tester.assertTrue(a2.matches('\n'), "The escaped newline character can be matched too");
+
 /*
         MiGrepCharFactory fac2 = MiGrepCharFactory(string("blowfish}"));
 
