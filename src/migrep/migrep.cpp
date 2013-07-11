@@ -1,6 +1,7 @@
 // Author: Michael Gilliland
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include "migrep.h"
 using namespace std;
 
@@ -50,8 +51,9 @@ bool isEngineToken(char a)
 	if (a == '}' || a == '{' ||
             a == '[' || a == ']' ||
  	    a == '+' || a == '*' ||
-	    a == '-' || a == '|' ||
-	    a == ',')
+	    a == '|' || a == '\\' ||
+            a == '.' || a == '(' ||
+            a == ')')
 	{
 		return true;
 	}
@@ -64,6 +66,53 @@ bool locationExists(string thing, int location)
 	return (location >= 0 && location < thing.length());
 }
 
+void MiGrepChar::addRange(Range r)
+{
+	ranges.push_back(r);
+}
+
+bool MiGrepChar::matches(char me)
+{
+	for (int i = 0; i < ranges.size(); i += 1)
+	{
+		if (ranges[i].includes(me))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void MiGrepChar::setCardinality(CardinalityType c, int min = 0, int max = 0)
+{
+	card.restriction = c;
+	card.minimum = min;
+	card.minimum = max;
+	card.mustMatch = min;
+}
+
+void miGrepError(string message)
+{
+	cout << "MiGrep Error:" << endl;
+	cout << message << endl;
+	exit(1);
+}
+
+bool nextCharacterIs(string thing, int i, char me)
+{
+	return locationExists(thing, i+1) && thing[i+1] == me;
+}
+
+bool isNumericCommaOrSpace(char me)
+{
+	if ((me >= '0' && me <= '9') ||
+             me == ',' || me == ' ')
+	{
+		return true;
+	}
+	return false;
+}
+
 MiGrepChar MiGrepCharFactory::buildNext()
 {
 	MiGrepChar result = MiGrepChar();
@@ -72,11 +121,67 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	{
 		char currentChar = buildFrom[i];
 
-		if (!isEngineToken(currentChar))
+		if (isEngineToken(currentChar))
 		{
+			if (currentChar == '}' || currentChar == ']' ||
+			    currentChar == '*' || currentChar == '+' ||
+			    currentChar == '|' || currentChar == ')')
+			{
+				miGrepError(string("The character: '") + 
+					currentChar + string("' is incorrectly formatted") + 
+					string(" in \"") + buildFrom + string("\""));
+			}
+			else if (currentChar == '{')
+			{
+				// Begin numeric cardinality range
+			}
+			else if (currentChar == '[')
+			{
+				// Begin character range(s)
+			}
+			else if (currentChar == '.')
+			{
+				// Matches any character
+			}
+			else if (currentChar == '(')
+			{
+				// Begin some section of expression
+			}
+			else if (currentChar == '\\')
+			{
+				// The next thing is a literal, unless it's some special escape char
+			}
 		}
 		else
 		{
+			if (locationExists(buildFrom, i+1) && !isEngineToken(buildFrom[i+1]))
+			{
+				result.addRange(Range(currentChar, currentChar));
+				result.setCardinality(numeric, 1, 1);
+				buildFrom = buildFrom.substr(i+1);
+                                break;
+			}
+			else if (nextCharacterIs(buildFrom, i, '+'))
+			{
+				result.addRange(Range(currentChar, currentChar));
+				result.setCardinality(infinite, 1);
+				buildFrom = buildFrom.substr(i+2);
+				break;
+			}
+			else if (nextCharacterIs(buildFrom, i, '*'))
+			{
+				result.addRange(Range(currentChar, currentChar));
+				result.setCardinality(infinite);
+				buildFrom = buildFrom.substr(i+2);
+				break;
+			}
+			else if (i == buildFrom.length() - 1)
+			{
+				result.addRange(Range(currentChar, currentChar));
+				result.setCardinality(numeric, 1, 1);
+				buildFrom = "";
+				break;
+			}
 		}
 	}
 
