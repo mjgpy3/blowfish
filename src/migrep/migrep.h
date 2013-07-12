@@ -37,6 +37,8 @@ public:
 	void addRange(Range r);
 	void setRanges(vector<Range> rs);
 	void setCardinality(CardinalityType c, int min, int max);
+	void decrementCard();
+	bool canBeDoneMatching();
 	bool matches(char toMatch);
 	void print();
 private:
@@ -44,14 +46,22 @@ private:
         Cardinality card;
 };
 
+class MiGrepPattern
+{
+public:
+	MiGrepPattern(string patternText);
+	void fillMatchables(string fromMe);
+	bool matchesText(string toMatch);
+
+private:
+	vector<MiGrepChar> matchables;
+	MiGrepChar * current;
+};
+
 class MiGrep
 {
 public:
 	bool isMatch(string text, string pattern);
-
-private:
-	vector<MiGrepChar> matchables;
-	void fillMatchables(string fromMe);
 };
 
 

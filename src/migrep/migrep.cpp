@@ -101,17 +101,43 @@ bool MiGrep::isMatch(string text, string pattern)
 
 	for (int j = 0; j < patterns.size(); j += 1)
 	{
-		fillMatchables(patterns[j]);
-		MiGrepChar * current = &matchables[0];
-		// Usage logic goes here
+		MiGrepPattern miPattern = MiGrepPattern(patterns[j]);
 
-		for (int i = 0; i < text.length(); i += 1)
+		if (miPattern.matchesText(text))
 		{
-			
+			return true;
 		}
 	}
 
 	return false;
+}
+
+bool MiGrepPattern::matchesText(string toMatch)
+{
+	for (int i = 0; i < toMatch.length(); i += 1)
+	{
+	}
+	return false;
+}
+
+void decrementIfNotZero(int & me)
+{
+	if (me != 0)
+	{
+		me -= 1;
+	}
+}
+
+void MiGrepChar::decrementCard()
+{
+	decrementIfNotZero(card.mustMatch);
+	decrementIfNotZero(card.minimum);
+	decrementIfNotZero(card.maximum);
+}
+
+bool MiGrepChar::canBeDoneMatching()
+{
+	return card.mustMatch == 0;
 }
 
 Range::Range(char b, char e)
@@ -176,7 +202,12 @@ string MiGrepCharFactory::getBuildFrom()
 	return buildFrom;
 }
 
-void MiGrep::fillMatchables(string fromMe)
+MiGrepPattern::MiGrepPattern(string patternText)
+{
+	fillMatchables(patternText);
+}
+
+void MiGrepPattern::fillMatchables(string fromMe)
 {
 	MiGrepCharFactory factory = MiGrepCharFactory(fromMe);
 
@@ -188,7 +219,7 @@ void MiGrep::fillMatchables(string fromMe)
 		}
 		catch (...)
 		{
-			cout << string("MiGrepError:\nMalformed pattern: ") + factory.getBuildFrom();
+			MiGrepError(string("Malformed pattern: ") + factory.getBuildFrom());
 		}
 	}
 }
