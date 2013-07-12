@@ -26,6 +26,13 @@ int main()
 	MiGrepChar a2 = fac2.buildNext();
 	tester.assertTrue(a2.matches('\n'), "The escaped newline character can be matched too");
 
+	MiGrepCharFactory f = MiGrepCharFactory(string("a{2, 4}5+\\n*.+[a-zA-Z_\\n]*"));
+
+	while (!f.doneBuilding())
+	{
+		f.buildNext();
+	}
+
 /*
         MiGrepCharFactory fac2 = MiGrepCharFactory(string("blowfish}"));
 

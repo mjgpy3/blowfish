@@ -6,6 +6,7 @@
 #include "migrep.h"
 using namespace std;
 
+#define DEBUG
 
 bool MiGrep::isMatch(string text, string pattern)
 {
@@ -119,6 +120,12 @@ int charsIntValue(char digit)
 	return int(digit) - 48;
 }
 
+bool isCardinalityToken(char me)
+{
+	return me == '+' || me == '{' ||
+		me == '*';
+}
+
 int MiAToI(string thing)
 {
 	int result = 0;
@@ -129,8 +136,52 @@ int MiAToI(string thing)
 	return result;
 }
 
-int buildRanges(string fromMe)
+char getEscapedChar(char pivot)
 {
+	if (pivot == 'n')
+	{
+		return '\n';
+	}
+	if (pivot == 't')
+	{
+		return '\t';
+	}
+
+	return pivot;
+}
+
+int buildRanges(MiGrepChar & miGrep, string fromMe)
+{
+	for (int i = 1; i < fromMe.length(); i += 1)
+	{
+#ifdef DEBUG
+		cout << "Processing Range: " << fromMe[i] << endl;
+#endif
+		if (fromMe[i] == ']')
+		{
+			cout << "Matches ]\n";
+			return i+1;
+		}
+		else if (fromMe[i] == '\\')
+		{
+			cout << "Matches escape\n";
+			char literal = getEscapedChar(fromMe[i+1]);
+			miGrep.addRange(Range(literal, literal));
+			i += 1;
+		}
+		else if (fromMe[i+1] != '-')
+		{
+			cout << "Matches literal\n";
+			miGrep.addRange(Range(fromMe[i], fromMe[i]));
+		}
+		else if (fromMe[i+1] == '-')
+		{
+			cout << "Mathes x-y\n";
+			miGrep.addRange(Range(fromMe[i], fromMe[i+2]));
+			i += 2;
+		}
+	}
+	return 0;
 }
 
 int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
@@ -155,6 +206,7 @@ int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
 		else if (fromMe[i] == '}')
 		{
 			*ptr = MiAToI(b);
+			break;
 		}
 		else if (fromMe[i] != ' ')
 		{
@@ -163,20 +215,6 @@ int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
 	}
 	miChar.setCardinality(numeric, min, max);
 	return i;
-}
-
-char getEscapedChar(char pivot)
-{
-	if (pivot == 'n')
-	{
-		return '\n';
-	}
-	if (pivot == 't')
-	{
-		return '\t';
-	}
-
-	return pivot;
 }
 
 void Range::print()
@@ -204,86 +242,59 @@ void MiGrepChar::print()
 MiGrepChar MiGrepCharFactory::buildNext()
 {
 	MiGrepChar result = MiGrepChar();
+	cout << "Processing: " << buildFrom << endl;
 
-	for (int i = 0; i < buildFrom.length(); i += 1)
+	if (!isEngineToken(buildFrom[0]))
 	{
-		char currentChar = buildFrom[i];
-		cout << endl << "currentChar: " <<  currentChar << endl;
-
-		// The next spot exists and is a literal
-		if (locationExists(buildFrom, i+1) && !isEngineToken(buildFrom[i+1]) && !isEngineToken(currentChar))
+		result.addRange(Range(buildFrom[0], buildFrom[0]));
+		buildFrom = buildFrom.substr(1);
+	}
+	else if (buildFrom[0] == '.')
+	{
+		result.addRange(Range(char(0), char(126)));
+		buildFrom = buildFrom.substr(1);
+	}
+	else if (buildFrom[0] == '\\')
+	{
+		if (!locationExists(buildFrom, 1))
 		{
-			cout << "Matches next literal" << endl;
-			result.addRange(Range(currentChar, currentChar));
-			result.setCardinality(numeric, 1, 1);
-			buildFrom = buildFrom.substr(i+1);
-			break;
+			MiGrepError("Cannot escape at the end of a pattern");
 		}
-		// Found escape char
-		if (currentChar == '\\')
-		{
-			cout << "Matches escape" << endl;
-			if (!locationExists(buildFrom, i+1))
-			{
-				MiGrepError("Cannot escape at the end of a pattern");
-			}
-			char literal = getEscapedChar(buildFrom[i+1]);
-			result.addRange(Range(literal, literal));
-			result.setCardinality(numeric, 1, 1);
-			buildFrom = buildFrom.substr(i+2);
-			cout << buildFrom[0] << endl;
-			break;
-		}
-		// The next spot exists and is '+'
-		else if (nextCharacterIs(buildFrom, i, '+'))
-		{
-			cout << "Matches +" << endl;
-			result.addRange(Range(currentChar, currentChar));
-			result.setCardinality(infinite, 1, 1);
-			buildFrom = buildFrom.substr(i+2);
-			break;
-		}
-		// The next spot exists and is '*'
-		else if (nextCharacterIs(buildFrom, i, '*'))
-		{
-			cout << "Matches *" << endl;
-			result.addRange(Range(currentChar, currentChar));
-			result.setCardinality(infinite, 0, 0);
-			buildFrom = buildFrom.substr(i+2);
-			break;
-		}
-		// The next spot exists and is '{'
-		else if (currentChar == '{')
-		{
-			cout << "Matches {" << endl;
-			result.addRange(Range(currentChar, currentChar));
-			buildFrom = 
-				buildFrom.substr(parseCardinalityToMiGrepChar(result, buildFrom.substr(i)));
-			break;
-		}
-		// The next spit exists and is a
-		else if (currentChar == '[')
-		{
-			cout << "Matches [" << endl;
-			vector<Range> builtRanges = buildRanges(buildFrom);
-                        buildFrom =
-                                buildFrom.substr(parseCardinalityToMiGrepChar(result, buildFrom.substr(i)));
-                        break;
-		}
-		// If at last character and is literal
-		else if (i == buildFrom.length()-1 && !isEngineToken(currentChar))
-		{
-			cout << "Matches last literal" << endl;
-			result.addRange(Range(currentChar, currentChar));
-			result.setCardinality(numeric, 1, 1);
-			buildFrom = "";
-			break;
-		}
-		cout << "No match" << endl;
+		char literal = getEscapedChar(buildFrom[1]);
+		result.addRange(Range(literal, literal));
+		buildFrom = buildFrom.substr(2);
+	}
+	else if (buildFrom[0] == '[')
+	{
+		buildFrom = buildFrom.substr(buildRanges(result, buildFrom));
 	}
 
+	// Cardinality
+
+	if (buildFrom.length() == 0 || !isEngineToken(buildFrom[0]) || buildFrom[0] == '\\')
+	{
+		result.setCardinality(numeric, 1, 1);
+	}
+	else if (buildFrom[0] == '+')
+        {
+                result.setCardinality(infinite, 1, 0);
+                buildFrom = buildFrom.substr(1);
+        }
+        else if (buildFrom[0] == '*')
+        {
+                result.setCardinality(infinite, 0, 0);
+                buildFrom = buildFrom.substr(1);
+        }
+        else if (buildFrom[0] == '{')
+        {
+                buildFrom =
+                        buildFrom.substr(1+parseCardinalityToMiGrepChar(result, buildFrom));
+        }
+
+#ifdef DEBUG
 	cout << "Generated MiGrepChar: " << endl;
 	result.print();
+#endif
 
 	return result;
 }

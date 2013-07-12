@@ -35,6 +35,7 @@ class MiGrepChar
 public:
 	MiGrepChar();
 	void addRange(Range r);
+	void setRanges(vector<Range> ranges);
 	void setCardinality(CardinalityType c, int min, int max);
 	bool matches(char toMatch);
 	void print();
