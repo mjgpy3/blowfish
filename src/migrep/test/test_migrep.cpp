@@ -14,6 +14,9 @@ int main()
 	tester.assertTrue(isNumericCommaOrSpace(','), "isNumericCommaOrSpace works for ','");
 	tester.assertTrue(isNumericCommaOrSpace(' '), "isNumericCommaOrSpace works for ' '");
 
+/*
+	tester.assertTrue(matcher.isMatch("for", "for"), "match a simple literal token");
+	tester.assertTrue(matcher.isMatch("a", "a|b"), "Simple OR should work");
 	tester.assertTrue(matcher.isMatch("a", "a"), "Something should always match itself");
 	tester.assertFalse(matcher.isMatch("b", "a"), "Some literal does not match another literal");
 	tester.assertTrue(matcher.isMatch("a", "."), "Dot matches everything");
@@ -23,7 +26,7 @@ int main()
 	tester.assertTrue(matcher.isMatch("blowfish a", ".+a"), "If those qualifiers are met, all is well");
 	tester.assertTrue(matcher.isMatch("blowfish", "........"), "Some number of dots matches that same number of chars");
 	tester.assertFalse(matcher.isMatch("blowfish", "."), "A statically sized pattern that is not the same length as the input, is not matched");
-
+*/
 	tester.printResults();
 	return 0;
 }

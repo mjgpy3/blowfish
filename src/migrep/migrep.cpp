@@ -6,12 +6,109 @@
 #include "migrep.h"
 using namespace std;
 
-//#define DEBUG
+#define DEBUG
+
+void MiGrepError(string message)
+{
+	cout << "MiGrep Error:" << endl;
+	cout << message << endl;
+	exit(1);
+}
+
+int numOccurrences(char me, string inMe)
+{
+	int result = 0;
+	for (int i = 0; i < inMe.length(); i += 1)
+	{
+		if (inMe[i] == me && inMe[i-1] != '\\')
+		{
+			result += 1;
+		}
+	}
+	return result;
+}
 
 bool MiGrep::isMatch(string text, string pattern)
 {
+	int numPipes = numOccurrences('|', pattern);
+	vector<string> patterns;
 
-	fillMatchables(pattern);
+	if (numPipes > 1)
+	{
+		MiGrepError("Only one OR '|' allowed in a pattern");
+	}
+	else if (numPipes == 1)
+	{
+		// TODO: Use this pointer to improve code...
+		string * ptr;
+		string beg = "", end = "", ext1 = "", ext2 = "";
+		bool beforePipe = true;
+
+		for (int i = 0; i < pattern.length(); i += 1)
+		{
+			if (pattern[i] == '|')
+			{
+				beforePipe = false;
+				if (pattern[i+1] != '(')
+				{
+					ext2.push_back(pattern[i+1]);
+					i += 1;
+				}
+			}
+			else if (pattern[i] == '\\')
+			{
+				if (beforePipe)
+				{
+					beg.push_back(pattern[i]);
+					beg.push_back(pattern[i+1]);
+				}
+				else
+				{
+					end.push_back(pattern[i]);
+					end.push_back(pattern[i+1]);
+				}
+				i += 1;
+			}
+			else if (pattern[i] == '(')
+			{
+				while (pattern[i] != ')')
+				{
+					i += 1;
+					if (beforePipe)
+					{
+						ext1.push_back(pattern[i]);
+					}
+					else
+					{
+						ext2.push_back(pattern[i]);
+					}
+				}
+			}
+			else if (beforePipe && pattern[i+1] == '|')
+			{
+				ext1.push_back(pattern[i]);
+			}
+			else if (beforePipe)
+			{
+				beg.push_back(pattern[i]);
+			}
+			else
+			{
+				end.push_back(pattern[i]);
+			}
+		}
+		patterns.push_back(beg+ext1+end);
+		patterns.push_back(beg+ext2+end);
+	}
+	else
+	{
+		patterns.push_back(pattern);
+	}
+
+	for (int i = 0; i < patterns.size(); i += 1)
+	{
+		fillMatchables(patterns[i]);
+	}
 
 	if (pattern.compare(".+") == 0)
 	{
@@ -114,13 +211,6 @@ void MiGrepChar::setCardinality(CardinalityType c, int min = 0, int max = 0)
 	card.minimum = min;
 	card.maximum = max;
 	card.mustMatch = min;
-}
-
-void MiGrepError(string message)
-{
-	cout << "MiGrep Error:" << endl;
-	cout << message << endl;
-	exit(1);
 }
 
 bool nextCharacterIs(string thing, int i, char me)
@@ -293,7 +383,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 
 	// Cardinality
 
-	if (buildFrom.length() == 0 || !isEngineToken(buildFrom[0]) || buildFrom[0] == '\\')
+	if (buildFrom.length() == 0 || !isEngineToken(buildFrom[0]) || buildFrom[0] == '\\' || buildFrom[0] == '.')
 	{
 		result.setCardinality(numeric, 1, 1);
 	}
