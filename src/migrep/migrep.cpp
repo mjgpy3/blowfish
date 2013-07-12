@@ -28,6 +28,51 @@ int numOccurrences(char me, string inMe)
 	return result;
 }
 
+void fillTwoPatternsFromSinglePipe(string & a, string & b, string pattern)
+{
+	string beg = "", end = "", ext1 = "", ext2 = "";
+	string * side = &beg;
+	string * orOpt = &ext1;
+
+	for (int i = 0; i < pattern.length(); i += 1)
+	{
+		if (pattern[i] == '|')
+		{
+			side = &end;
+			orOpt = &ext2;
+		}
+		else if (pattern[i] == '\\')
+		{
+			(*side).push_back(pattern[i]);
+			(*side).push_back(pattern[i+1]);
+			i += 1;
+		}
+		else if (pattern[i] == '(')
+		{
+			i += 1;
+			while (pattern[i] != ')')
+			{
+				(*orOpt).push_back(pattern[i]);
+				i += 1;
+			}
+		}
+		else if (i != pattern.length()-1 && pattern[i+1] == '|')
+		{
+			(*orOpt).push_back(pattern[i]);
+		}
+		else if (i != 0 && pattern[i-1] == '|')
+		{
+			(*orOpt).push_back(pattern[i]);
+		}
+		else
+		{
+			(*side).push_back(pattern[i]);
+		}
+	}
+	a = beg+ext1+end;
+	b = beg+ext2+end;
+}
+
 bool MiGrep::isMatch(string text, string pattern)
 {
 	int numPipes = numOccurrences('|', pattern);
@@ -39,91 +84,34 @@ bool MiGrep::isMatch(string text, string pattern)
 	}
 	else if (numPipes == 1)
 	{
-		// TODO: Use this pointer to improve code...
-		string * ptr;
-		string beg = "", end = "", ext1 = "", ext2 = "";
-		bool beforePipe = true;
-
-		for (int i = 0; i < pattern.length(); i += 1)
-		{
-			if (pattern[i] == '|')
-			{
-				beforePipe = false;
-				if (pattern[i+1] != '(')
-				{
-					ext2.push_back(pattern[i+1]);
-					i += 1;
-				}
-			}
-			else if (pattern[i] == '\\')
-			{
-				if (beforePipe)
-				{
-					beg.push_back(pattern[i]);
-					beg.push_back(pattern[i+1]);
-				}
-				else
-				{
-					end.push_back(pattern[i]);
-					end.push_back(pattern[i+1]);
-				}
-				i += 1;
-			}
-			else if (pattern[i] == '(')
-			{
-				while (pattern[i] != ')')
-				{
-					i += 1;
-					if (beforePipe)
-					{
-						ext1.push_back(pattern[i]);
-					}
-					else
-					{
-						ext2.push_back(pattern[i]);
-					}
-				}
-			}
-			else if (beforePipe && pattern[i+1] == '|')
-			{
-				ext1.push_back(pattern[i]);
-			}
-			else if (beforePipe)
-			{
-				beg.push_back(pattern[i]);
-			}
-			else
-			{
-				end.push_back(pattern[i]);
-			}
-		}
-		patterns.push_back(beg+ext1+end);
-		patterns.push_back(beg+ext2+end);
+		string pattern1, pattern2;
+		fillTwoPatternsFromSinglePipe(pattern1, pattern2, pattern);
+		patterns.push_back(pattern1);
+		patterns.push_back(pattern2);
+#ifdef DEBUG
+		cout << "Patterns parsed from OR: " << endl;
+		cout << '\t' << patterns[0] << endl;
+		cout << '\t' << patterns[1] << endl;
+#endif
 	}
 	else
 	{
 		patterns.push_back(pattern);
 	}
 
-	for (int i = 0; i < patterns.size(); i += 1)
+	for (int j = 0; j < patterns.size(); j += 1)
 	{
-		fillMatchables(patterns[i]);
-	}
+		fillMatchables(patterns[j]);
+		MiGrepChar * current = &matchables[0];
+		// Usage logic goes here
 
-	if (pattern.compare(".+") == 0)
-	{
-		return true;
-	}
-
-	for (int i = 0; i < text.length(); i += 1)
-	{
-		if (!(pattern[i] == text[i] || pattern[i] == '.'))
+		for (int i = 0; i < text.length(); i += 1)
 		{
-			return false;
+			
 		}
 	}
 
-	return true;
+	return false;
 }
 
 Range::Range(char b, char e)
@@ -149,11 +137,11 @@ MiGrepCharFactory::MiGrepCharFactory(string patternText)
 bool isEngineToken(char a)
 {
 	if (a == '}' || a == '{' ||
-            a == '[' || a == ']' ||
+	    a == '[' || a == ']' ||
  	    a == '+' || a == '*' ||
 	    a == '|' || a == '\\' ||
-            a == '.' || a == '(' ||
-            a == ')')
+	    a == '.' || a == '(' ||
+	    a == ')')
 	{
 		return true;
 	}
@@ -221,7 +209,7 @@ bool nextCharacterIs(string thing, int i, char me)
 bool isNumericCommaOrSpace(char me)
 {
 	if ((me >= '0' && me <= '9') ||
-             me == ',' || me == ' ')
+	     me == ',' || me == ' ')
 	{
 		return true;
 	}
@@ -344,7 +332,7 @@ void MiGrepChar::print()
 	}
 	cout << "Cardinality type: " << card.restriction << endl;
 	cout << "Card start:       " << card.minimum << endl;
-	cout << "Card end:         " << card.maximum << endl;
+	cout << "Card end:	 " << card.maximum << endl;
 	cout << "Card required:    " << card.mustMatch << endl;
 	
 }
@@ -388,20 +376,20 @@ MiGrepChar MiGrepCharFactory::buildNext()
 		result.setCardinality(numeric, 1, 1);
 	}
 	else if (buildFrom[0] == '+')
-        {
-                result.setCardinality(infinite, 1, 0);
-                buildFrom = buildFrom.substr(1);
-        }
-        else if (buildFrom[0] == '*')
-        {
-                result.setCardinality(infinite, 0, 0);
-                buildFrom = buildFrom.substr(1);
-        }
-        else if (buildFrom[0] == '{')
-        {
-                buildFrom =
-                        buildFrom.substr(1+parseCardinalityToMiGrepChar(result, buildFrom));
-        }
+	{
+		result.setCardinality(infinite, 1, 0);
+		buildFrom = buildFrom.substr(1);
+	}
+	else if (buildFrom[0] == '*')
+	{
+		result.setCardinality(infinite, 0, 0);
+		buildFrom = buildFrom.substr(1);
+	}
+	else if (buildFrom[0] == '{')
+	{
+		buildFrom =
+			buildFrom.substr(1+parseCardinalityToMiGrepChar(result, buildFrom));
+	}
 
 #ifdef DEBUG
 	cout << "Generated MiGrepChar: " << endl;

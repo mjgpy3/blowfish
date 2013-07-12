@@ -14,10 +14,12 @@ int main()
 	tester.assertTrue(isNumericCommaOrSpace(','), "isNumericCommaOrSpace works for ','");
 	tester.assertTrue(isNumericCommaOrSpace(' '), "isNumericCommaOrSpace works for ' '");
 
-/*
-	tester.assertTrue(matcher.isMatch("for", "for"), "match a simple literal token");
+	matcher.isMatch("adsafdsg", "\\((a+5{2, 3})| fae+\\{");
+
 	tester.assertTrue(matcher.isMatch("a", "a|b"), "Simple OR should work");
 	tester.assertTrue(matcher.isMatch("a", "a"), "Something should always match itself");
+/*
+	tester.assertTrue(matcher.isMatch("for", "for"), "match a simple literal token");
 	tester.assertFalse(matcher.isMatch("b", "a"), "Some literal does not match another literal");
 	tester.assertTrue(matcher.isMatch("a", "."), "Dot matches everything");
 	tester.assertTrue(matcher.isMatch("aaa", "a.a"), "Dot matches anything in the middle of a string");
