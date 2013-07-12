@@ -35,7 +35,7 @@ class MiGrepChar
 public:
 	MiGrepChar();
 	void addRange(Range r);
-	void setRanges(vector<Range> ranges);
+	void setRanges(vector<Range> rs);
 	void setCardinality(CardinalityType c, int min, int max);
 	bool matches(char toMatch);
 	void print();
@@ -50,7 +50,8 @@ public:
 	bool isMatch(string text, string pattern);
 
 private:
-	vector<MiGrepChar> patternChars;
+	vector<MiGrepChar> matchables;
+	void fillMatchables(string fromMe);
 };
 
 
@@ -60,6 +61,7 @@ public:
 	MiGrepCharFactory(string patternText);
 	MiGrepChar buildNext();
 	bool doneBuilding();
+	string getBuildFrom();
 private:
 	string buildFrom;
 };

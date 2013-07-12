@@ -6,11 +6,12 @@
 #include "migrep.h"
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 
 bool MiGrep::isMatch(string text, string pattern)
 {
-	// TODO: Keep current, look for current and next
+
+	fillMatchables(pattern);
 
 	if (pattern.compare(".+") == 0)
 	{
@@ -83,6 +84,28 @@ bool MiGrepChar::matches(char me)
 		}
 	}
 	return false;
+}
+
+string MiGrepCharFactory::getBuildFrom()
+{
+	return buildFrom;
+}
+
+void MiGrep::fillMatchables(string fromMe)
+{
+	MiGrepCharFactory factory = MiGrepCharFactory(fromMe);
+
+	while (!factory.doneBuilding())
+	{
+		try
+		{
+			matchables.push_back(factory.buildNext());
+		}
+		catch (...)
+		{
+			cout << string("MiGrepError:\nMalformed pattern: ") + factory.getBuildFrom();
+		}
+	}
 }
 
 void MiGrepChar::setCardinality(CardinalityType c, int min = 0, int max = 0)
@@ -164,19 +187,16 @@ int buildRanges(MiGrepChar & miGrep, string fromMe)
 		}
 		else if (fromMe[i] == '\\')
 		{
-			cout << "Matches escape\n";
 			char literal = getEscapedChar(fromMe[i+1]);
 			miGrep.addRange(Range(literal, literal));
 			i += 1;
 		}
 		else if (fromMe[i+1] != '-')
 		{
-			cout << "Matches literal\n";
 			miGrep.addRange(Range(fromMe[i], fromMe[i]));
 		}
 		else if (fromMe[i+1] == '-')
 		{
-			cout << "Mathes x-y\n";
 			miGrep.addRange(Range(fromMe[i], fromMe[i+2]));
 			i += 2;
 		}
@@ -242,7 +262,9 @@ void MiGrepChar::print()
 MiGrepChar MiGrepCharFactory::buildNext()
 {
 	MiGrepChar result = MiGrepChar();
+#ifdef DEBUG
 	cout << "Processing: " << buildFrom << endl;
+#endif
 
 	if (!isEngineToken(buildFrom[0]))
 	{
