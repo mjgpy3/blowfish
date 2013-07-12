@@ -220,7 +220,7 @@ class TokensToCPlusPlus(object):
                 attr + " = ")
 
     def get_token_enum(self, tokens):
-        return "enum " + self.enum_name + " \n{\n" + ",\n".join("\tt_" + i.name for i in tokens) + "\n};"
+        return "enum " + self.enum_name + " \n{\n\t" + ", ".join("t_" + i.name for i in tokens) + "\n};"
 
     def get_token_array_declaration(self, tokens):
         return (self.struct_name + " * " + self.array_name + " = new " + 
