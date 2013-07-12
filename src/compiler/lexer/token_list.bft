@@ -29,6 +29,8 @@ op_times     -> '*'
 op_divide    -> '/'
 op_modulus   -> '%'
 op_assign    -> ':='
+op_pow       -> '^'
+op_concat    -> '++'
 
 line_ending  -> \n
 
@@ -73,6 +75,10 @@ kwd_enum     -> 'enum'
 kwd_require  -> 'require'
 [keyword]
 kwd_import   -> 'import'
+[keyword]
+kwd_until    -> 'until'
+[keyword]
+kwd_unless   -> 'unless'
 [keyword]
 
 holder_begin -> {holder_ident}'{'

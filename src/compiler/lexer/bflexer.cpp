@@ -24,6 +24,8 @@ enum TokenName
 	t_op_divide,
 	t_op_modulus,
 	t_op_assign,
+	t_op_pow,
+	t_op_concat,
 	t_line_ending,
 	t_op_eq,
 	t_op_lt,
@@ -48,6 +50,8 @@ enum TokenName
 	t_kwd_enum,
 	t_kwd_require,
 	t_kwd_import,
+	t_kwd_until,
+	t_kwd_unless,
 	t_holder_begin,
 	t_holder_end,
 	t_block_begin,
@@ -65,15 +69,15 @@ struct Token
 	bool isIgnored;
 }; 
 
-const int NUM_TOKENS = 43;
+const int NUM_TOKENS = 47;
 
 Token * AllTokens = new Token[NUM_TOKENS];
 
-int Ignore[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int Keyword[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
-int SaveText[] = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int Ignore[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int Keyword[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+int SaveText[] = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-string Matches[] = {"[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "\'.|\\.\'", "\".\"", "[\t ]+", "+", "-", "*", "/", "%", ":=", "\n", "=", "<", "<=", ">", ">=", "|", "module", "class", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "[lsd]{", "}", "[", "]", "(", ")"};
+string Matches[] = {"[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "\'.|\\.\'", "\".\"", "[\t ]+", "+", "-", "*", "/", "%", ":=", "^", "++", "\n", "=", "<", "<=", ">", ">=", "|", "module", "class", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[lsd]{", "}", "[", "]", "(", ")"};
 
 void init_token(int index)
 {
