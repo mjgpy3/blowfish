@@ -14,11 +14,8 @@ int main()
 	tester.assertTrue(isNumericCommaOrSpace(','), "isNumericCommaOrSpace works for ','");
 	tester.assertTrue(isNumericCommaOrSpace(' '), "isNumericCommaOrSpace works for ' '");
 
-	matcher.isMatch("adsafdsg", "\\((a+5{2, 3})| fae+\\{");
-
 	tester.assertTrue(matcher.isMatch("a", "a|b"), "Simple OR should work");
 	tester.assertTrue(matcher.isMatch("a", "a"), "Something should always match itself");
-/*
 	tester.assertTrue(matcher.isMatch("for", "for"), "match a simple literal token");
 	tester.assertFalse(matcher.isMatch("b", "a"), "Some literal does not match another literal");
 	tester.assertTrue(matcher.isMatch("a", "."), "Dot matches everything");
@@ -28,7 +25,12 @@ int main()
 	tester.assertTrue(matcher.isMatch("blowfish a", ".+a"), "If those qualifiers are met, all is well");
 	tester.assertTrue(matcher.isMatch("blowfish", "........"), "Some number of dots matches that same number of chars");
 	tester.assertFalse(matcher.isMatch("blowfish", "."), "A statically sized pattern that is not the same length as the input, is not matched");
-*/
+	tester.assertTrue(matcher.isMatch("blowfish", "bl(a+foo)|(ow)fish"), "Should match where second or condition satisfies");
+	tester.assertFalse(matcher.isMatch("blowfish", "bl(owf)|(i+)sh"), "OR test where none of the ors satisfy");
+	tester.assertTrue(matcher.isMatch("aaaa", "a{4}"), "Exact cardinality N in {N} is hit");
+	tester.assertFalse(matcher.isMatch("aaaa", "a{5}"), "If greater cardinalty, no match is hit");
+	tester.assertFalse(matcher.isMatch("aaaa", "a{3}"), "If lesser cardinality, no match is hit");
+	tester.assertTrue(matcher.isMatch("p5U", "[a-z][0-9][A-Z]"), "Simple range matches work");
 	tester.printResults();
 	return 0;
 }

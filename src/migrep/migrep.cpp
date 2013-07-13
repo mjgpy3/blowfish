@@ -6,7 +6,7 @@
 #include "migrep.h"
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 
 void MiGrepError(string message)
 {
@@ -102,7 +102,6 @@ bool MiGrep::isMatch(string text, string pattern)
 	for (int j = 0; j < patterns.size(); j += 1)
 	{
 		MiGrepPattern miPattern = MiGrepPattern(patterns[j]);
-
 		if (miPattern.matchesText(text))
 		{
 			return true;
@@ -112,37 +111,69 @@ bool MiGrep::isMatch(string text, string pattern)
 	return false;
 }
 
+void MiGrepPattern::decrementCurrentCardinality()
+{
+	matchables[currentIndex].decrementCard();
+}
+
 bool MiGrepPattern::matchesText(string toMatch)
 {
+	cout << "Attempting to match: " << toMatch << endl;
 	for (int i = 0; i < toMatch.length(); i += 1)
 	{
+		cout << "------------------------------\n";
+		cout << " char: " << toMatch[i] << endl;
+		cout << " current pattern is:\n";
+		current().print();
+		cout << "------------------------------\n";
 		if (current().mustStopMatching())
 		{
+			cout << "  MUST STOP MATCHING WITH CURRENT" << endl;
 			if (nextExists())
 			{
+				cout << "   Move next\n";
 				moveNext();
+				current().print();
 			}
 			else
 			{
+				cout << "   No more matches\n";
 				return false;
 			}
 		}
 
-		if (current().matches(toMatch[i]))
+		if (current().canStopMatching() && nextExists() && nextMatches(toMatch[i]))
 		{
-			current().decrementCard();
-		}
-		else if (current().canStopMatching() && nextExists() && nextMatches(toMatch[i]))
-		{
+			cout << "  ->The next thing matches, we're moving\n";
 			moveNext();
-			current().decrementCard();
+			decrementCurrentCardinality();
+		}
+		else if (current().matches(toMatch[i]))
+		{
+			cout << "  ->The current thing matches\n";
+			decrementCurrentCardinality();
 		}
 		else
 		{
+			cout << "  ->Nothing matches\n";
 			return false;
 		}
 	}
-	return true;
+
+	current().print();
+	cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
+
+	return !nextExists() && (current().mustStopMatching() || currentHasInfiniteCardinality());
+}
+
+bool MiGrepPattern::currentHasInfiniteCardinality()
+{
+	return matchables[currentIndex].hasInfiniteCardinality();
+}
+
+bool MiGrepChar::hasInfiniteCardinality()
+{
+	return card.restriction == infinite;
 }
 
 void decrementIfNotZero(int & me)
@@ -155,7 +186,7 @@ void decrementIfNotZero(int & me)
 
 bool MiGrepChar::mustStopMatching()
 {
-	return canStopMatching() && (card.restriction != infinite || card.maximum == 0);
+	return canStopMatching() && card.restriction != infinite && card.maximum == 0;
 }
 
 bool MiGrepChar::canStopMatching()
@@ -455,6 +486,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	else if (buildFrom[0] == '[')
 	{
 		buildFrom = buildFrom.substr(buildRanges(result, buildFrom));
+		cout << "BUILD FROM AFTER RANGE: " << buildFrom << endl;
 	}
 
 	// Cardinality
@@ -477,6 +509,10 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	{
 		buildFrom =
 			buildFrom.substr(1+parseCardinalityToMiGrepChar(result, buildFrom));
+	}
+	else
+	{
+		result.setCardinality(numeric, 1, 1);
 	}
 
 #ifdef DEBUG

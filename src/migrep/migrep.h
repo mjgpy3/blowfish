@@ -38,6 +38,7 @@ public:
 	void setCardinality(CardinalityType c, int min, int max);
 	void decrementCard();
 	bool canStopMatching();
+	bool hasInfiniteCardinality();
 	bool mustStopMatching();
 	bool matches(char toMatch);
 	void print();
@@ -57,9 +58,11 @@ private:
 	int currentIndex;
 	MiGrepChar current();
 	void fillMatchables(string fromMe);
+	void decrementCurrentCardinality();
 	void moveNext();
 	bool nextExists();
 	bool nextMatches(char me);
+	bool currentHasInfiniteCardinality();
 	bool currentMatches(char me);
 };
 
