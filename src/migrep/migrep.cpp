@@ -116,8 +116,33 @@ bool MiGrepPattern::matchesText(string toMatch)
 {
 	for (int i = 0; i < toMatch.length(); i += 1)
 	{
+		if (current().mustStopMatching())
+		{
+			if (nextExists())
+			{
+				moveNext();
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		if (current().matches(toMatch[i]))
+		{
+			current().decrementCard();
+		}
+		else if (current().canStopMatching() && nextExists() && nextMatches(toMatch[i]))
+		{
+			moveNext();
+			current().decrementCard();
+		}
+		else
+		{
+			return false;
+		}
 	}
-	return false;
+	return true;
 }
 
 void decrementIfNotZero(int & me)
@@ -128,16 +153,20 @@ void decrementIfNotZero(int & me)
 	}
 }
 
-void MiGrepChar::decrementCard()
+bool MiGrepChar::mustStopMatching()
 {
-	decrementIfNotZero(card.mustMatch);
-	decrementIfNotZero(card.minimum);
-	decrementIfNotZero(card.maximum);
+	return canStopMatching() && (card.restriction != infinite || card.maximum == 0);
 }
 
-bool MiGrepChar::canBeDoneMatching()
+bool MiGrepChar::canStopMatching()
 {
-	return card.mustMatch == 0;
+	return card.minimum == 0;
+}
+
+void MiGrepChar::decrementCard()
+{
+	decrementIfNotZero(card.minimum);
+	decrementIfNotZero(card.maximum);
 }
 
 Range::Range(char b, char e)
@@ -205,6 +234,37 @@ string MiGrepCharFactory::getBuildFrom()
 MiGrepPattern::MiGrepPattern(string patternText)
 {
 	fillMatchables(patternText);
+
+	if (matchables.size() == 0)
+	{
+		MiGrepError("Must be given pattern text");
+	}
+	currentIndex = 0;
+}
+
+MiGrepChar MiGrepPattern::current()
+{
+	return matchables[currentIndex];
+}
+
+bool MiGrepPattern::nextExists()
+{
+	return currentIndex < (matchables.size()-1);
+}
+
+bool MiGrepPattern::currentMatches(char me)
+{
+	return matchables[currentIndex].matches(me);
+}
+
+bool MiGrepPattern::nextMatches(char me)
+{
+	return matchables[currentIndex+1].matches(me);
+}	
+
+void MiGrepPattern::moveNext()
+{
+	currentIndex += 1;
 }
 
 void MiGrepPattern::fillMatchables(string fromMe)
@@ -229,7 +289,6 @@ void MiGrepChar::setCardinality(CardinalityType c, int min = 0, int max = 0)
 	card.restriction = c;
 	card.minimum = min;
 	card.maximum = max;
-	card.mustMatch = min;
 }
 
 bool nextCharacterIs(string thing, int i, char me)
@@ -364,8 +423,6 @@ void MiGrepChar::print()
 	cout << "Cardinality type: " << card.restriction << endl;
 	cout << "Card start:       " << card.minimum << endl;
 	cout << "Card end:	 " << card.maximum << endl;
-	cout << "Card required:    " << card.mustMatch << endl;
-	
 }
 
 MiGrepChar MiGrepCharFactory::buildNext()

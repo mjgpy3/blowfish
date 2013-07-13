@@ -16,7 +16,6 @@ struct Cardinality
 	CardinalityType restriction;
 	int minimum;
 	int maximum;
-	int mustMatch;
 };
 
 class Range
@@ -38,7 +37,8 @@ public:
 	void setRanges(vector<Range> rs);
 	void setCardinality(CardinalityType c, int min, int max);
 	void decrementCard();
-	bool canBeDoneMatching();
+	bool canStopMatching();
+	bool mustStopMatching();
 	bool matches(char toMatch);
 	void print();
 private:
@@ -50,12 +50,17 @@ class MiGrepPattern
 {
 public:
 	MiGrepPattern(string patternText);
-	void fillMatchables(string fromMe);
 	bool matchesText(string toMatch);
 
 private:
 	vector<MiGrepChar> matchables;
-	MiGrepChar * current;
+	int currentIndex;
+	MiGrepChar current();
+	void fillMatchables(string fromMe);
+	void moveNext();
+	bool nextExists();
+	bool nextMatches(char me);
+	bool currentMatches(char me);
 };
 
 class MiGrep
