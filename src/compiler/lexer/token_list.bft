@@ -1,6 +1,6 @@
 section_helpers:
 ident        -> [a-zA-Z0-9][a-zA-Z_]*
-char_inside  -> .|\.
+char_inside  -> (.)|(\[nt])
 holder_ident -> [lsd]
 
 section_tokens:
@@ -13,7 +13,7 @@ param_ident -> {ident}':'
 integer      -> [0-9]+
 [save_text]
 
-float        -> [0-9]*\.[0-9]+
+float        -> [0-9]*'.'[0-9]+
 [save_text]
 
 char         -> '\''{char_inside}'\''

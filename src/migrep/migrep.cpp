@@ -222,17 +222,12 @@ MiGrepCharFactory::MiGrepCharFactory(string patternText)
 
 bool isEngineToken(char a)
 {
-	if (a == '}' || a == '{' ||
+	return a == '}' || a == '{' ||
 	    a == '[' || a == ']' ||
  	    a == '+' || a == '*' ||
 	    a == '|' || a == '\\' ||
 	    a == '.' || a == '(' ||
-	    a == ')')
-	{
-		return true;
-	}
-
-	return false;
+	    a == ')';
 }
 
 bool locationExists(string thing, int location)

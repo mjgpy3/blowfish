@@ -90,9 +90,40 @@ class TokenFileParser(object):
 
                     self.tokens[-1].options = options
 
+    def is_token_engine_char(self, value):
+	return len(value) == 1 and value in "{}[]+*|\\.()"
+
     def remove_single_quotes(self, value):
-        parts = [part.replace("'", "") for part in value.split("\\'")]
-        return "\\'".join(parts)
+	result = ""
+        in_quote_mode = False
+        ignore_next = False
+
+        for i, c in enumerate(value):
+            print "Processing", c
+            if ignore_next:
+                ignore_next = False
+                continue
+            if c == "'":
+                in_quote_mode = not in_quote_mode
+            else:
+                if c == '\\' and value[i+1] == "'":
+                    result += "'"
+                    ignore_next = True
+
+                elif in_quote_mode:
+                    if c == '.':
+                        result += "\."
+                    elif self.is_token_engine_char(c):
+                        result += "\\" + "\\" + c[-1]
+                    else:
+                        result += c
+                else:
+                    if c == '\\':
+                        result += '\\' + c
+                    else:
+                        result += c
+
+        return result
 
     def get_options(self, line):
         return_line = line[1:-1]
