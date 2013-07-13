@@ -31,6 +31,12 @@ int main()
 	tester.assertFalse(matcher.isMatch("aaaa", "a{5}"), "If greater cardinalty, no match is hit");
 	tester.assertFalse(matcher.isMatch("aaaa", "a{3}"), "If lesser cardinality, no match is hit");
 	tester.assertTrue(matcher.isMatch("p5U", "[a-z][0-9][A-Z]"), "Simple range matches work");
+	tester.assertTrue(matcher.isMatch("Blowfish", "[A-C][a-z]{4, 9}"), "Test ranges and cardinality ranges");
+	tester.assertTrue(matcher.isMatch("blowfish", "[b-l]{2, 7}o*w+(foobar)|([fi]{2})s{1}h+"), "Complexity end-to-end test 1");
+	tester.assertFalse(matcher.isMatch("blowfish", "[a-v]*"), "Ranges should not match values in said range");
+	tester.assertTrue(matcher.isMatch("{{{{   |", "\\{{4} +\\|"), "Escaped characters work nicely");
+	tester.assertTrue(matcher.isMatch(";(\n", "[\\;\\(\\n]{3}"), "Escaped characters in a range work alright");
+
 	tester.printResults();
 	return 0;
 }

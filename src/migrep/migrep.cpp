@@ -163,7 +163,7 @@ bool MiGrepPattern::matchesText(string toMatch)
 	current().print();
 	cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
 
-	return !nextExists() && (current().mustStopMatching() || currentHasInfiniteCardinality());
+	return !nextExists() && (current().canStopMatching() || currentHasInfiniteCardinality());
 }
 
 bool MiGrepPattern::currentHasInfiniteCardinality()
