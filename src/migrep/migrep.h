@@ -5,6 +5,8 @@
 #include <vector>
 using namespace std;
 
+void MiGrepError(string message);
+
 enum CardinalityType
 {
 	infinite,
@@ -79,7 +81,7 @@ public:
 	MiGrepCharFactory(string patternText);
 	MiGrepChar buildNext();
 	bool doneBuilding();
-	string getBuildFrom();
+	void printBuildFrom();
 private:
 	string buildFrom;
 };
