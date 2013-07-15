@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <fstream>
 using namespace std;
 
 #ifndef BLOWFISH_TOKENS
@@ -59,10 +59,37 @@ public:
 	string value;
 };
 
-vector<FoundToken> tokenQueue;
+vector<FoundToken> foundTokens;
 
 void parseTokensFromFile(string fileName)
 {
+	ifstream reader;
+	string buffer;
+
+	reader.open(fileName);
+
+	if (!reader)
+	{
+		cout << "File \"" + fileName + "\" does not exist!";
+		exit(1);
+	}
+
+	while (!reader.eof())
+	{
+		buffer.push_back(reader.get());
+
+		while (matchesSomeToken(buffer))
+		{
+			buffer.push_back(reader.get());
+		}
+
+		foundTokens.push_back(buildFoundToken(buffer.substr(0, buffer.lengt()-1)));
+
+		// Buffer needs to be where the match stopped
+		char endOfBuffer = buffer[buffer.length()-1]
+		buffer = "";
+		buffer.push_back(endOfBuffer);
+	}
 }
 
 int main()
