@@ -119,8 +119,11 @@ void parseTokensFromFile(string fileName)
 		if (matchFound)
 		{
 			// TODO: Test for the ignore case here
-			cout << "--------->Found match with type: " <<  (*currentToken).type << endl;
-			foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
+			cout << "--------->Found match with type: " <<  (*currentToken).type << " with pattern: /" << (*currentToken).match << "/" << endl;
+			if (!(*currentToken).isIgnored)
+			{
+				foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
+			}
 
 			// Buffer needs to be where the match stopped
 			char endOfBuffer = buffer[buffer.length()-1];
