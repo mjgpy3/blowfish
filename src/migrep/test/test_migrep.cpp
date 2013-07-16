@@ -38,6 +38,8 @@ int main()
 	tester.assertTrue(matcher.isMatch(";(\n", "[\\;\\(\\n]{3}"), "Escaped characters in a range work alright");
 	tester.assertTrue(matcher.isMatch("24.6", "[0-9]*\\.[0-9]+"), "Can match a float-like object");
 	tester.assertTrue(matcher.isMatch("'a'", "'(.)|(\\\\[nt])'"), "Can match a character");
+	tester.assertTrue(matcher.isMatch("]", "\\]"), "Matching a simple escaped character");
+	tester.assertFalse(matcher.isMatch("", ".+"), "Empty string shouldn't be matchable with anything");
 
 	tester.printResults();
 	return 0;

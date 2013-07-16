@@ -91,6 +91,7 @@ void parseTokensFromFile(string fileName)
 {
 	ifstream reader;
 	string buffer;
+	bool pushedBack = false;
 
 	reader.open(fileName.c_str());
 
@@ -102,18 +103,22 @@ void parseTokensFromFile(string fileName)
 
 	while (!reader.eof())
 	{
-		buffer.push_back(reader.get());
-
-		cout << "Processing: " << buffer << endl;
+		if (!pushedBack)
+		{
+			buffer.push_back(reader.get());
+			pushedBack = false;
+		}
+		cout << "Processing: (" << buffer << ')' << endl;
 		matchFound = false;
 		while (matchesSomeToken(buffer))
 		{
 			buffer.push_back(reader.get());
-			cout << "Processing: " << buffer << endl;
+			cout << "(IN WHILE) Processing: (" << buffer << ')' << endl;
 		}
 
 		if (matchFound)
 		{
+			// TODO: Test for the ignore case here
 			cout << "--------->Found match with type: " <<  (*currentToken).type << endl;
 			foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
 
@@ -121,6 +126,8 @@ void parseTokensFromFile(string fileName)
 			char endOfBuffer = buffer[buffer.length()-1];
 			buffer = "";
 			buffer.push_back(endOfBuffer);
+			pushedBack = true;
+			cout << "New buffer: (" << buffer << ")" << endl;
 		}
 	}
 }
