@@ -1,5 +1,5 @@
 section_helpers:
-ident        -> [a-zA-Z0-9][a-zA-Z_]*
+ident        -> [a-zA-Z][a-zA-Z_]*
 char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
 
@@ -24,16 +24,13 @@ kwd_import   -> 'import'
 kwd_until    -> 'until'
 kwd_unless   -> 'unless'
 
-identifier  -> {ident}
-[save_text]
-
 param_ident -> {ident}':'
 [save_text]
 
 integer      -> [0-9]+
 [save_text]
 
-float        -> [0-9]*'.'[0-9]+
+float        -> [0-9]+'.'[0-9]*
 [save_text]
 
 char         -> '\''{char_inside}'\''
@@ -52,6 +49,10 @@ op_modulus   -> '%'
 op_assign    -> ':='
 op_pow       -> '^'
 op_concat    -> '++'
+op_dot       -> '.'
+
+identifier  -> {ident}
+[save_text]
 
 line_ending  -> \n
 
