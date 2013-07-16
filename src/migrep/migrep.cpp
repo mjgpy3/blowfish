@@ -172,7 +172,8 @@ bool MiGrepPattern::matchesText(string toMatch)
 	//cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
 
 	// TODO: Need to check and see if next is last and next is *
-	return !nextExists() && (current().canStopMatching() || currentHasInfiniteCardinality());
+	return (!nextExists() && (current().canStopMatching() || currentHasInfiniteCardinality())) ||
+		canStopMatchingFrom(currentIndex);
 }
 
 //!
@@ -216,6 +217,18 @@ bool MiGrepChar::mustStopMatching()
 bool MiGrepChar::canStopMatching()
 {
 	return card.minimum == 0;
+}
+
+bool MiGrepPattern::canStopMatchingFrom(int index)
+{
+	for (int i = 0; i < matchables.size(); i += 1)
+	{
+		if (!matchables[i].canStopMatching())
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 //!

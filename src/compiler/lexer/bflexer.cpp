@@ -31,7 +31,7 @@ Token * AllTokens = new Token[NUM_TOKENS];
 int Ignore[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-string Matches[] = {"class", "module", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "'(.)|(\\\\[nt])'", "\".\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\n", "=", "<", "<=", ">", ">=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
+string Matches[] = {"class", "module", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\n", "=", "<", "<=", ">", ">=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
 
 void init_token(int index)
 {
@@ -61,6 +61,16 @@ public:
 		{
 			value = val;
 		}
+	}
+
+	void print()
+	{
+		cout << (*token).match << " - ";
+		if ((*token).savesText)
+		{
+			cout << value;
+		}
+		cout << endl;
 	}
 private:
 	Token * token;
@@ -142,6 +152,11 @@ int main()
 
         int a[] = {1,2,3,4};
 	parseTokensFromFile(string("test.st"));
+
+	for (int i = 0; i < foundTokens.size(); i += 1)
+	{
+		foundTokens[i].print();
+	}
 
 	return 0;
 }

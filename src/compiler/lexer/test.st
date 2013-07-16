@@ -2,7 +2,7 @@ module Introduction [
 
     meth Main [
 
-        say standard: "Hello world!"
+        say standard: foo
 
     ]
 

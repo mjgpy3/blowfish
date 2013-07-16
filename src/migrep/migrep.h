@@ -63,6 +63,7 @@ private:
 	void decrementCurrentCardinality();
 	void moveNext();
 	bool nextExists();
+	bool canStopMatchingFrom(int index);
 	bool nextMatches(char me);
 	bool currentHasInfiniteCardinality();
 	bool currentMatches(char me);
