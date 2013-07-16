@@ -39,6 +39,7 @@ float        -> [0-9]*'.'[0-9]+
 char         -> '\''{char_inside}'\''
 
 string       -> '"'.*'"'
+[save_text]
 
 white_space  -> [\t ]
 [ignore]

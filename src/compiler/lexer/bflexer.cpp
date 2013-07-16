@@ -86,7 +86,7 @@ bool matchesSomeToken(string value)
 	MiGrep matcher;
 	for (int i = 0; i < NUM_TOKENS; i += 1)
 	{
-		cout << "Trying to match with: " << i << endl;
+		//cout << "Trying to match with: " << i << endl;
 		if (matcher.isMatch(value, AllTokens[i].match))
 		{
 			currentToken = &AllTokens[i];
@@ -102,6 +102,7 @@ void parseTokensFromFile(string fileName)
 	ifstream reader;
 	string buffer;
 	bool pushedBack = false;
+	bool enteredMatches = false;
 
 	reader.open(fileName.c_str());
 
@@ -113,15 +114,17 @@ void parseTokensFromFile(string fileName)
 
 	while (!reader.eof())
 	{
-		if (!pushedBack)
+		if (!pushedBack || !enteredMatches)
 		{
 			buffer.push_back(reader.get());
 			pushedBack = false;
+			enteredMatches = false;
 		}
 		cout << "Processing: (" << buffer << ')' << endl;
 		matchFound = false;
 		while (matchesSomeToken(buffer))
 		{
+			enteredMatches = true;
 			buffer.push_back(reader.get());
 			cout << "(IN WHILE) Processing: (" << buffer << ')' << endl;
 		}
