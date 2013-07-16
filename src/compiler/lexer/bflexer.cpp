@@ -29,7 +29,7 @@ const int NUM_TOKENS = 47;
 Token * AllTokens = new Token[NUM_TOKENS];
 
 int Ignore[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 string Matches[] = {"class", "module", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\n", "=", "<", "<=", ">", ">=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
 
@@ -101,8 +101,7 @@ void parseTokensFromFile(string fileName)
 {
 	ifstream reader;
 	string buffer;
-	bool pushedBack = false;
-	bool enteredMatches = false;
+	bool justCreatedNewBuffer = false;
 
 	reader.open(fileName.c_str());
 
@@ -114,24 +113,19 @@ void parseTokensFromFile(string fileName)
 
 	while (!reader.eof())
 	{
-		if (!pushedBack || !enteredMatches)
+		if (!justCreatedNewBuffer)
 		{
 			buffer.push_back(reader.get());
-			pushedBack = false;
-			enteredMatches = false;
 		}
 		cout << "Processing: (" << buffer << ')' << endl;
 		matchFound = false;
 		while (matchesSomeToken(buffer))
 		{
-			enteredMatches = true;
 			buffer.push_back(reader.get());
 			cout << "(IN WHILE) Processing: (" << buffer << ')' << endl;
 		}
-
 		if (matchFound)
 		{
-			// TODO: Test for the ignore case here
 			cout << "--------->Found match with type: " <<  (*currentToken).type << " with pattern: /" << (*currentToken).match << "/" << endl;
 			if (!(*currentToken).isIgnored)
 			{
@@ -142,8 +136,12 @@ void parseTokensFromFile(string fileName)
 			char endOfBuffer = buffer[buffer.length()-1];
 			buffer = "";
 			buffer.push_back(endOfBuffer);
-			pushedBack = true;
+			justCreatedNewBuffer = true;
 			cout << "New buffer: (" << buffer << ")" << endl;
+		}
+		else
+		{
+			justCreatedNewBuffer = false;
 		}
 	}
 }
