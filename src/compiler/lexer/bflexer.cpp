@@ -1,7 +1,9 @@
 #include <string>
+#include <cstdlib>
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "migrep.h"
 using namespace std;
 
 #ifndef BLOWFISH_TOKENS
@@ -31,7 +33,7 @@ int Ignore[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 int Keyword[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
 int SaveText[] = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-string Matches[] = {"[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "'(.)|(\\[nt])'", "\".\"", "[\\t ]+", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\n", "=", "<", "<=", ">", ">=", "\\|", "module", "class", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
+string Matches[] = {"[a-zA-Z0-9][a-zA-Z_]*", "[a-zA-Z0-9][a-zA-Z_]*:", "[0-9]+", "[0-9]*\\.[0-9]+", "'(.)|(\\\\[nt])'", "\".\"", "[\\t ]+", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\n", "=", "<", "<=", ">", ">=", "\\|", "module", "class", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
 
 void init_token(int index)
 {
@@ -55,18 +57,45 @@ void setup_tokens()
 class FoundToken
 {
 public:
+	FoundToken(Token & tok, string val)
+	{
+		token = &tok;
+		if ((*token).savesText)
+		{
+			value = val;
+		}
+	}
+private:
 	Token * token;
 	string value;
 };
 
 vector<FoundToken> foundTokens;
+Token * currentToken;
+bool matchFound;
+
+bool matchesSomeToken(string value)
+{
+	MiGrep matcher;
+	for (int i = 0; i < NUM_TOKENS; i += 1)
+	{
+		cout << "Trying to match with: " << i << endl;
+		if (matcher.isMatch(value, AllTokens[i].match))
+		{
+			currentToken = &AllTokens[i];
+			matchFound = true;
+			return true;
+		}
+	}
+	return false;
+}
 
 void parseTokensFromFile(string fileName)
 {
 	ifstream reader;
 	string buffer;
 
-	reader.open(fileName);
+	reader.open(fileName.c_str());
 
 	if (!reader)
 	{
@@ -78,17 +107,23 @@ void parseTokensFromFile(string fileName)
 	{
 		buffer.push_back(reader.get());
 
+		cout << "Processing: " << buffer << endl;
+		matchFound = false;
 		while (matchesSomeToken(buffer))
 		{
 			buffer.push_back(reader.get());
+			cout << "Processing: " << buffer << endl;
 		}
 
-		foundTokens.push_back(buildFoundToken(buffer.substr(0, buffer.lengt()-1)));
+		if (matchFound)
+		{
+			foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
 
-		// Buffer needs to be where the match stopped
-		char endOfBuffer = buffer[buffer.length()-1]
-		buffer = "";
-		buffer.push_back(endOfBuffer);
+			// Buffer needs to be where the match stopped
+			char endOfBuffer = buffer[buffer.length()-1];
+			buffer = "";
+			buffer.push_back(endOfBuffer);
+		}
 	}
 }
 
@@ -98,6 +133,7 @@ int main()
 	cout << "Hello Lexer!\n";
 
         int a[] = {1,2,3,4};
+	parseTokensFromFile(string("test.txt"));
 
 	return 0;
 }

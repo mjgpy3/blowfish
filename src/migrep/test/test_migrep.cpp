@@ -36,6 +36,8 @@ int main()
 	tester.assertFalse(matcher.isMatch("blowfish", "[a-v]*"), "Ranges should not match values in said range");
 	tester.assertTrue(matcher.isMatch("{{{{   |", "\\{{4} +\\|"), "Escaped characters work nicely");
 	tester.assertTrue(matcher.isMatch(";(\n", "[\\;\\(\\n]{3}"), "Escaped characters in a range work alright");
+	tester.assertTrue(matcher.isMatch("24.6", "[0-9]*\\.[0-9]+"), "Can match a float-like object");
+	tester.assertTrue(matcher.isMatch("'a'", "'(.)|(\\\\[nt])'"), "Can match a character");
 
 	tester.printResults();
 	return 0;

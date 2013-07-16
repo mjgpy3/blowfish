@@ -91,9 +91,9 @@ bool MiGrep::isMatch(string text, string pattern)
 		patterns.push_back(pattern1);
 		patterns.push_back(pattern2);
 #ifdef DEBUG
-		cout << "Patterns parsed from OR: " << endl;
-		cout << '\t' << patterns[0] << endl;
-		cout << '\t' << patterns[1] << endl;
+		////cout << "Patterns parsed from OR: " << endl;
+		//cout << '\t' << patterns[0] << endl;
+		//cout << '\t' << patterns[1] << endl;
 #endif
 	}
 	else
@@ -126,50 +126,50 @@ void MiGrepPattern::decrementCurrentCardinality()
 //!
 bool MiGrepPattern::matchesText(string toMatch)
 {
-	cout << "Attempting to match: " << toMatch << endl;
+	//cout << "Attempting to match: " << toMatch << endl;
 	for (int i = 0; i < toMatch.length(); i += 1)
 	{
-		cout << "------------------------------\n";
-		cout << " char: " << toMatch[i] << endl;
-		cout << " current pattern is:\n";
+		//cout << "------------------------------\n";
+		//cout << " char: " << toMatch[i] << endl;
+		//cout << " current pattern is:\n";
 		current().print();
-		cout << "------------------------------\n";
+		//cout << "------------------------------\n";
 		if (current().mustStopMatching())
 		{
-			cout << "  MUST STOP MATCHING WITH CURRENT" << endl;
+			//cout << "  MUST STOP MATCHING WITH CURRENT" << endl;
 			if (nextExists())
 			{
-				cout << "   Move next\n";
+				//cout << "   Move next\n";
 				moveNext();
 				current().print();
 			}
 			else
 			{
-				cout << "   No more matches\n";
+				//cout << "   No more matches\n";
 				return false;
 			}
 		}
 
 		if (current().canStopMatching() && nextExists() && nextMatches(toMatch[i]))
 		{
-			cout << "  ->The next thing matches, we're moving\n";
+			//cout << "  ->The next thing matches, we're moving\n";
 			moveNext();
 			decrementCurrentCardinality();
 		}
 		else if (current().matches(toMatch[i]))
 		{
-			cout << "  ->The current thing matches\n";
+			//cout << "  ->The current thing matches\n";
 			decrementCurrentCardinality();
 		}
 		else
 		{
-			cout << "  ->Nothing matches\n";
+			//cout << "  ->Nothing matches\n";
 			return false;
 		}
 	}
 
 	current().print();
-	cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
+	//cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
 
 	return !nextExists() && (current().canStopMatching() || currentHasInfiniteCardinality());
 }
@@ -307,7 +307,7 @@ bool MiGrepChar::matches(char me)
 //!
 void MiGrepCharFactory::printBuildFrom()
 {
-	cout << buildFrom << endl;
+	//cout << buildFrom << endl;
 }
 
 //!
@@ -471,11 +471,11 @@ int buildRanges(MiGrepChar & miGrep, string fromMe)
 	for (int i = 1; i < fromMe.length(); i += 1)
 	{
 #ifdef DEBUG
-		cout << "Processing Range: " << fromMe[i] << endl;
+		//cout << "Processing Range: " << fromMe[i] << endl;
 #endif
 		if (fromMe[i] == ']')
 		{
-			cout << "Matches ]\n";
+			//cout << "Matches ]\n";
 			return i+1;
 		}
 		else if (fromMe[i] == '\\')
@@ -538,7 +538,7 @@ int parseCardinalityToMiGrepChar(MiGrepChar & miChar, string fromMe)
 //!
 void Range::print()
 {
-	cout << "'" << begin << "'" << "-" << "'" << end << "'";
+	//cout << "'" << begin << "'" << "-" << "'" << end << "'";
 }
 
 //!
@@ -546,17 +546,17 @@ void Range::print()
 //!
 void MiGrepChar::print()
 {
-	cout << "Ranges: " << endl;
+	//cout << "Ranges: " << endl;
 
 	for (int i = 0; i < ranges.size(); i += 1)
 	{
-		cout << "\t";
+		//cout << "\t";
 		ranges[i].print();
-		cout << endl;
+		//cout << endl;
 	}
-	cout << "Cardinality type: " << card.restriction << endl;
-	cout << "Card start:       " << card.minimum << endl;
-	cout << "Card end:	 " << card.maximum << endl;
+	//cout << "Cardinality type: " << card.restriction << endl;
+	//cout << "Card start:       " << card.minimum << endl;
+	//cout << "Card end:	 " << card.maximum << endl;
 }
 
 //!
@@ -566,7 +566,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 {
 	MiGrepChar result = MiGrepChar();
 #ifdef DEBUG
-	cout << "Processing: " << buildFrom << endl;
+	//cout << "Processing: " << buildFrom << endl;
 #endif
 
 	if (!isEngineToken(buildFrom[0]))
@@ -592,7 +592,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	else if (buildFrom[0] == '[')
 	{
 		buildFrom = buildFrom.substr(buildRanges(result, buildFrom));
-		cout << "BUILD FROM AFTER RANGE: " << buildFrom << endl;
+		//cout << "BUILD FROM AFTER RANGE: " << buildFrom << endl;
 	}
 
 	// Cardinality
@@ -622,7 +622,7 @@ MiGrepChar MiGrepCharFactory::buildNext()
 	}
 
 #ifdef DEBUG
-	cout << "Generated MiGrepChar: " << endl;
+	//cout << "Generated MiGrepChar: " << endl;
 	result.print();
 #endif
 
@@ -642,7 +642,7 @@ bool MiGrepCharFactory::doneBuilding()
 //!
 void MiGrepError(string message)
 {
-	cout << "MiGrep Error:" << endl;
-	cout << message << endl;
+	//cout << "MiGrep Error:" << endl;
+	//cout << message << endl;
 	exit(1);
 }
