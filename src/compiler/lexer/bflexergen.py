@@ -16,7 +16,6 @@ PARSE_MODES = {
 OPTIONS = [
     "save_text",
     "ignore",
-    "keyword"
 ]
 
 class Token(object):
@@ -212,7 +211,6 @@ class TokensToCPlusPlus(object):
 {
 \t""" + self.array_name +  """[index].type = (""" + self.enum_name +  """)index;
 \t""" + self.array_name + """[index].match = Matches[index];
-\t""" + self.array_name + """[index].isKeyword = Keyword[index];
 \t""" + self.array_name + """[index].savesText = SaveText[index];
 \t""" + self.array_name + """[index].isIgnored = Ignore[index];
 }
@@ -269,7 +267,6 @@ class TokensToCPlusPlus(object):
 {
 \t%s type;
 \tstring match;
-\tbool isKeyword;
 \tbool savesText;
 \tbool isIgnored;
 }; """ % self.enum_name

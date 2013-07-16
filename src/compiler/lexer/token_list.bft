@@ -1,9 +1,29 @@
 section_helpers:
 ident        -> [a-zA-Z0-9][a-zA-Z_]*
-char_inside  -> (.)|(\[nt])
+char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
 
 section_tokens:
+kwd_class    -> 'class'
+kwd_module   -> 'module'
+kwd_meth     -> 'meth'
+kwd_if       -> 'if'
+kwd_elseif   -> 'elseif'
+kwd_else     -> 'else'
+kwd_is       -> 'is'
+kwd_isnow    -> 'is_now'
+kwd_not      -> 'not'
+kwd_forms    -> 'forms'
+kwd_are      -> 'are'
+kwd_or       -> 'or'
+kwd_and      -> 'and'
+kwd_for      -> 'for'
+kwd_enum     -> 'enum'
+kwd_require  -> 'require'
+kwd_import   -> 'import'
+kwd_until    -> 'until'
+kwd_unless   -> 'unless'
+
 identifier  -> {ident}
 [save_text]
 
@@ -42,44 +62,6 @@ op_geq       -> '>='
 
 pipe         -> '|'
 
-kwd_module   -> 'module'
-[keyword]
-kwd_class    -> 'class'
-[keyword]
-kwd_meth     -> 'meth'
-[keyword]
-kwd_if       -> 'if'
-[keyword]
-kwd_elseif   -> 'elseif'
-[keyword]
-kwd_else     -> 'else'
-[keyword]
-kwd_is       -> 'is'
-[keyword]
-kwd_isnow    -> 'is_now'
-[keyword]
-kwd_not      -> 'not'
-[keyword]
-kwd_forms    -> 'forms'
-[keyword]
-kwd_are      -> 'are'
-[keyword]
-kwd_or       -> 'or'
-[keyword]
-kwd_and      -> 'and'
-[keyword]
-kwd_for      -> 'for'
-[keyword]
-kwd_enum     -> 'enum'
-[keyword]
-kwd_require  -> 'require'
-[keyword]
-kwd_import   -> 'import'
-[keyword]
-kwd_until    -> 'until'
-[keyword]
-kwd_unless   -> 'unless'
-[keyword]
 
 holder_begin -> {holder_ident}'{'
 holder_end   -> '}'
