@@ -40,7 +40,7 @@ char         -> '\''{char_inside}'\''
 
 string       -> '"'.'"'
 
-white_space  -> [\t ]+
+white_space  -> [\t ]
 [ignore]
 
 op_plus      -> '+'

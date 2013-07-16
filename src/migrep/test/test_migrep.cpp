@@ -39,7 +39,7 @@ int main()
 	tester.assertTrue(matcher.isMatch("24.6", "[0-9]*\\.[0-9]+"), "Can match a float-like object");
 	tester.assertTrue(matcher.isMatch("'a'", "'(.)|(\\\\[nt])'"), "Can match a character");
 	tester.assertTrue(matcher.isMatch("]", "\\]"), "Matching a simple escaped character");
-	tester.assertFalse(matcher.isMatch("", ".+"), "Empty string shouldn't be matchable with anything");
+	tester.assertTrue(matcher.isMatch("I", "[a-zA-Z0-9][a-zA-Z_]*"), "Complex match 2");
 
 	tester.printResults();
 	return 0;

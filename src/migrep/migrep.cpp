@@ -171,6 +171,7 @@ bool MiGrepPattern::matchesText(string toMatch)
 	current().print();
 	//cout << "Must stop matching: " << bool(!nextExists() && current().mustStopMatching()) << endl;
 
+	// TODO: Need to check and see if next is last and next is *
 	return !nextExists() && (current().canStopMatching() || currentHasInfiniteCardinality());
 }
 
