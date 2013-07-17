@@ -20,7 +20,7 @@
 
 
 """
-    A lexer for generating token connections in blowfish
+    A code generator for blowfish's lexer
 """
 
 from sys import argv
