@@ -194,17 +194,35 @@ class TokensToCPlusPlus(object):
         with open(file_name, 'w') as file_stream:
             file_stream.write("\n".join(resultant_lines))
 
+        with open(file_name[:-4] + ".h", 'r') as f:
+            text = f.read()
+
+        results = []
+        section = False
+
+        for line in text.split("\n"):
+            if line.strip() == "#define BLOWFISH_TOKEN_NAMES":
+                section = True
+                results.append("#define BLOWFISH_TOKEN_NAMES")
+                results.append('\n'+self.get_token_enum(tokens)+'\n')
+
+            if line.strip() == "#endif":
+                section = False
+
+            if not section:
+                results.append(line)
+            else:
+                pass
+
+        with open(file_name[:-4] + ".h", 'w') as f:
+            f.write("\n".join(results))
+
     def get_token_structure_code(self, definition_name, tokens):
         return [ self.get_comment("bflexergen.py") + '\n',
                  self.get_token_section_definition(definition_name) + '\n',
-                 self.get_token_enum(tokens) + '\n',
-                 self.get_token_struct() + '\n',
                  self.get_number_of_tokens_constant(tokens) + '\n',
-                 self.get_token_array_declaration(tokens) + '\n',
                  self.options_to_cpp_arrays(tokens) + '\n',
-                 self.match_to_cpp_array(tokens) + '\n',
-                 self.get_init_token_function(),
-                 self.get_token_array_filling_statements(tokens)]
+                 self.match_to_cpp_array(tokens) + '\n']
 
     def options_to_cpp_arrays(self, tokens):
         array_dict = {}
