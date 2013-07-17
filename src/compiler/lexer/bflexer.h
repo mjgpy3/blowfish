@@ -23,6 +23,8 @@
 #include <vector>
 using namespace std;
 
+// TODO: separate out this file into 3 .h each with a corrisponding .cpp
+
 #ifndef BLOWFISH_TOKEN_NAMES
 #define BLOWFISH_TOKEN_NAMES
 
