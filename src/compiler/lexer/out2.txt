@@ -105,3 +105,217 @@ Processing: (
 ÿ)
 --------->Found match with type: 35 with pattern: /\n/
 New buffer: (ÿ)
+Hello Lexer!
+Processing: (m)
+(IN WHILE) Processing: (mo)
+(IN WHILE) Processing: (mod)
+(IN WHILE) Processing: (modu)
+(IN WHILE) Processing: (modul)
+(IN WHILE) Processing: (module)
+(IN WHILE) Processing: (module )
+--------->Found match with type: 1 with pattern: /module/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( M)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (M)
+Processing: (M)
+(IN WHILE) Processing: (Ma)
+(IN WHILE) Processing: (Mai)
+(IN WHILE) Processing: (Main)
+(IN WHILE) Processing: (Main )
+--------->Found match with type: 34 with pattern: /[a-zA-Z][a-zA-Z_]*/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( [)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: ([)
+Processing: ([)
+(IN WHILE) Processing: ([
+)
+--------->Found match with type: 44 with pattern: /\[/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+ )
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: (  )
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( s)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (s)
+Processing: (s)
+(IN WHILE) Processing: (sa)
+(IN WHILE) Processing: (say)
+(IN WHILE) Processing: (say )
+--------->Found match with type: 34 with pattern: /[a-zA-Z][a-zA-Z_]*/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( s)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (s)
+Processing: (s)
+(IN WHILE) Processing: (st)
+(IN WHILE) Processing: (sta)
+(IN WHILE) Processing: (stan)
+(IN WHILE) Processing: (stand)
+(IN WHILE) Processing: (standa)
+(IN WHILE) Processing: (standar)
+(IN WHILE) Processing: (standard)
+(IN WHILE) Processing: (standard:)
+(IN WHILE) Processing: (standard: )
+--------->Found match with type: 19 with pattern: /[a-zA-Z][a-zA-Z_]*:/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( ")
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (")
+Processing: (")
+Processing: ("H)
+Processing: ("He)
+Processing: ("Hel)
+Processing: ("Hell)
+Processing: ("Hello)
+Processing: ("Hello )
+Processing: ("Hello W)
+Processing: ("Hello Wo)
+Processing: ("Hello Wor)
+Processing: ("Hello Worl)
+Processing: ("Hello World)
+Processing: ("Hello World")
+(IN WHILE) Processing: ("Hello World"
+)
+--------->Found match with type: 23 with pattern: /".*"/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+])
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: (])
+Processing: (])
+(IN WHILE) Processing: (]
+)
+--------->Found match with type: 45 with pattern: /\]/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+ÿ)
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: (ÿ)
+Hello Lexer!
+Processing: (m)
+(IN WHILE) Processing: (mo)
+(IN WHILE) Processing: (mod)
+(IN WHILE) Processing: (modu)
+(IN WHILE) Processing: (modul)
+(IN WHILE) Processing: (module)
+(IN WHILE) Processing: (module )
+--------->Found match with type: 1 with pattern: /module/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( M)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (M)
+Processing: (M)
+(IN WHILE) Processing: (Ma)
+(IN WHILE) Processing: (Mai)
+(IN WHILE) Processing: (Main)
+(IN WHILE) Processing: (Main )
+--------->Found match with type: 34 with pattern: /[a-zA-Z][a-zA-Z_]*/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( [)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: ([)
+Processing: ([)
+(IN WHILE) Processing: ([
+)
+--------->Found match with type: 44 with pattern: /\[/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+ )
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: (  )
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( s)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (s)
+Processing: (s)
+(IN WHILE) Processing: (sa)
+(IN WHILE) Processing: (say)
+(IN WHILE) Processing: (say )
+--------->Found match with type: 34 with pattern: /[a-zA-Z][a-zA-Z_]*/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( s)
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (s)
+Processing: (s)
+(IN WHILE) Processing: (st)
+(IN WHILE) Processing: (sta)
+(IN WHILE) Processing: (stan)
+(IN WHILE) Processing: (stand)
+(IN WHILE) Processing: (standa)
+(IN WHILE) Processing: (standar)
+(IN WHILE) Processing: (standard)
+(IN WHILE) Processing: (standard:)
+(IN WHILE) Processing: (standard: )
+--------->Found match with type: 19 with pattern: /[a-zA-Z][a-zA-Z_]*:/
+New buffer: ( )
+Processing: ( )
+(IN WHILE) Processing: ( ")
+--------->Found match with type: 24 with pattern: /[\t ]/
+New buffer: (")
+Processing: (")
+Processing: ("H)
+Processing: ("He)
+Processing: ("Hel)
+Processing: ("Hell)
+Processing: ("Hello)
+Processing: ("Hello )
+Processing: ("Hello W)
+Processing: ("Hello Wo)
+Processing: ("Hello Wor)
+Processing: ("Hello Worl)
+Processing: ("Hello World)
+Processing: ("Hello World")
+(IN WHILE) Processing: ("Hello World"
+)
+--------->Found match with type: 23 with pattern: /".*"/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+])
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: (])
+Processing: (])
+(IN WHILE) Processing: (]
+)
+--------->Found match with type: 45 with pattern: /\]/
+New buffer: (
+)
+Processing: (
+)
+(IN WHILE) Processing: (
+ÿ)
+--------->Found match with type: 35 with pattern: /\n/
+New buffer: (ÿ)

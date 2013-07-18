@@ -194,7 +194,7 @@ class TokensToCPlusPlus(object):
         with open(file_name, 'w') as file_stream:
             file_stream.write("\n".join(resultant_lines))
 
-        with open(file_name[:-4] + ".h", 'r') as f:
+        with open("bftokennames.h", 'r') as f:
             text = f.read()
 
         results = []
@@ -214,7 +214,7 @@ class TokensToCPlusPlus(object):
             else:
                 pass
 
-        with open(file_name[:-4] + ".h", 'w') as f:
+        with open("bftokennames.h", 'w') as f:
             f.write("\n".join(results))
 
     def get_token_structure_code(self, definition_name, tokens):
