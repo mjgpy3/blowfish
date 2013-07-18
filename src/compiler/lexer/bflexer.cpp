@@ -23,6 +23,7 @@
 #include <fstream>
 #include "migrep.h"
 #include "bflexer.h"
+#include "foundtoken.h"
 using namespace std;
 
 #ifndef BLOWFISH_TOKENS
@@ -57,25 +58,6 @@ void BfLexer::setupTokens()
 	}
 }
 
-FoundToken::FoundToken(Token & tok, string val)
-{
-	token = &tok;
-	if ((*token).savesText)
-	{
-		value = val;
-	}
-}
-
-void FoundToken::print()
-{
-	cout << (*token).match << " - ";
-	if ((*token).savesText)
-	{
-		cout << value;
-	}
-	cout << endl;
-}
-
 bool BfLexer::matchesSomeToken(string value)
 {
 	MiGrep matcher;
@@ -102,7 +84,7 @@ void BfLexer::parseTokensFromFile(string fileName)
 
 	if (!reader)
 	{
-		cout << "File \"" + fileName + "\" does not exist!";
+		cout << "File \"" + fileName + "\" does not exist!" << endl;
 		exit(1);
 	}
 

@@ -21,26 +21,10 @@
 
 #include <string>
 #include "bftokennames.h"
+#include "token.h"
+#include "foundtoken.h"
 #include <vector>
 using namespace std;
-
-struct Token
-{
-        TokenName type;
-        string match;
-        bool savesText;
-        bool isIgnored;
-};
-
-class FoundToken
-{
-public:
-	FoundToken(Token & tok, string val);
-	void print();
-private:
-        Token * token;
-        string value;
-};
 
 class BfLexer
 {
