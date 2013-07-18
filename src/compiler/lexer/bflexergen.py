@@ -50,7 +50,7 @@ class Token(object):
                self.match + " (" + ", ".join(self.options) + ")" + '"'
 
 def validate_args():
-    if len(argv) < 3:
+    if len(argv) < 2:
         usage()
         exit()
     try:
@@ -60,11 +60,8 @@ def validate_args():
         usage()
         exit()
 
-    if not argv[2].endswith(".cpp"):
-        argv[2] += ".cpp"
-
 def usage():
-    print "bflexer.py <token_file> <output_name>.cpp"
+    print "bflexer.py <token_file>"
 
 class TokenFileParser(object):
     def __init__(self):
@@ -172,8 +169,8 @@ class TokensToCPlusPlus(object):
         self.array_size_name = "NUM_TOKENS"
         self.enum_name = "TokenName"
 
-    def write_tokens_to_file(self, tokens, definition_name, file_name):
-        with open(file_name, 'r') as file_reader:
+    def write_tokens_to_file(self, tokens, definition_name):
+        with open("bflexer.cpp", 'r') as file_reader:
             text = file_reader.read()
 
         resultant_lines = []
@@ -191,7 +188,7 @@ class TokensToCPlusPlus(object):
                 in_section = False
                 resultant_lines.append(line)
 
-        with open(file_name, 'w') as file_stream:
+        with open("bflexer.cpp", 'w') as file_stream:
             file_stream.write("\n".join(resultant_lines))
 
         with open("bftokennames.h", 'r') as f:
@@ -309,11 +306,9 @@ class TokensToCPlusPlus(object):
 
 if __name__ == '__main__':
     validate_args()
-    print "Input:", argv[1], "\nOutput:", argv[2]
-
     parser = TokenFileParser()
     parser.parse(argv[1])
 
     writer = TokensToCPlusPlus()
 
-    writer.write_tokens_to_file(parser.tokens, "BLOWFISH_TOKENS", argv[2])
+    writer.write_tokens_to_file(parser.tokens, "BLOWFISH_TOKENS")
