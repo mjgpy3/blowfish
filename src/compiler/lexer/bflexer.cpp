@@ -147,7 +147,7 @@ int main()
 	BfLexer lexer = BfLexer();
 
         int a[] = {1,2,3,4};
-	lexer.parseTokensFromFile(string("test.st"));
+	lexer.parseTokensFromFile(string("hello_world.bf"));
 
 	return 0;
 }
