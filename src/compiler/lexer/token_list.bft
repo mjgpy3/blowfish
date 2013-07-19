@@ -63,7 +63,7 @@ op_gt        -> '>'
 op_geq       -> '>='
 
 pipe         -> '|'
-
+comma        -> ','
 
 holder_begin -> {holder_ident}'{'
 holder_end   -> '}'

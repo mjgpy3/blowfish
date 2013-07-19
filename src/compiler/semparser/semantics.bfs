@@ -17,6 +17,9 @@
 <ident> ::= t_identifier -> ( $$ = BFIdentifier( $1 ) );
 <param ident> ::= t_param_ident -> ( $$ = BFParamIdentifier( $1 ) );
 
+<spec param> ::= <param ident> <ident>
+               | t_comma <ident>;
+
 # Literals:
 <literal> ::= <int>
             | <float>
@@ -60,7 +63,10 @@
 
 <module def> ::= t_kwd_module <ident> <block> -> ($$ = BFModuleDef( $1 ) );
 <class def> ::= t_kwd_class <ident> <block> -> ($$ = BFClassDef( $1 ));
-<meth def> ::= t_kwd_meth <ident> <context> -> ($$ = BFClassDef( $1, $2 ));
+<meth def> ::= t_kwd_meth <ident> -> ($$ = BFClassDef( $1, $2 ))
+             | t_kwd_methd <ident> <context> -> ($$ = BFClassDef( $1, $2 ) );
+
+<context> ::= <ident> <spec param>* -> ($$ = BFMethodParam() );
 
 <block> ::= t_block_begin ... t_block_end -> ( $$ = BFBlock() );
 
