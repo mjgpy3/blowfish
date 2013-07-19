@@ -33,6 +33,7 @@ public:
 	void setupTokens();
 	bool matchesSomeToken(string value);
 	void parseTokensFromFile(string fileName);
+	// TODO: Specify some access routines for foundTokens so that this is usable later
 
 private:
 	Token * AllTokens;
