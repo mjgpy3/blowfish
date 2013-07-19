@@ -37,11 +37,8 @@
 <is now> ::= t_kwd_isnow
 	   | t_op_assign;
 
-# Constant assign:
-<is> ::= t_kwd_is;
-
 # General:
-<math op> ::= t_op_plus 
+<math operator> ::= t_op_plus 
             | t_op_minus
             | t_op_times
             | t_op_divide
@@ -51,7 +48,24 @@
 
 # Assignment:
 <assign> ::= <variable assign>
-           | <const assign>;
+           | <const assign>
+           | <poly assign>;
 
-<variable assign> ::= <ident> <is now> <exp> -> ($$ = BFVariableAssign( $1, $3 ));
-<const assign> ::= <ident> <is> <literal> -> ($$ = BFConstantAssign( $1, $3 ))
+<statement> ::= <assign>
+              | <exp>;
+
+<exp> ::= t_paren_begin <exp> t_paren_end
+        | <literal>
+        | <ident>;
+
+<module def> ::= t_kwd_module <ident> <block> -> ($$ = BFModuleDef( $1 ) );
+<class def> ::= t_kwd_class <ident> <block> -> ($$ = BFClassDef( $1 ));
+<meth def> ::= t_kwd_meth <ident> <context> -> ($$ = BFClassDef( $1, $2 ));
+
+<block> ::= t_block_begin ... t_block_end -> ( $$ = BFBlock() );
+
+<variable assign> ::= <ident> <is now> <exp> -> ($$ = BFVariableAssign());
+<const assign> ::= <ident> t_kwd_is <literal> -> ($$ = BFConstantAssign());
+<poly assign> ::= t_kwd_forms <ident> t_kwd_are <ident> <other forms>* -> ($$ = BFPolyAssign());
+
+<other forms> ::= t_pipe <ident>;
