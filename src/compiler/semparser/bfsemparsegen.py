@@ -29,9 +29,6 @@ def parse_semantics_file(file_name):
     for i in definition_part:
         print [[k.strip() for k in j.split('->')] for j in i]
 
-
-    # TODO: Write code to parse file and reduce semantic items to list of only tokens (with gen code)
-
 def get_tokens(file_name):
     with open(file_name, 'r') as file_stream:
         text = file_stream.read()
