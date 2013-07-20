@@ -16,22 +16,23 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#ifndef BLOWFISH_AST_BUILDER
+#define BLOWFISH_AST_BUILDER
+
 #include "syntaxnode.h"
-#include "bftokennames.h"
+#include "bfnodes.h"
+#include <vector>
 using namespace std;
 
-SyntaxNode::SyntaxNode(TokenName & val, bool builds)
+class AstBuilder
 {
-	value = &val;
-	buildsCode = builds;
-}
+public:
+	AstBuilder();
+	void buildPatterns();
+private:
+	vector<SyntaxNode> patterns;
+	BFNode * ast;
+	BFNode * current;
+};
 
-SyntaxNode(bool builds)
-{
-	buildsCode = builds;
-}
-
-void attachNext(SyntaxNode n)
-{
-	next.push_back(n);
-}
+#endif
