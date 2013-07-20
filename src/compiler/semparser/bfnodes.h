@@ -19,8 +19,30 @@
 #ifndef BLOWFISH_AST_NODES
 #define BLOWFISH_AST_NODES
 
+#include <vector>
+#include <string>
+using namespace std;
+
 class BFNode
 {
+public:
+	BFNode(string value);
+	BFNode();
+private:
+	vector<BFNode*> children;
+	BFNode * parent;
+	TokenName * type;
+	int indexLast() { return children.size()-1; }
+};
+
+class BFRoot : private BFNode
+{
+};
+
+class BFIdentifier : private BFNode
+{
+public:
+	BFIdentifier(string value) : BFNode(value);
 };
 
 #endif

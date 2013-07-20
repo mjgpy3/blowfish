@@ -19,7 +19,6 @@
 #ifndef BLOWFISH_AST_BUILDER
 #define BLOWFISH_AST_BUILDER
 
-#include "syntaxnode.h"
 #include "bfnodes.h"
 #include <vector>
 using namespace std;
@@ -28,10 +27,16 @@ class AstBuilder
 {
 public:
 	AstBuilder();
-	void buildPatterns();
+	BFNode buildAst(vector<FoundToken> tokens);
+	void buildNode(FoundToken tok);
+
+	void appendChild(BFNode n);
+	void moveToCurrentChild();
+	void moveToParent();
+	void currentChildsParentIs(BFNode n);
+
 private:
-	vector<SyntaxNode> patterns;
-	BFNode * ast;
+	BFNode * root;
 	BFNode * current;
 };
 

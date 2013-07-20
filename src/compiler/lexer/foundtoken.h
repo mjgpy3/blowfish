@@ -27,6 +27,8 @@ class FoundToken
 {
 public:
         FoundToken(Token & tok, string val);
+	TokenName getTokenValue() { return (*token).type; }
+	string getValue() { return value; }
         void print();
 private:
         Token * token;
