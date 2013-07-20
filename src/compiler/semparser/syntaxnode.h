@@ -16,51 +16,26 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef BLOWFISH_SEMANTIC_NODE
-#define BLOWFISH_SEMANTIC_NODE
+#ifndef BLOWFISH_SYNTAX_NODE
+#define BLOWFISH_SYNTAX_NODE
 
 #include "bfnodes.h"
 #include "bftokennames.h"
 #include <vector>
 using namespace std;
 
-class SemanticNode
-{
-protected:
-	BFNode * current;
-};
-
-class StartNode : protected SemanticNode
-{
-private:
-	SemanticNode * next;
-};
-
-class EndNode : protected SemanticNode
+class SyntaxNode
 {
 public:
-	void buildCurrentNode();
-};
-
-class OrNode : protected SemanticNode
-{
+	SyntaxNode(TokenName & value, bool builds);
+	SyntaxNode(bool builds);
+	void attachNext(SyntaxNode n);
+	virtual BFNode getAstNode() = 0;
+	bool canBuildAstNode();
 private:
-	vector<BFNode *> options;
-	SemanticNode * next;
-};
-
-class DefNode : protected SemanticNode
-{
-private:
-	SemanticNode * sub;
-	SemanticNode * next;
-};
-
-class MatchNode : protected SemanticNode
-{
-private:
-	TokenName matches;
-	SemanticNode * next;
+	vector<SyntaxNode> next;
+	TokenName * value;
+	bool buildsCode;
 };
 
 #endif

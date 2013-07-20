@@ -18,16 +18,32 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """
 
+def str_to_camel(string):
+    return "".join(i[0].upper() + i[1:] for i in string.split(' '))
+
+class SyntaxNodeGenerator(object):
+    def __init__(self, key_name, defs):
+        self.key_name = key_name
+        self.defs = defs
+
+    def print_me(self):
+        print self.get_key_name_class_def(), self.defs
+
 def parse_semantics_file(file_name):
+    generators = []
+
     keys = get_keys(file_name)
     tokens = get_tokens(file_name)
-
     definition_part = [[j.strip() for j in i[1].split('|')] for i in get_key_and_definition_pairs(file_name)]
 
-    print keys
+    if len(keys) != len(definition_part):
+        print "Something strange is amuck"
+        exit()
 
-    for i in definition_part:
-        print [[k.strip() for k in j.split('->')] for j in i]
+    for i in xrange(len(keys)):
+        generators.append(SyntaxNodeGenerator(keys[i], definition_part[i]))
+        generators[-1].print_me()
+
 
 def get_tokens(file_name):
     with open(file_name, 'r') as file_stream:
@@ -65,7 +81,7 @@ def get_key_and_definition_pairs(file_name):
     lines = get_only_valuable_lines(file_name)
     mini = unlines_and_minify(lines)
     stmnts = mini.split(';')
-    return [[j.strip() for j in i.split('::=')] for i in stmnts]
+    return [[j.strip() for j in i.split('::=')] for i in stmnts][:-1]
 
 def unlines_and_minify(lines):
     result = "".join(lines)
@@ -92,7 +108,6 @@ def get_only_valuable_lines(file_name):
             continue
 
         result.append(line)
-
     return result
 
     
