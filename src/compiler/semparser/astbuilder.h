@@ -20,6 +20,7 @@
 #define BLOWFISH_AST_BUILDER
 
 #include "bfnodes.h"
+#include "foundtoken.h"
 #include <vector>
 using namespace std;
 
@@ -30,7 +31,7 @@ public:
 	BFNode buildAst(vector<FoundToken> tokens);
 	void buildNode(FoundToken tok);
 
-	void appendChild(BFNode n);
+	void attachChild(BFNode n);
 	void moveToCurrentChild();
 	void moveToParent();
 	void currentChildsParentIs(BFNode n);

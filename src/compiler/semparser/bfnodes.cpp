@@ -16,39 +16,20 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef BLOWFISH_AST_NODES
-#define BLOWFISH_AST_NODES
-
-#include "bftokennames.h"
-#include <vector>
+#include "bfnodes.h"
 #include <string>
 using namespace std;
 
-class BFNode
+BFNode::BFNode()
 {
-public:
-	BFNode(string val);
-	BFNode();
-	void appendChild(BFNode n);
+}
 
-private:
-	vector<BFNode*> children;
-	BFNode * parent;
-	TokenName * type;
-	int indexLast() { return children.size()-1; }
-	string value;
-};
-
-class BFRoot : public BFNode
+BFNode::BFNode(string val)
 {
-public:
-	BFRoot() : BFNode() {}
-};
+	value = val;
+}
 
-class BFIdentifier : public BFNode
+void BFNode::appendChild(BFNode n)
 {
-public:
-	BFIdentifier(string value) : BFNode(value) {}
-};
-
-#endif
+	children.push_back(&n);
+}

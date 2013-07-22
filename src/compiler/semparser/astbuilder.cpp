@@ -17,7 +17,8 @@
 */
 
 #include "astbuilder.h"
-#include "foundToken.h"
+#include <iostream>
+#include "foundtoken.h"
 #include "bfnodes.h"
 using namespace std;
 
@@ -27,7 +28,7 @@ AstBuilder::AstBuilder()
 	BFNode blowfish = BFRoot(); 
 
 	root = &blowfish;
-	current = &root;
+	current = root;
 }
 
 void AstBuilder::buildNode(FoundToken tok)
@@ -36,7 +37,18 @@ void AstBuilder::buildNode(FoundToken tok)
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
-			appendChild(BFIdentifier(tok.getValue()));
+			attachChild(BFIdentifier(tok.getValue()));
 			break;
 	}
+}
+
+void AstBuilder::attachChild(BFNode n)
+{
+	(*current).appendChild(n);
+}
+
+int main()
+{
+	cout << "Hello Semantic Parser!" << endl;
+	return 0;
 }
