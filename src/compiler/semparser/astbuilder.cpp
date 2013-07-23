@@ -18,6 +18,7 @@
 
 #include "astbuilder.h"
 #include <iostream>
+#include <cstdlib>
 #include "foundtoken.h"
 #include "bfnodes.h"
 using namespace std;
@@ -29,6 +30,7 @@ AstBuilder::AstBuilder()
 
 	root = &blowfish;
 	current = root;
+	numLevelsAfterNext = 0;
 }
 
 void AstBuilder::buildNode(FoundToken tok)
@@ -37,9 +39,29 @@ void AstBuilder::buildNode(FoundToken tok)
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
+		{
 			attachChild(BFIdentifier(tok.getValue()));
-			break;
+		} break;
+		case t_param_ident:
+		{
+			BFParamDef paramContainer = BFParamDef();
+			paramContainer.appendChild(BFParamIdent(tok.getValue()));
+
+			attachChild(paramContainer);
+			moveToCurrentChild();
+			numLevelsAfterNext = 1;
+		} break;
+		default:
+			cout << "Error: Unsupported token!" << endl;
+			exit(1);
 	}
+
+	while (numLevelsAfterNext > 0)
+	{
+		moveToParent();
+		numLevelsAfterNext -= 1;
+	}
+
 }
 
 void AstBuilder::attachChild(BFNode n)

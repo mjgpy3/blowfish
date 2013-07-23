@@ -54,4 +54,16 @@ public:
 	BFIdentifier(string value) : BFNode(value) {}
 };
 
+class BFParamDef : public BFNode
+{
+public:
+	BFParamDef() : BFNode() { }
+};
+
+class BFParamIdent : public BFNode
+{
+public:
+	BFParamIdent(string value) : BFNode(value) { }
+};
+
 #endif

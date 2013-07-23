@@ -39,6 +39,7 @@ public:
 private:
 	BFNode * root;
 	BFNode * current;
+	int numLevelsAfterNext;
 };
 
 #endif

@@ -28,6 +28,10 @@ FoundToken::FoundToken(Token & tok, string val)
         {
                 value = val;
         }
+	else
+	{
+		value = string("");
+	}
 }
 
 void FoundToken::print()
@@ -39,4 +43,3 @@ void FoundToken::print()
         }
         cout << endl;
 }
-
