@@ -47,6 +47,25 @@ void AstBuilder::attachChild(BFNode n)
 	(*current).appendChild(n);
 }
 
+void AstBuilder::moveToCurrentChild()
+{
+	current = (*current).currentChild();
+}
+
+void AstBuilder::moveToParent()
+{
+	current = (*current).getParent();
+}
+
+void AstBuilder::lastChildIsChildOf(BFNode n)
+{
+	BFNode * ptr;
+	ptr = (*current).popCurrentChild();
+        n.appendChild(*ptr);
+        attachChild(n);
+	
+}
+
 int main()
 {
 	cout << "Hello Semantic Parser!" << endl;

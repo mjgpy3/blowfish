@@ -18,6 +18,7 @@
 
 #include "bfnodes.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 BFNode::BFNode()
@@ -31,5 +32,14 @@ BFNode::BFNode(string val)
 
 void BFNode::appendChild(BFNode n)
 {
+	n.parent = this;
 	children.push_back(&n);
+}
+
+BFNode * BFNode::popCurrentChild()
+{
+	BFNode * ptr;
+        ptr = children.back();
+	children.pop_back();
+	return ptr;
 }

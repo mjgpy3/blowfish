@@ -30,6 +30,9 @@ public:
 	BFNode(string val);
 	BFNode();
 	void appendChild(BFNode n);
+	BFNode * currentChild() { return children[indexLast()]; }
+	BFNode * popCurrentChild();
+        BFNode * getParent() { return parent; }
 
 private:
 	vector<BFNode*> children;

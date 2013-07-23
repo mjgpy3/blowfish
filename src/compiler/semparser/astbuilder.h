@@ -34,7 +34,7 @@ public:
 	void attachChild(BFNode n);
 	void moveToCurrentChild();
 	void moveToParent();
-	void currentChildsParentIs(BFNode n);
+	void lastChildIsChildOf(BFNode n);
 
 private:
 	BFNode * root;
