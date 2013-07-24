@@ -19,10 +19,36 @@
 #include "bfnodes.h"
 #include <string>
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 BFNode::BFNode()
 {
+	infiniteCardinality = true;
+        maxChildren = 0;
+}
+
+string BFNode::toString()
+{
+	string result = value + string(" -> [ ");
+
+	for (int i = 0; i < children.size(); i += 1)
+	{
+		result += (*children[i]).toString() + string(", ");
+	}
+
+	return result + string(" ]"); 
+}
+
+void BFNode::setCardinality(int max)
+{
+	infiniteCardinality = false;
+	maxChildren = max;
+}
+
+bool BFNode::canHoldMoreChildren()
+{
+	return infiniteCardinality || maxChildren < children.size();
 }
 
 BFNode::BFNode(string val)
@@ -32,6 +58,11 @@ BFNode::BFNode(string val)
 
 void BFNode::appendChild(BFNode n)
 {
+	if (!canHoldMoreChildren())
+	{
+		cout << "Error: Tried to append a child to a full parent" << endl;
+		exit(1);
+	}
 	n.parent = this;
 	children.push_back(&n);
 }

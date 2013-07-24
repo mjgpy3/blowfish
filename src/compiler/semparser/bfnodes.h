@@ -33,6 +33,9 @@ public:
 	BFNode * currentChild() { return children[indexLast()]; }
 	BFNode * popCurrentChild();
         BFNode * getParent() { return parent; }
+	bool canHoldMoreChildren();
+	void setCardinality(int max);
+	string toString();
 
 private:
 	vector<BFNode*> children;
@@ -40,6 +43,8 @@ private:
 	TokenName * type;
 	int indexLast() { return children.size()-1; }
 	string value;
+	bool infiniteCardinality;
+	int maxChildren;
 };
 
 class BFRoot : public BFNode
@@ -51,19 +56,61 @@ public:
 class BFIdentifier : public BFNode
 {
 public:
-	BFIdentifier(string value) : BFNode(value) {}
+	BFIdentifier(string value) : BFNode(value) { setCardinality(0); }
 };
 
-class BFParamDef : public BFNode
+class BFParameterIdentifier : public BFNode
 {
 public:
-	BFParamDef() : BFNode() { }
+	BFParameterIdentifier(string value) : BFNode(value) { }
 };
 
-class BFParamIdent : public BFNode
+class BFAssignment : public BFNode
 {
 public:
-	BFParamIdent(string value) : BFNode(value) { }
+	BFAssignment() : BFNode() { setCardinality(2); }
+};
+
+class BFVariableAssignment : public BFAssignment
+{
+public:
+	BFVariableAssignment() : BFAssignment() { }
+};
+
+class BFConstantAssignment : public BFAssignment
+{
+public:
+	BFConstantAssignment() : BFAssignment() { }
+};
+
+class BFParameterlessDef : public BFNode
+{
+public:
+	BFParameterlessDef() : BFNode() { setCardinality(2); }
+};
+
+class BFClassDef : public BFParameterlessDef
+{
+public:
+	BFClassDef() : BFParameterlessDef() { }
+};
+
+class BFModuleDef : public BFParameterlessDef
+{
+public:
+	BFModuleDef() : BFParameterlessDef() { }
+};
+
+class BFMethodDef : public BFNode
+{
+public:
+	BFMethodDef() : BFNode() { }
+};
+
+class BFNot : public BFNode
+{
+public:
+	BFNot() : BFNode() { setCardinality(1); }
 };
 
 #endif

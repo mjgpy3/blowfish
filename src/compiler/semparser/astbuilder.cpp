@@ -30,7 +30,6 @@ AstBuilder::AstBuilder()
 
 	root = &blowfish;
 	current = root;
-	numLevelsAfterNext = 0;
 }
 
 void AstBuilder::buildNode(FoundToken tok)
@@ -42,26 +41,58 @@ void AstBuilder::buildNode(FoundToken tok)
 		{
 			attachChild(BFIdentifier(tok.getValue()));
 		} break;
+
 		case t_param_ident:
 		{
-			BFParamDef paramContainer = BFParamDef();
-			paramContainer.appendChild(BFParamIdent(tok.getValue()));
-
-			attachChild(paramContainer);
-			moveToCurrentChild();
-			numLevelsAfterNext = 1;
+			attachChild(BFParameterIdentifier(tok.getValue()));
 		} break;
+
+		case t_kwd_isnow:
+		{
+			lastChildIsChildOf(BFVariableAssignment());
+		} break;
+
+		case t_op_assign:
+		{
+			lastChildIsChildOf(BFVariableAssignment());
+		} break;
+
+		case t_kwd_is:
+		{
+			lastChildIsChildOf(BFConstantAssignment());
+		} break;
+
+		case t_kwd_class:
+		{
+			attachChild(BFClassDef());
+		} break;
+
+		case t_kwd_module:
+		{
+			attachChild(BFModuleDef());
+		} break;
+
+		case t_kwd_meth:
+		{
+			attachChild(BFMethodDef());
+			moveToCurrentChild();
+		} break;
+
+		case t_kwd_not:
+		{
+			attachChild(BFNot());
+			moveToCurrentChild();
+		} break;
+
 		default:
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
 	}
 
-	while (numLevelsAfterNext > 0)
+	while (!(*current).canHoldMoreChildren())
 	{
 		moveToParent();
-		numLevelsAfterNext -= 1;
 	}
-
 }
 
 void AstBuilder::attachChild(BFNode n)
