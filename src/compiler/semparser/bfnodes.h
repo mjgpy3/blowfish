@@ -144,4 +144,10 @@ public:
 	BFElse() : BFNode() { setCardinality(1); }
 };
 
+class BFNewline : public BFNode
+{
+public:
+	BFNewline() : BFNode() { setCardinality(0); }
+};
+
 #endif

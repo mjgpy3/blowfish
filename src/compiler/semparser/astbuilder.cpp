@@ -121,6 +121,14 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChildAsCurrent(BFElse());
 		} break;
 
+		case t_line_ending:
+		{
+			if ((*current).canHoldMoreChildren())
+			{
+				attachChild(BFNewline());
+			}
+		} break;
+
 		default:
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
