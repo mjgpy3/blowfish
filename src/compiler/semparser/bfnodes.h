@@ -207,4 +207,14 @@ public:
 
 // TODO: Implement operators
 
+class BFBinaryOperator : public BFNode
+{
+public:
+	BFBinaryOperator(OperatorPriority p) : BFNode() { priority = p; setCardinality(2); }
+	OperatorPriority getPriority() { return priority; }
+
+private:
+	OperatorPriority priority;
+};
+
 #endif
