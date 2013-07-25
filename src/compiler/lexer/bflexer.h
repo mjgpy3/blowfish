@@ -26,6 +26,7 @@
 #include <vector>
 using namespace std;
 
+// TODO: Rename BfLexer -> BFLexer
 class BfLexer
 {
 public:
@@ -33,7 +34,7 @@ public:
 	void setupTokens();
 	bool matchesSomeToken(string value);
 	void parseTokensFromFile(string fileName);
-	// TODO: Specify some access routines for foundTokens so that this is usable later
+	vector<FoundToken> getTokens();
 
 private:
 	Token * AllTokens;

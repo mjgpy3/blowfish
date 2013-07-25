@@ -123,6 +123,11 @@ void BfLexer::parseTokensFromFile(string fileName)
 	}
 }
 
+vector<FoundToken> BfLexer::getTokens()
+{
+	return foundTokens;
+}
+
 int main()
 {
 	cout << "Hello Lexer!\n";

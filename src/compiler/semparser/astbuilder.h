@@ -21,6 +21,7 @@
 
 #include "bfnodes.h"
 #include "foundtoken.h"
+#include "bflexer.h"
 #include <vector>
 using namespace std;
 
