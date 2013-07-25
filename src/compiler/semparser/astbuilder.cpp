@@ -129,6 +129,8 @@ void AstBuilder::buildNode(FoundToken tok)
 			}
 		} break;
 
+		// TODO: Implement rules for operator tokens
+
 		default:
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
