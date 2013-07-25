@@ -32,9 +32,10 @@ public:
 	void buildNode(FoundToken tok);
 
 	void attachChild(BFNode n);
+	void attachChildAsCurrent(BFNode n);
 	void moveToCurrentChild();
 	void moveToParent();
-	void lastChildIsChildOf(BFNode n);
+	void currentChildIsChildOf(BFNode n);
 
 private:
 	BFNode * root;

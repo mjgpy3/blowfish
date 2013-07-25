@@ -113,4 +113,35 @@ public:
 	BFNot() : BFNode() { setCardinality(1); }
 };
 
+class BFExpression : public BFNode
+{
+public:
+	BFExpression() : BFNode() { }
+};
+
+class BFBlock : public BFNode
+{
+public:
+	BFBlock() : BFNode() { }
+};
+
+class BFIf : public BFNode
+{
+public:
+	BFIf() : BFNode() { }
+};
+
+class BFElseIf : public BFNode
+{
+public:
+	BFElseIf() : BFNode() { }
+};
+
+class BFElse : public BFNode
+{
+public:
+	// Else should only contain a block...
+	BFElse() : BFNode() { setCardinality(1); }
+};
+
 #endif

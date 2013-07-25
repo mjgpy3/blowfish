@@ -49,17 +49,20 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_isnow:
 		{
-			lastChildIsChildOf(BFVariableAssignment());
+			currentChildIsChildOf(BFVariableAssignment());
+			moveToCurrentChild();
 		} break;
 
 		case t_op_assign:
 		{
-			lastChildIsChildOf(BFVariableAssignment());
+			currentChildIsChildOf(BFVariableAssignment());
+			moveToCurrentChild();
 		} break;
 
 		case t_kwd_is:
 		{
-			lastChildIsChildOf(BFConstantAssignment());
+			currentChildIsChildOf(BFConstantAssignment());
+			moveToCurrentChild();
 		} break;
 
 		case t_kwd_class:
@@ -74,14 +77,48 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_meth:
 		{
-			attachChild(BFMethodDef());
-			moveToCurrentChild();
+			attachChildAsCurrent(BFMethodDef());
 		} break;
 
 		case t_kwd_not:
 		{
-			attachChild(BFNot());
-			moveToCurrentChild();
+			attachChildAsCurrent(BFNot());
+		} break;
+
+		case t_paren_begin:
+		{
+			attachChildAsCurrent(BFExpression());
+		} break;
+
+		case t_paren_end:
+		{
+			moveToParent();
+		} break;
+
+		case t_block_begin:
+		{
+			attachChildAsCurrent(BFBlock());
+		} break;
+
+		case t_block_end:
+		{
+			moveToParent();
+			moveToParent();
+		} break;
+
+		case t_kwd_if:
+		{
+			attachChildAsCurrent(BFIf());
+		} break;
+
+		case t_kwd_elseif:
+		{
+			attachChildAsCurrent(BFElseIf());
+		} break;
+
+		case t_kwd_else:
+		{
+			attachChildAsCurrent(BFElse());
 		} break;
 
 		default:
@@ -100,6 +137,12 @@ void AstBuilder::attachChild(BFNode n)
 	(*current).appendChild(n);
 }
 
+void AstBuilder::attachChildAsCurrent(BFNode n)
+{
+	attachChild(n);
+	moveToCurrentChild();
+}
+
 void AstBuilder::moveToCurrentChild()
 {
 	current = (*current).currentChild();
@@ -110,7 +153,7 @@ void AstBuilder::moveToParent()
 	current = (*current).getParent();
 }
 
-void AstBuilder::lastChildIsChildOf(BFNode n)
+void AstBuilder::currentChildIsChildOf(BFNode n)
 {
 	BFNode * ptr;
 	ptr = (*current).popCurrentChild();
