@@ -17,6 +17,7 @@
 */
 
 #include "bfnodes.h"
+#include "bfoperatorpriority.h"
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -26,6 +27,7 @@ BFNode::BFNode()
 {
 	infiniteCardinality = true;
         maxChildren = 0;
+	priority = none;
 }
 
 string BFNode::toString()
@@ -38,6 +40,15 @@ string BFNode::toString()
 	}
 
 	return result + string(" ]"); 
+}
+
+bool BFNode::higherPriorityThan(BFNode n)
+{
+	if (n.priority == none || priority == none)
+	{
+		return false;
+	}
+	return priority > n.priority;
 }
 
 void BFNode::setCardinality(int max)
@@ -56,15 +67,15 @@ BFNode::BFNode(string val)
 	value = val;
 }
 
-void BFNode::appendChild(BFNode n)
+void BFNode::appendChild(BFNode * n)
 {
 	if (!canHoldMoreChildren())
 	{
 		cout << "Error: Tried to append a child to a full parent" << endl;
 		exit(1);
 	}
-	n.parent = this;
-	children.push_back(&n);
+	(*n).parent = this;
+	children.push_back(n);
 }
 
 BFNode * BFNode::popCurrentChild()

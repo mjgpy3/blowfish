@@ -17,6 +17,7 @@
 */
 
 #include "astbuilder.h"
+#include "bflexer.h"
 #include <iostream>
 #include <cstdlib>
 #include "foundtoken.h"
@@ -26,68 +27,79 @@ using namespace std;
 AstBuilder::AstBuilder()
 {
 	// The global namespace, BFRoot
-	BFNode blowfish = BFRoot(); 
+	BFNode * blowfish = new BFRoot(); 
 
-	root = &blowfish;
+	root = blowfish;
 	current = root;
+}
+
+BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
+{
+	for (int i = 0; i < tokens.size(); i += 1)
+	{
+		buildNode(tokens[i]);
+	}
+	return root;
 }
 
 void AstBuilder::buildNode(FoundToken tok)
 {
+	cout << "Processing: " << tok.getTokenValue() << endl;
+	cout << "Current node's number of children: " << (*current).numChildren() << endl;
 	// The switches that are met here are the ones that actually generate nodes
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
 		{
-			attachChild(BFIdentifier(tok.getValue()));
+			attachChild(new BFIdentifier(tok.getValue()));
 		} break;
 
 		case t_param_ident:
 		{
-			attachChild(BFParameterIdentifier(tok.getValue()));
+			attachChild(new BFParameterIdentifier(tok.getValue()));
 		} break;
 
 		case t_kwd_isnow:
 		{
-			currentChildIsChildOf(BFVariableAssignment());
+			currentChildIsChildOf(new BFVariableAssignment());
 			moveToCurrentChild();
 		} break;
 
 		case t_op_assign:
 		{
-			currentChildIsChildOf(BFVariableAssignment());
+			currentChildIsChildOf(new BFVariableAssignment());
 			moveToCurrentChild();
 		} break;
 
 		case t_kwd_is:
 		{
-			currentChildIsChildOf(BFConstantAssignment());
+			currentChildIsChildOf(new BFConstantAssignment());
 			moveToCurrentChild();
 		} break;
 
 		case t_kwd_class:
 		{
-			attachChild(BFClassDef());
+			attachChild(new BFClassDef());
 		} break;
 
 		case t_kwd_module:
 		{
-			attachChild(BFModuleDef());
+			attachChildAsCurrent(new BFModuleDef());
 		} break;
 
 		case t_kwd_meth:
 		{
-			attachChildAsCurrent(BFMethodDef());
+			attachChildAsCurrent(new BFMethodDef());
 		} break;
 
 		case t_kwd_not:
 		{
-			attachChildAsCurrent(BFNot());
+			attachChildAsCurrent(new BFNot());
 		} break;
 
 		case t_paren_begin:
 		{
-			attachChildAsCurrent(BFExpression());
+			attachChildAsCurrent(new BFExpression());
 		} break;
 
 		case t_paren_end:
@@ -97,35 +109,40 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_block_begin:
 		{
-			attachChildAsCurrent(BFBlock());
+			attachChildAsCurrent(new BFBlock());
 		} break;
 
 		case t_block_end:
 		{
 			moveToParent();
-			moveToParent();
+			//moveToParent();
 		} break;
 
 		case t_kwd_if:
 		{
-			attachChildAsCurrent(BFIf());
+			attachChildAsCurrent(new BFIf());
 		} break;
 
 		case t_kwd_elseif:
 		{
-			attachChildAsCurrent(BFElseIf());
+			attachChildAsCurrent(new BFElseIf());
 		} break;
 
 		case t_kwd_else:
 		{
-			attachChildAsCurrent(BFElse());
+			attachChildAsCurrent(new BFElse());
+		} break;
+
+		case t_string:
+		{
+			attachChild(new BFString(tok.getValue()));
 		} break;
 
 		case t_line_ending:
 		{
 			if ((*current).canHoldMoreChildren())
 			{
-				attachChild(BFNewline());
+				attachChild(new BFNewline());
 			}
 		} break;
 
@@ -136,18 +153,22 @@ void AstBuilder::buildNode(FoundToken tok)
 			exit(1);
 	}
 
+	cout << "Done handling token..." << endl;
 	while (!(*current).canHoldMoreChildren())
 	{
 		moveToParent();
 	}
+
+	// cout << "Current TREE:\n    ";
 }
 
-void AstBuilder::attachChild(BFNode n)
+void AstBuilder::attachChild(BFNode * n)
 {
 	(*current).appendChild(n);
+	cout << "Attached Child\n";
 }
 
-void AstBuilder::attachChildAsCurrent(BFNode n)
+void AstBuilder::attachChildAsCurrent(BFNode * n)
 {
 	attachChild(n);
 	moveToCurrentChild();
@@ -156,24 +177,45 @@ void AstBuilder::attachChildAsCurrent(BFNode n)
 void AstBuilder::moveToCurrentChild()
 {
 	current = (*current).currentChild();
+	cout << "Moved to current child\n";
 }
 
 void AstBuilder::moveToParent()
 {
+	cout << "Trying to move to parent" << endl;
 	current = (*current).getParent();
+	cout << "Moved to parent\n";
 }
 
-void AstBuilder::currentChildIsChildOf(BFNode n)
+void AstBuilder::currentChildIsChildOf(BFNode * n)
 {
 	BFNode * ptr;
 	ptr = (*current).popCurrentChild();
-        n.appendChild(*ptr);
+        (*n).appendChild(ptr);
         attachChild(n);
-	
+}
+
+void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
+{
+	while ((*current).numChildren() != 0 && (*current).higherPriorityThan(*((*current).currentChild())))
+	{
+		moveToCurrentChild();
+	}
+
+	currentChildIsChildOf(n);
 }
 
 int main()
 {
 	cout << "Hello Semantic Parser!" << endl;
+
+	BFNode * ast;
+
+	BfLexer lexer = BfLexer();
+	AstBuilder builder = AstBuilder();
+	lexer.parseTokensFromFile("hello_world.bf");
+
+	ast = builder.buildAst(lexer.getTokens());
+
 	return 0;
 }

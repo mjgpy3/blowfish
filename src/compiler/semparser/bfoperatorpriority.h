@@ -21,9 +21,12 @@
 
 enum OperatorPriority
 {
-	highest = 92812,
+	lowest = 92812,
+	low,
 	medium,
-	lowest
+	high,
+	highest,
+        none
 };
 
 #endif

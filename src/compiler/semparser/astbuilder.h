@@ -29,14 +29,15 @@ class AstBuilder
 {
 public:
 	AstBuilder();
-	BFNode buildAst(vector<FoundToken> tokens);
+	BFNode * buildAst(vector<FoundToken> tokens);
 	void buildNode(FoundToken tok);
 
-	void attachChild(BFNode n);
-	void attachChildAsCurrent(BFNode n);
+	void insertOperatorNode(BFBinaryOperator * n);
+	void attachChild(BFNode * n);
+	void attachChildAsCurrent(BFNode * n);
 	void moveToCurrentChild();
 	void moveToParent();
-	void currentChildIsChildOf(BFNode n);
+	void currentChildIsChildOf(BFNode * n);
 
 private:
 	BFNode * root;

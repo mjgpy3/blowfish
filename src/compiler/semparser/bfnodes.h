@@ -33,13 +33,16 @@ class BFNode
 public:
 	BFNode(string val);
 	BFNode();
-	void appendChild(BFNode n);
-	BFNode * currentChild() { return children[indexLast()]; }
+	void appendChild(BFNode * n);
+	BFNode * currentChild() { return children.back(); }
 	BFNode * popCurrentChild();
         BFNode * getParent() { return parent; }
+	int numChildren() { return children.size(); }
 	bool canHoldMoreChildren();
 	void setCardinality(int max);
+	bool higherPriorityThan(BFNode n);
 	string toString();
+	OperatorPriority priority;
 
 private:
 	vector<BFNode*> children;
@@ -213,8 +216,30 @@ public:
 	BFBinaryOperator(OperatorPriority p) : BFNode() { priority = p; setCardinality(2); }
 	OperatorPriority getPriority() { return priority; }
 
-private:
-	OperatorPriority priority;
+};
+
+class BFPlus : public BFBinaryOperator
+{
+public:
+	BFPlus() : BFBinaryOperator(medium) { }
+};
+
+class BFMinus : public BFBinaryOperator
+{
+public:
+	BFMinus() : BFBinaryOperator(medium) { }
+};
+
+class BFLiteral : public BFNode
+{
+public:
+	BFLiteral(string value) : BFNode(value) { setCardinality(0); }
+};
+
+class BFString : public BFLiteral
+{
+public:
+	BFString(string value) : BFLiteral(value) { }
 };
 
 #endif
