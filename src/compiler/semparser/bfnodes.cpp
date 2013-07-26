@@ -28,11 +28,12 @@ BFNode::BFNode()
 	infiniteCardinality = true;
         maxChildren = 0;
 	priority = none;
+	debugName = "BFNode";
 }
 
 string BFNode::toString()
 {
-	string result = value + string(" -> [ ");
+	string result = debugName + string(" -> [ ");
 
 	for (int i = 0; i < children.size(); i += 1)
 	{
@@ -59,7 +60,7 @@ void BFNode::setCardinality(int max)
 
 bool BFNode::canHoldMoreChildren()
 {
-	return infiniteCardinality || maxChildren < children.size();
+	return infiniteCardinality || maxChildren > children.size();
 }
 
 BFNode::BFNode(string val)

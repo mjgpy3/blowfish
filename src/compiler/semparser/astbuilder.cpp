@@ -31,6 +31,7 @@ AstBuilder::AstBuilder()
 
 	root = blowfish;
 	current = root;
+	careAboutNewline = true;
 }
 
 BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
@@ -44,6 +45,7 @@ BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 
 void AstBuilder::buildNode(FoundToken tok)
 {
+	// TODO: Add "Don't care about newline until you see an open bracket" logic
 	cout << "Processing: " << tok.getTokenValue() << endl;
 	cout << "Current node's number of children: " << (*current).numChildren() << endl;
 	// The switches that are met here are the ones that actually generate nodes
@@ -85,6 +87,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_kwd_module:
 		{
 			attachChildAsCurrent(new BFModuleDef());
+			careAboutNewline = false;
 		} break;
 
 		case t_kwd_meth:
@@ -110,6 +113,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_block_begin:
 		{
 			attachChildAsCurrent(new BFBlock());
+			careAboutNewline = true;
 		} break;
 
 		case t_block_end:
@@ -140,7 +144,7 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_line_ending:
 		{
-			if ((*current).canHoldMoreChildren())
+			if (careAboutNewline && (*current).canHoldMoreChildren())
 			{
 				attachChild(new BFNewline());
 			}
@@ -154,6 +158,7 @@ void AstBuilder::buildNode(FoundToken tok)
 	}
 
 	cout << "Done handling token..." << endl;
+	cout << "Cardinality of new node: " << (*current).maxChildren << endl;
 	while (!(*current).canHoldMoreChildren())
 	{
 		moveToParent();
@@ -216,6 +221,8 @@ int main()
 	lexer.parseTokensFromFile("hello_world.bf");
 
 	ast = builder.buildAst(lexer.getTokens());
+
+	cout << (*ast).toString() << endl;
 
 	return 0;
 }

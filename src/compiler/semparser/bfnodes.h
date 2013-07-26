@@ -43,6 +43,8 @@ public:
 	bool higherPriorityThan(BFNode n);
 	string toString();
 	OperatorPriority priority;
+	string debugName;
+	int maxChildren;
 
 private:
 	vector<BFNode*> children;
@@ -51,7 +53,6 @@ private:
 	int indexLast() { return children.size()-1; }
 	string value;
 	bool infiniteCardinality;
-	int maxChildren;
 };
 
 //!
@@ -60,7 +61,7 @@ private:
 class BFRoot : public BFNode
 {
 public:
-	BFRoot() : BFNode() {}
+	BFRoot() : BFNode() { debugName = "Blowfish Root"; }
 };
 
 //!
@@ -69,7 +70,7 @@ public:
 class BFIdentifier : public BFNode
 {
 public:
-	BFIdentifier(string value) : BFNode(value) { setCardinality(0); }
+	BFIdentifier(string value) : BFNode(value) { setCardinality(0); debugName = string("Ident:") + value; }
 };
 
 //!
@@ -78,7 +79,7 @@ public:
 class BFParameterIdentifier : public BFNode
 {
 public:
-	BFParameterIdentifier(string value) : BFNode(value) { }
+	BFParameterIdentifier(string value) : BFNode(value) { debugName = string("ParaIdent:") + value; }
 };
 
 //!
@@ -96,7 +97,7 @@ public:
 class BFVariableAssignment : public BFAssignment
 {
 public:
-	BFVariableAssignment() : BFAssignment() { }
+	BFVariableAssignment() : BFAssignment() { debugName = "VarAssignment"; }
 };
 
 //!
@@ -105,7 +106,7 @@ public:
 class BFConstantAssignment : public BFAssignment
 {
 public:
-	BFConstantAssignment() : BFAssignment() { }
+	BFConstantAssignment() : BFAssignment() { debugName = "ConstAssignemnt"; }
 };
 
 //!
@@ -123,7 +124,7 @@ public:
 class BFClassDef : public BFParameterlessDef
 {
 public:
-	BFClassDef() : BFParameterlessDef() { }
+	BFClassDef() : BFParameterlessDef() { debugName = "Class"; }
 };
 
 //!
@@ -132,7 +133,7 @@ public:
 class BFModuleDef : public BFParameterlessDef
 {
 public:
-	BFModuleDef() : BFParameterlessDef() { }
+	BFModuleDef() : BFParameterlessDef() { debugName = "Module"; }
 };
 
 //!
@@ -141,7 +142,7 @@ public:
 class BFMethodDef : public BFNode
 {
 public:
-	BFMethodDef() : BFNode() { }
+	BFMethodDef() : BFNode() { debugName = "Method"; }
 };
 
 //!
@@ -150,7 +151,7 @@ public:
 class BFNot : public BFNode
 {
 public:
-	BFNot() : BFNode() { setCardinality(1); }
+	BFNot() : BFNode() { setCardinality(1); debugName = "Not"; }
 };
 
 //!
@@ -159,7 +160,7 @@ public:
 class BFExpression : public BFNode
 {
 public:
-	BFExpression() : BFNode() { }
+	BFExpression() : BFNode() { debugName = "(...)"; }
 };
 
 //!
@@ -168,7 +169,7 @@ public:
 class BFBlock : public BFNode
 {
 public:
-	BFBlock() : BFNode() { }
+	BFBlock() : BFNode() { debugName = "[...]"; }
 };
 
 //!
@@ -177,7 +178,7 @@ public:
 class BFIf : public BFNode
 {
 public:
-	BFIf() : BFNode() { }
+	BFIf() : BFNode() { debugName = "if"; }
 };
 
 //!
@@ -186,7 +187,7 @@ public:
 class BFElseIf : public BFNode
 {
 public:
-	BFElseIf() : BFNode() { }
+	BFElseIf() : BFNode() { debugName = "else if"; }
 };
 
 //!
@@ -196,7 +197,7 @@ class BFElse : public BFNode
 {
 public:
 	// Else should only contain a block...
-	BFElse() : BFNode() { setCardinality(1); }
+	BFElse() : BFNode() { setCardinality(1); debugName = "else"; }
 };
 
 //!
@@ -205,7 +206,7 @@ public:
 class BFNewline : public BFNode
 {
 public:
-	BFNewline() : BFNode() { setCardinality(0); }
+	BFNewline() : BFNode() { setCardinality(0); debugName = "nl"; }
 };
 
 // TODO: Implement operators
@@ -233,7 +234,7 @@ public:
 class BFLiteral : public BFNode
 {
 public:
-	BFLiteral(string value) : BFNode(value) { setCardinality(0); }
+	BFLiteral(string value) : BFNode(value) { setCardinality(0); debugName = value;  }
 };
 
 class BFString : public BFLiteral

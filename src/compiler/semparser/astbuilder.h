@@ -42,6 +42,7 @@ public:
 private:
 	BFNode * root;
 	BFNode * current;
+	bool careAboutNewline;
 };
 
 #endif
