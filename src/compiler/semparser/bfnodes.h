@@ -218,16 +218,76 @@ public:
 
 };
 
+class BFOr : public BFBinaryOperator
+{
+public:
+	BFOr() : BFBinaryOperator(lowest) { }
+};
+
+class BFAnd : public BFBinaryOperator
+{
+public:
+	BFAnd() : BFBinaryOperator(lowest) { }
+};
+
+class BFGreaterThan : public BFBinaryOperator
+{
+public:
+	BFGreaterThan() : BFBinaryOperator(low) { }
+};
+
+class BFLessThan : public BFBinaryOperator
+{
+public:
+	BFLessThan() : BFBinaryOperator(low) { }
+};
+
+class BFEqual : public BFBinaryOperator
+{
+public:
+	BFEqual() : BFBinaryOperator(low) { }
+};
+
 class BFPlus : public BFBinaryOperator
 {
 public:
-	BFPlus() : BFBinaryOperator(medium) { }
+	BFPlus() : BFBinaryOperator(medium) { debugName = "+"; }
 };
 
 class BFMinus : public BFBinaryOperator
 {
 public:
-	BFMinus() : BFBinaryOperator(medium) { }
+	BFMinus() : BFBinaryOperator(medium) { debugName = "-"; }
+};
+
+class BFConcat : public BFBinaryOperator
+{
+public:
+	BFConcat() : BFBinaryOperator(medium) { }
+};
+
+class BFMultiply : public BFBinaryOperator
+{
+public:
+	BFMultiply() : BFBinaryOperator(high) { }
+};
+
+class BFDivide : public BFBinaryOperator
+{
+public:
+	BFDivide() : BFBinaryOperator(high) { }
+};
+
+class BFModulus : public BFBinaryOperator
+{
+public:
+	BFModulus() : BFBinaryOperator(high) { }
+};
+
+class BFPower : public BFBinaryOperator
+{
+public:
+	BFPower() : BFBinaryOperator(highest) { }
 };
 
 class BFLiteral : public BFNode
@@ -240,6 +300,12 @@ class BFString : public BFLiteral
 {
 public:
 	BFString(string value) : BFLiteral(value) { }
+};
+
+class BFInteger : public BFLiteral
+{
+public:
+	BFInteger(string value) : BFLiteral(value) { }
 };
 
 #endif

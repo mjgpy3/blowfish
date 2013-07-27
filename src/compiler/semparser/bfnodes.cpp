@@ -33,14 +33,19 @@ BFNode::BFNode()
 
 string BFNode::toString()
 {
-	string result = debugName + string(" -> [ ");
+	string result = debugName;
 
-	for (int i = 0; i < children.size(); i += 1)
+	if (children.size() != 0)
 	{
-		result += (*children[i]).toString() + string(", ");
-	}
+		result += string(" -> [ ");
+		for (int i = 0; i < children.size(); i += 1)
+		{
+			result += (*children[i]).toString() + string(", ");
+		}
 
-	return result + string(" ]"); 
+		return result + string("]"); 
+	}
+	return result;
 }
 
 bool BFNode::higherPriorityThan(BFNode n)

@@ -144,6 +144,11 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BFString(tok.getValue()));
 		} break;
 
+		case t_integer:
+		{
+			attachChild(new BFInteger(tok.getValue()));
+		} break;
+
 		case t_line_ending:
 		{
 			if (careAboutNewline &&
@@ -154,7 +159,15 @@ void AstBuilder::buildNode(FoundToken tok)
 			}
 		} break;
 
-		// TODO: Implement rules for operator tokens
+		case t_op_plus:
+		{
+			insertOperatorNode(new BFPlus());
+		} break;
+
+		case t_op_minus:
+		{
+			insertOperatorNode(new BFMinus());
+		} break;
 
 		default:
 			cout << "Error: Unsupported token!" << endl;
@@ -169,8 +182,6 @@ void AstBuilder::buildNode(FoundToken tok)
 	{
 		moveToParent();
 	}
-
-	// cout << "Current TREE:\n    ";
 }
 
 void AstBuilder::attachChild(BFNode * n)
@@ -208,12 +219,14 @@ void AstBuilder::currentChildIsChildOf(BFNode * n)
 
 void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
 {
+	// TODO: Fix this, it's wrong
 	while ((*current).numChildren() != 0 && (*current).higherPriorityThan(*((*current).currentChild())))
 	{
 		moveToCurrentChild();
 	}
 
 	currentChildIsChildOf(n);
+	moveToCurrentChild();
 }
 
 int main()
