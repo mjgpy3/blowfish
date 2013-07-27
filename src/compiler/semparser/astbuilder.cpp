@@ -19,6 +19,7 @@
 #include "astbuilder.h"
 #include "bflexer.h"
 #include <iostream>
+#include <typeinfo>
 #include <cstdlib>
 #include "foundtoken.h"
 #include "bfnodes.h"
@@ -49,6 +50,7 @@ void AstBuilder::buildNode(FoundToken tok)
 	cout << "Processing: " << tok.getTokenValue() << endl;
 	cout << "Current node's number of children: " << (*current).numChildren() << endl;
 	// The switches that are met here are the ones that actually generate nodes
+
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
@@ -119,7 +121,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_block_end:
 		{
 			moveToParent();
-			//moveToParent();
+			moveToParent();
 		} break;
 
 		case t_kwd_if:
@@ -144,7 +146,9 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_line_ending:
 		{
-			if (careAboutNewline && (*current).canHoldMoreChildren())
+			if (careAboutNewline &&
+                            lastToken != t_line_ending &&
+                            (*current).canHoldMoreChildren())
 			{
 				attachChild(new BFNewline());
 			}
@@ -156,6 +160,8 @@ void AstBuilder::buildNode(FoundToken tok)
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
 	}
+
+	lastToken = tok.getTokenValue();
 
 	cout << "Done handling token..." << endl;
 	cout << "Cardinality of new node: " << (*current).maxChildren << endl;

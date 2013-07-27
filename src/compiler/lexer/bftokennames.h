@@ -63,13 +63,12 @@ enum TokenName
 	t_op_gt = 39,
 	t_op_geq = 40,
 	t_pipe = 41,
-	t_comma = 42,
-	t_holder_begin = 43,
-	t_holder_end = 44,
-	t_block_begin = 45,
-	t_block_end = 46,
-	t_paren_begin = 47,
-	t_paren_end = 48
+	t_holder_begin = 42,
+	t_holder_end = 43,
+	t_block_begin = 44,
+	t_block_end = 45,
+	t_paren_begin = 46,
+	t_paren_end = 47
 };
 
 #endif

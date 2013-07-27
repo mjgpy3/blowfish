@@ -31,14 +31,17 @@ using namespace std;
 
 #define BLOWFISH_TOKENS
 
-const int NUM_TOKENS = 49;
+const int NUM_TOKENS = 48;
 
-int Ignore[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int Ignore[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-string Matches[] = {"class", "module", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[a-zA-Z][a-zA-Z_]*:", "[0-9]+", "[0-9]+\\.[0-9]*", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\.", "[a-zA-Z][a-zA-Z_]*", "\\n", "=", "<", "<=", ">", ">=", "\\|", ",", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
+string Matches[] = {"class", "module", "meth", "if", "elseif", "else", "is", "is_now", "not", "forms", "are", "or", "and", "for", "enum", "require", "import", "until", "unless", "[a-zA-Z][a-zA-Z_]*:", "[0-9]+", "[0-9]+\\.[0-9]*", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\.", "[a-zA-Z][a-zA-Z_]*", "\\n", "=", "<", "<=", ">", ">=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "\\)"};
 
 #endif
+
+// We will use this to eat up the buffer later
+string CommentStart = "#";
 
 BfLexer::BfLexer()
 {
@@ -96,6 +99,15 @@ void BfLexer::parseTokensFromFile(string fileName)
 		}
 		cout << "Processing: (" << buffer << ')' << endl;
 		matchFound = false;
+
+		if (buffer == CommentStart)
+		{
+			while (buffer != "\n")
+			{
+				buffer = "";
+				buffer.push_back(reader.get());
+			}
+		}
 		while (matchesSomeToken(buffer))
 		{
 			buffer.push_back(reader.get());

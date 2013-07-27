@@ -43,6 +43,7 @@ private:
 	BFNode * root;
 	BFNode * current;
 	bool careAboutNewline;
+	TokenName lastToken;
 };
 
 #endif
