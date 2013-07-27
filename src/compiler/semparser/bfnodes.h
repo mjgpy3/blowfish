@@ -221,31 +221,31 @@ public:
 class BFOr : public BFBinaryOperator
 {
 public:
-	BFOr() : BFBinaryOperator(lowest) { }
+	BFOr() : BFBinaryOperator(lowest) { debugName = "OR"; }
 };
 
 class BFAnd : public BFBinaryOperator
 {
 public:
-	BFAnd() : BFBinaryOperator(lowest) { }
+	BFAnd() : BFBinaryOperator(lowest) { debugName = "AND"; }
 };
 
 class BFGreaterThan : public BFBinaryOperator
 {
 public:
-	BFGreaterThan() : BFBinaryOperator(low) { }
+	BFGreaterThan() : BFBinaryOperator(low) { debugName = ">"; }
 };
 
 class BFLessThan : public BFBinaryOperator
 {
 public:
-	BFLessThan() : BFBinaryOperator(low) { }
+	BFLessThan() : BFBinaryOperator(low) { debugName = "<"; }
 };
 
 class BFEqual : public BFBinaryOperator
 {
 public:
-	BFEqual() : BFBinaryOperator(low) { }
+	BFEqual() : BFBinaryOperator(low) { debugName = "="; }
 };
 
 class BFPlus : public BFBinaryOperator
@@ -263,31 +263,31 @@ public:
 class BFConcat : public BFBinaryOperator
 {
 public:
-	BFConcat() : BFBinaryOperator(medium) { }
+	BFConcat() : BFBinaryOperator(medium) { debugName = "++"; }
 };
 
 class BFMultiply : public BFBinaryOperator
 {
 public:
-	BFMultiply() : BFBinaryOperator(high) { }
+	BFMultiply() : BFBinaryOperator(high) { debugName = "*";}
 };
 
 class BFDivide : public BFBinaryOperator
 {
 public:
-	BFDivide() : BFBinaryOperator(high) { }
+	BFDivide() : BFBinaryOperator(high) { debugName = "/"; }
 };
 
 class BFModulus : public BFBinaryOperator
 {
 public:
-	BFModulus() : BFBinaryOperator(high) { }
+	BFModulus() : BFBinaryOperator(high) { debugName = "%"; }
 };
 
 class BFPower : public BFBinaryOperator
 {
 public:
-	BFPower() : BFBinaryOperator(highest) { }
+	BFPower() : BFBinaryOperator(highest) { debugName = "^"; }
 };
 
 class BFLiteral : public BFNode

@@ -159,6 +159,16 @@ void AstBuilder::buildNode(FoundToken tok)
 			}
 		} break;
 
+		case t_kwd_or:
+		{
+			insertOperatorNode(new BFOr());
+		} break;
+
+		case t_kwd_and:
+		{
+			insertOperatorNode(new BFAnd());
+		} break;
+
 		case t_op_plus:
 		{
 			insertOperatorNode(new BFPlus());
@@ -168,6 +178,33 @@ void AstBuilder::buildNode(FoundToken tok)
 		{
 			insertOperatorNode(new BFMinus());
 		} break;
+
+		case t_op_concat:
+		{
+			insertOperatorNode(new BFConcat());
+		} break;
+
+		case t_op_times:
+		{
+			insertOperatorNode(new BFMultiply());
+		} break;
+
+		case t_op_divide:
+		{
+			insertOperatorNode(new BFDivide());
+		} break;
+
+		case t_op_modulus:
+		{
+			insertOperatorNode(new BFModulus());
+		} break;
+
+		case t_op_pow:
+		{
+			insertOperatorNode(new BFPower());
+		} break;
+
+		
 
 		default:
 			cout << "Error: Unsupported token!" << endl;
@@ -219,8 +256,7 @@ void AstBuilder::currentChildIsChildOf(BFNode * n)
 
 void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
 {
-	// TODO: Fix this, it's wrong
-	while ((*current).numChildren() != 0 && (*current).higherPriorityThan(*((*current).currentChild())))
+	while ((*current).numChildren() != 0 && (*n).higherPriorityThan(*((*current).currentChild())))
 	{
 		moveToCurrentChild();
 	}

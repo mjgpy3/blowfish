@@ -61,6 +61,7 @@ op_lt        -> '<'
 op_leq       -> '<='
 op_gt        -> '>'
 op_geq       -> '>='
+op_noteq     -> '/='
 
 pipe         -> '|'
 
