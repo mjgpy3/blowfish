@@ -147,7 +147,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_line_ending:
 		{
 			if (careAboutNewline &&
-                            lastToken != t_line_ending &&
+                            lastToken != t_line_ending && 
                             (*current).canHoldMoreChildren())
 			{
 				attachChild(new BFNewline());
