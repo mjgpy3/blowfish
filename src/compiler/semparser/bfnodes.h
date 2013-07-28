@@ -242,10 +242,28 @@ public:
 	BFLessThan() : BFBinaryOperator(low) { debugName = "<"; }
 };
 
+class BFGreaterThanOrEqual : public BFBinaryOperator
+{
+public:
+	BFGreaterThanOrEqual() : BFBinaryOperator(low) { debugName = ">="; }
+};
+
+class BFLessThanOrEqual : public BFBinaryOperator
+{
+public:
+        BFLessThanOrEqual() : BFBinaryOperator(low) { debugName = "<="; }
+};
+
 class BFEqual : public BFBinaryOperator
 {
 public:
 	BFEqual() : BFBinaryOperator(low) { debugName = "="; }
+};
+
+class BFNotEqual : public BFBinaryOperator
+{
+public:
+	BFNotEqual() : BFBinaryOperator(low) { debugName = "/="; }
 };
 
 class BFPlus : public BFBinaryOperator

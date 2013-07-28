@@ -41,6 +41,7 @@ BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 	{
 		buildNode(tokens[i]);
 	}
+
 	return root;
 }
 
@@ -169,6 +170,38 @@ void AstBuilder::buildNode(FoundToken tok)
 			insertOperatorNode(new BFAnd());
 		} break;
 
+		case t_op_eq:
+		{
+			insertOperatorNode(new BFEqual());
+		} break;
+
+		case t_op_noteq:
+		{
+			insertOperatorNode(new BFNotEqual());
+		} break;
+
+		case t_op_lt:
+		{
+			insertOperatorNode(new BFLessThan());
+		} break;
+
+		case t_op_gt:
+		{
+			insertOperatorNode(new BFGreaterThan());
+		} break;
+
+		case t_op_geq:
+		{
+			insertOperatorNode(new BFGreaterThanOrEqual());
+		} break;
+
+		case t_op_leq:
+		{
+			insertOperatorNode(new BFLessThanOrEqual());
+		} break;
+
+		// TODO: Store above as (nodes to not), apply not in parent method
+
 		case t_op_plus:
 		{
 			insertOperatorNode(new BFPlus());
@@ -204,8 +237,6 @@ void AstBuilder::buildNode(FoundToken tok)
 			insertOperatorNode(new BFPower());
 		} break;
 
-		
-
 		default:
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
@@ -213,8 +244,6 @@ void AstBuilder::buildNode(FoundToken tok)
 
 	lastToken = tok.getTokenValue();
 
-	cout << "Done handling token..." << endl;
-	cout << "Cardinality of new node: " << (*current).maxChildren << endl;
 	while (!(*current).canHoldMoreChildren())
 	{
 		moveToParent();
