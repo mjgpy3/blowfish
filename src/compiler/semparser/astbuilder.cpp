@@ -75,6 +75,12 @@ void AstBuilder::buildNode(FoundToken tok)
 			moveToCurrentChild();
 		} break;
 
+		case t_op_assign:
+		{
+			currentChildIsChildOf(new BFVariableAssignment());
+                        moveToCurrentChild();
+		} break;
+
 		case t_kwd_is:
 		{
 			currentChildIsChildOf(new BFConstantAssignment());
@@ -83,7 +89,8 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_class:
 		{
-			attachChild(new BFClassDef());
+			attachChildAsCurrent(new BFClassDef());
+			careAboutNewline = false;
 		} break;
 
 		case t_kwd_module:
@@ -92,15 +99,10 @@ void AstBuilder::buildNode(FoundToken tok)
 			careAboutNewline = false;
 		} break;
 
-		case t_op_assign:
-		{
-			currentChildIsChildOf(new BFVariableAssignment());
-                        moveToCurrentChild();
-		} break;
-
 		case t_kwd_meth:
 		{
 			attachChildAsCurrent(new BFMethodDef());
+			careAboutNewline = false;
 		} break;
 
 		case t_kwd_not:

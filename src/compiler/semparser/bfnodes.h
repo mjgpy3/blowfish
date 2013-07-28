@@ -88,7 +88,7 @@ public:
 class BFAssignment : public BFNode
 {
 public:
-	BFAssignment() : BFNode() { setCardinality(2); }
+	BFAssignment() : BFNode() { setCardinality(2); priority = absoluteLowest; }
 };
 
 //!

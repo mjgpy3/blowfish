@@ -1,4 +1,4 @@
 module Main [
   say standard: "Hello World"
-  a := -a
+  a := -a + -5
 ]
