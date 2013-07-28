@@ -326,4 +326,16 @@ public:
 	BFInteger(string value) : BFLiteral(value) { }
 };
 
+class BFFloat : public BFLiteral
+{
+public:
+	BFFloat(string value) : BFLiteral(value) { }
+};
+
+class BFNegative : public BFNode
+{
+public:
+	BFNegative() : BFNode() { debugName = "-"; setCardinality(1); }
+};
+
 #endif

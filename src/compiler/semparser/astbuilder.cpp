@@ -59,18 +59,17 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BFIdentifier(tok.getValue()));
 		} break;
 
+		case t_neg_ident:
+		{
+			attachNegativeChild(new BFIdentifier(tok.getValue().substr(1)));
+		} break;
+
 		case t_param_ident:
 		{
 			attachChild(new BFParameterIdentifier(tok.getValue()));
 		} break;
 
 		case t_kwd_isnow:
-		{
-			currentChildIsChildOf(new BFVariableAssignment());
-			moveToCurrentChild();
-		} break;
-
-		case t_op_assign:
 		{
 			currentChildIsChildOf(new BFVariableAssignment());
 			moveToCurrentChild();
@@ -91,6 +90,12 @@ void AstBuilder::buildNode(FoundToken tok)
 		{
 			attachChildAsCurrent(new BFModuleDef());
 			careAboutNewline = false;
+		} break;
+
+		case t_op_assign:
+		{
+			currentChildIsChildOf(new BFVariableAssignment());
+                        moveToCurrentChild();
 		} break;
 
 		case t_kwd_meth:
@@ -149,6 +154,21 @@ void AstBuilder::buildNode(FoundToken tok)
 		{
 			attachChild(new BFInteger(tok.getValue()));
 		} break;
+
+		case t_neg_integer:
+		{
+			attachNegativeChild(new BFInteger(tok.getValue().substr(1)));
+		} break;
+
+		case t_float:
+		{
+			attachChild(new BFFloat(tok.getValue()));
+		} break;
+
+                case t_neg_float:
+                {
+                        attachNegativeChild(new BFFloat(tok.getValue().substr(1)));
+                } break;
 
 		case t_line_ending:
 		{
@@ -292,6 +312,13 @@ void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
 
 	currentChildIsChildOf(n);
 	moveToCurrentChild();
+}
+
+void AstBuilder::attachNegativeChild(BFNode * n)
+{
+        BFNegative * neg = new BFNegative();
+        (*neg).appendChild(n);
+	attachChild(neg);
 }
 
 int main()

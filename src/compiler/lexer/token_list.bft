@@ -2,6 +2,8 @@ section_helpers:
 ident        -> [a-zA-Z][a-zA-Z_]*
 char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
+int          -> [0-9]+
+flt          -> [0-9]+'.'[0-9]*
 
 section_tokens:
 kwd_class    -> 'class'
@@ -27,10 +29,16 @@ kwd_unless   -> 'unless'
 param_ident -> {ident}':'
 [save_text]
 
-integer      -> [0-9]+
+integer      -> {int}
 [save_text]
 
-float        -> [0-9]+'.'[0-9]*
+neg_integer  -> '-'{int}
+[save_text]
+
+neg_float    -> '-'{flt}
+[save_text]
+
+float        -> ({flt})|('-'{flt})
 [save_text]
 
 char         -> '\''{char_inside}'\''
@@ -52,6 +60,9 @@ op_concat    -> '++'
 op_dot       -> '.'
 
 identifier  -> {ident}
+[save_text]
+
+neg_ident   -> '-'{ident}
 [save_text]
 
 line_ending  -> \n

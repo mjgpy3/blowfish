@@ -35,6 +35,7 @@ public:
 	void insertOperatorNode(BFBinaryOperator * n);
 	void attachChild(BFNode * n);
 	void attachChildAsCurrent(BFNode * n);
+	void attachNegativeChild(BFNode * n);
 	void moveToCurrentChild();
 	void moveToParent();
 	void currentChildIsChildOf(BFNode * n);
