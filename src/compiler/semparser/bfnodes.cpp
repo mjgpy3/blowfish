@@ -84,6 +84,26 @@ void BFNode::appendChild(BFNode * n)
 	children.push_back(n);
 }
 
+BFHolder * BFHolderFactory(string spec)
+{
+        if (spec == "l")
+        {
+                return new BFList();
+        }
+        if (spec == "s")
+        {
+                return new BFSet();
+        }
+        if (spec == "d")
+        {
+                return new BFDictionary();
+        }
+
+        cout << "Error! Unrecognized factory specifier: " << spec << endl;
+        exit(1);
+}
+
+
 BFNode * BFNode::popCurrentChild()
 {
 	BFNode * ptr;

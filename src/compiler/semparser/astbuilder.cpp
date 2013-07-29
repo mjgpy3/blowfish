@@ -105,9 +105,25 @@ void AstBuilder::buildNode(FoundToken tok)
 			careAboutNewline = false;
 		} break;
 
+		case t_kwd_forms:
+		{
+			attachChildAsCurrent(new BFFormsDef());
+			careAboutNewline = false;
+		} break;
+
 		case t_kwd_not:
 		{
 			attachChildAsCurrent(new BFNot());
+		} break;
+
+		case t_pipe:
+		{
+			attachChild(new BFPipe());
+		} break;
+
+		case t_kwd_in:
+		{
+			attachChild(new BFIn());
 		} break;
 
 		case t_paren_begin:
@@ -118,6 +134,18 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_paren_end:
 		{
 			moveToParent();
+			careAboutNewline = true;
+		} break;
+
+		case t_holder_begin:
+		{
+			attachChildAsCurrent(BFHolderFactory(tok.getValue().substr(0, 1)));
+		} break;
+
+		case t_holder_end:
+		{
+			moveToParent();
+			careAboutNewline = true;
 		} break;
 
 		case t_block_begin:
@@ -257,6 +285,11 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_op_pow:
 		{
 			insertOperatorNode(new BFPower());
+		} break;
+
+		case t_ellipsis:
+		{
+			insertOperatorNode(new BFEllipsis());
 		} break;
 
 		default:

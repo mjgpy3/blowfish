@@ -3,7 +3,7 @@ ident        -> [a-zA-Z][a-zA-Z_]*
 char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
 int          -> [0-9]+
-flt          -> [0-9]+'.'[0-9]*
+flt          -> [0-9]+'.'[0-9]+
 
 section_tokens:
 kwd_class    -> 'class'
@@ -20,11 +20,14 @@ kwd_are      -> 'are'
 kwd_or       -> 'or'
 kwd_and      -> 'and'
 kwd_for      -> 'for'
+kwd_in       -> 'in'
 kwd_enum     -> 'enum'
 kwd_require  -> 'require'
 kwd_import   -> 'import'
 kwd_until    -> 'until'
 kwd_unless   -> 'unless'
+
+ellipsis     -> '..'
 
 param_ident -> {ident}':'
 [save_text]
@@ -77,6 +80,7 @@ op_noteq     -> '/='
 pipe         -> '|'
 
 holder_begin -> {holder_ident}'{'
+[save_text]
 holder_end   -> '}'
 
 block_begin  -> '['

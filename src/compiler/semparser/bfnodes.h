@@ -22,6 +22,8 @@
 #include "bftokennames.h"
 #include "bfoperatorpriority.h"
 #include <vector>
+#include <iostream>
+#include <cstdlib>
 #include <string>
 using namespace std;
 
@@ -116,6 +118,24 @@ class BFParameterlessDef : public BFNode
 {
 public:
 	BFParameterlessDef() : BFNode() { setCardinality(2); }
+};
+
+class BFFormsDef : public BFParameterlessDef
+{
+public:
+	BFFormsDef() : BFParameterlessDef() { debugName = "Forms"; }
+};
+
+class BFPipe : public BFNode
+{
+public:
+	BFPipe() : BFNode() { setCardinality(0); debugName = "|"; }
+};
+
+class BFIn : public BFNode
+{
+public:
+	BFIn() : BFNode() { setCardinality(0); debugName = "In"; }
 };
 
 //!
@@ -308,6 +328,12 @@ public:
 	BFPower() : BFBinaryOperator(highest) { debugName = "^"; }
 };
 
+class BFEllipsis : public BFBinaryOperator
+{
+public:
+	BFEllipsis() : BFBinaryOperator(highest) { debugName = ".."; }
+};
+
 class BFLiteral : public BFNode
 {
 public:
@@ -337,5 +363,31 @@ class BFNegative : public BFNode
 public:
 	BFNegative() : BFNode() { debugName = "-"; setCardinality(1); }
 };
+
+class BFHolder : public BFNode
+{
+public:
+	BFHolder() : BFNode() { }
+};
+
+class BFList : public BFHolder
+{
+public:
+	BFList() : BFHolder() { debugName = "l{...}"; }
+};
+
+class BFSet : public BFHolder
+{
+public:
+	BFSet() : BFHolder() { debugName = "s{...}"; }
+};
+
+class BFDictionary : public BFHolder
+{
+public:
+	BFDictionary() : BFHolder() { debugName = "d{...}"; }
+};
+
+BFHolder * BFHolderFactory(string spec);
 
 #endif
