@@ -131,6 +131,13 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChildAsCurrent(new BFExpression());
 		} break;
 
+		case t_neg_paren:
+		{
+			attachNegativeChild(new BFExpression());
+			moveToCurrentChild();
+			moveToCurrentChild();
+		} break;
+
 		case t_paren_end:
 		{
 			moveToParent();
@@ -163,16 +170,19 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_kwd_if:
 		{
 			attachChildAsCurrent(new BFIf());
+			careAboutNewline = false;
 		} break;
 
 		case t_kwd_elseif:
 		{
 			attachChildAsCurrent(new BFElseIf());
+			careAboutNewline = false;
 		} break;
 
 		case t_kwd_else:
 		{
 			attachChildAsCurrent(new BFElse());
+			careAboutNewline = false;
 		} break;
 
 		case t_string:
