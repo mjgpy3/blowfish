@@ -73,9 +73,9 @@ enum TokenName
 	t_holder_end = 49,
 	t_block_begin = 50,
 	t_block_end = 51,
-	t_paren_begin = 52,
-	t_neg_paren = 53,
-	t_paren_end = 54
+	t_paran_begin = 52,
+	t_neg_paran = 53,
+	t_paran_end = 54
 };
 
 #endif

@@ -126,19 +126,19 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BFIn());
 		} break;
 
-		case t_paren_begin:
+		case t_paran_begin:
 		{
 			attachChildAsCurrent(new BFExpression());
 		} break;
 
-		case t_neg_paren:
+		case t_neg_paran:
 		{
 			attachNegativeChild(new BFExpression());
 			moveToCurrentChild();
 			moveToCurrentChild();
 		} break;
 
-		case t_paren_end:
+		case t_paran_end:
 		{
 			moveToParent();
 			careAboutNewline = true;
