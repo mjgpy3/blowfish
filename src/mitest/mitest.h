@@ -22,7 +22,7 @@
 #include <string>
 using namespace std;
 
-// TODO; Improve me so that I can better be used for TDD
+// TODO: Improve me so that I can better be used for TDD
 
 class MiTester
 {
