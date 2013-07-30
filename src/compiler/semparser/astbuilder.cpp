@@ -27,15 +27,15 @@ using namespace std;
 
 AstBuilder::AstBuilder()
 {
-	// The global namespace, BFRoot
-	BFNode * blowfish = new BFRoot(); 
+	// The global namespace, BfRoot
+	BfNode * blowfish = new BfRoot(); 
 
 	root = blowfish;
 	current = root;
 	careAboutNewline = true;
 }
 
-BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
+BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 {
 	for (int i = 0; i < tokens.size(); i += 1)
 	{
@@ -47,7 +47,6 @@ BFNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 
 void AstBuilder::buildNode(FoundToken tok)
 {
-	// TODO: Add "Don't care about newline until you see an open bracket" logic
 	cout << "Processing: " << tok.getTokenValue() << endl;
 	cout << "Current node's number of children: " << (*current).numChildren() << endl;
 	// The switches that are met here are the ones that actually generate nodes
@@ -56,84 +55,106 @@ void AstBuilder::buildNode(FoundToken tok)
 	{
 		case t_identifier:
 		{
-			attachChild(new BFIdentifier(tok.getValue()));
+			attachChild(new BfIdentifier(tok.getValue()));
 		} break;
 
 		case t_neg_ident:
 		{
-			attachNegativeChild(new BFIdentifier(tok.getValue().substr(1)));
+			attachNegativeChild(new BfIdentifier(tok.getValue().substr(1)));
 		} break;
 
 		case t_param_ident:
 		{
-			attachChild(new BFParameterIdentifier(tok.getValue()));
+			attachChild(new BfParameterIdentifier(tok.getValue()));
 		} break;
 
 		case t_kwd_isnow:
 		{
-			currentChildIsChildOf(new BFVariableAssignment());
+			currentChildIsChildOf(new BfVariableAssignment());
 			moveToCurrentChild();
 		} break;
 
 		case t_op_assign:
 		{
-			currentChildIsChildOf(new BFVariableAssignment());
+			currentChildIsChildOf(new BfVariableAssignment());
                         moveToCurrentChild();
 		} break;
 
 		case t_kwd_is:
 		{
-			currentChildIsChildOf(new BFConstantAssignment());
+			currentChildIsChildOf(new BfConstantAssignment());
 			moveToCurrentChild();
 		} break;
 
 		case t_kwd_class:
 		{
-			attachChildAsCurrent(new BFClassDef());
+			attachChildAsCurrent(new BfClassDef());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_module:
 		{
-			attachChildAsCurrent(new BFModuleDef());
+			attachChildAsCurrent(new BfModuleDef());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_meth:
 		{
-			attachChildAsCurrent(new BFMethodDef());
+			attachChildAsCurrent(new BfMethodDef());
+			careAboutNewline = false;
+		} break;
+
+		case t_kwd_for:
+		{
+			attachChildAsCurrent(new BfForLoop());
+			careAboutNewline = false;
+		} break;
+
+		case t_kwd_enum:
+		{
+			attachChildAsCurrent(new BfEnumLoop());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_forms:
 		{
-			attachChildAsCurrent(new BFFormsDef());
+			attachChildAsCurrent(new BfFormsDef());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_not:
 		{
-			attachChildAsCurrent(new BFNot());
+			attachChildAsCurrent(new BfNot());
+		} break;
+
+		case t_kwd_require:
+		{
+			attachChildAsCurrent(new BfRequire());
+		} break;
+
+		case t_kwd_import:
+		{
+			attachChildAsCurrent(new BfImport());
 		} break;
 
 		case t_pipe:
 		{
-			attachChild(new BFPipe());
+			attachChild(new BfPipe());
 		} break;
 
 		case t_kwd_in:
 		{
-			attachChild(new BFIn());
+			attachChild(new BfIn());
 		} break;
 
 		case t_paran_begin:
 		{
-			attachChildAsCurrent(new BFExpression());
+			attachChildAsCurrent(new BfExpression());
 		} break;
 
 		case t_neg_paran:
 		{
-			attachNegativeChild(new BFExpression());
+			attachNegativeChild(new BfExpression());
 			moveToCurrentChild();
 			moveToCurrentChild();
 		} break;
@@ -146,7 +167,7 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_holder_begin:
 		{
-			attachChildAsCurrent(BFHolderFactory(tok.getValue().substr(0, 1)));
+			attachChildAsCurrent(BfHolderFactory(tok.getValue().substr(0, 1)));
 		} break;
 
 		case t_holder_end:
@@ -157,7 +178,7 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_block_begin:
 		{
-			attachChildAsCurrent(new BFBlock());
+			attachChildAsCurrent(new BfBlock());
 			careAboutNewline = true;
 		} break;
 
@@ -169,45 +190,50 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_if:
 		{
-			attachChildAsCurrent(new BFIf());
+			attachChildAsCurrent(new BfIf());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_elseif:
 		{
-			attachChildAsCurrent(new BFElseIf());
+			attachChildAsCurrent(new BfElseIf());
 			careAboutNewline = false;
 		} break;
 
 		case t_kwd_else:
 		{
-			attachChildAsCurrent(new BFElse());
+			attachChildAsCurrent(new BfElse());
 			careAboutNewline = false;
 		} break;
 
 		case t_string:
 		{
-			attachChild(new BFString(tok.getValue()));
+			attachChild(new BfString(tok.getValue()));
 		} break;
 
 		case t_integer:
 		{
-			attachChild(new BFInteger(tok.getValue()));
+			attachChild(new BfInteger(tok.getValue()));
 		} break;
 
 		case t_neg_integer:
 		{
-			attachNegativeChild(new BFInteger(tok.getValue().substr(1)));
+			attachNegativeChild(new BfInteger(tok.getValue().substr(1)));
 		} break;
 
 		case t_float:
 		{
-			attachChild(new BFFloat(tok.getValue()));
+			attachChild(new BfFloat(tok.getValue()));
+		} break;
+
+		case t_char:
+		{
+			attachChild(new BfString(tok.getValue()));
 		} break;
 
                 case t_neg_float:
                 {
-                        attachNegativeChild(new BFFloat(tok.getValue().substr(1)));
+                        attachNegativeChild(new BfFloat(tok.getValue().substr(1)));
                 } break;
 
 		case t_line_ending:
@@ -216,90 +242,93 @@ void AstBuilder::buildNode(FoundToken tok)
                             lastToken != t_line_ending && 
                             (*current).canHoldMoreChildren())
 			{
-				attachChild(new BFNewline());
+				attachChild(new BfNewline());
 			}
 		} break;
 
 		case t_kwd_or:
 		{
-			insertOperatorNode(new BFOr());
+			insertOperatorNode(new BfOr());
 		} break;
 
 		case t_kwd_and:
 		{
-			insertOperatorNode(new BFAnd());
+			insertOperatorNode(new BfAnd());
+		} break;
+
+		case t_op_dot:
+		{
+			attachChild(new BfDot());
 		} break;
 
 		case t_op_eq:
 		{
-			insertOperatorNode(new BFEqual());
+			insertOperatorNode(new BfEqual());
 		} break;
 
 		case t_op_noteq:
 		{
-			insertOperatorNode(new BFNotEqual());
+			insertOperatorNode(new BfNotEqual());
 		} break;
 
 		case t_op_lt:
 		{
-			insertOperatorNode(new BFLessThan());
+			insertOperatorNode(new BfLessThan());
 		} break;
 
 		case t_op_gt:
 		{
-			insertOperatorNode(new BFGreaterThan());
+			insertOperatorNode(new BfGreaterThan());
 		} break;
 
 		case t_op_geq:
 		{
-			insertOperatorNode(new BFGreaterThanOrEqual());
+			insertOperatorNode(new BfGreaterThanOrEqual());
 		} break;
 
 		case t_op_leq:
 		{
-			insertOperatorNode(new BFLessThanOrEqual());
+			insertOperatorNode(new BfLessThanOrEqual());
 		} break;
-
-		// TODO: Store above as (nodes to not), apply not in parent method
 
 		case t_op_plus:
 		{
-			insertOperatorNode(new BFPlus());
+			insertOperatorNode(new BfPlus());
 		} break;
 
 		case t_op_minus:
 		{
-			insertOperatorNode(new BFMinus());
+			insertOperatorNode(new BfMinus());
 		} break;
 
 		case t_op_concat:
 		{
-			insertOperatorNode(new BFConcat());
+			insertOperatorNode(new BfConcat());
 		} break;
 
 		case t_op_times:
 		{
-			insertOperatorNode(new BFMultiply());
+			insertOperatorNode(new BfMultiply());
 		} break;
 
 		case t_op_divide:
 		{
-			insertOperatorNode(new BFDivide());
+			insertOperatorNode(new BfDivide());
 		} break;
 
 		case t_op_modulus:
 		{
-			insertOperatorNode(new BFModulus());
+			insertOperatorNode(new BfModulus());
 		} break;
 
 		case t_op_pow:
 		{
-			insertOperatorNode(new BFPower());
+			insertOperatorNode(new BfPower());
 		} break;
 
 		case t_ellipsis:
 		{
-			insertOperatorNode(new BFEllipsis());
+			insertOperatorNode(new BfEllipsis());
 		} break;
 
 		default:
@@ -315,13 +344,13 @@ void AstBuilder::buildNode(FoundToken tok)
 	}
 }
 
-void AstBuilder::attachChild(BFNode * n)
+void AstBuilder::attachChild(BfNode * n)
 {
 	(*current).appendChild(n);
 	cout << "Attached Child\n";
 }
 
-void AstBuilder::attachChildAsCurrent(BFNode * n)
+void AstBuilder::attachChildAsCurrent(BfNode * n)
 {
 	attachChild(n);
 	moveToCurrentChild();
@@ -340,15 +369,15 @@ void AstBuilder::moveToParent()
 	cout << "Moved to parent\n";
 }
 
-void AstBuilder::currentChildIsChildOf(BFNode * n)
+void AstBuilder::currentChildIsChildOf(BfNode * n)
 {
-	BFNode * ptr;
+	BfNode * ptr;
 	ptr = (*current).popCurrentChild();
         (*n).appendChild(ptr);
         attachChild(n);
 }
 
-void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
+void AstBuilder::insertOperatorNode(BfBinaryOperator * n)
 {
 	while ((*current).numChildren() != 0 && (*n).higherPriorityThan(*((*current).currentChild())))
 	{
@@ -359,9 +388,9 @@ void AstBuilder::insertOperatorNode(BFBinaryOperator * n)
 	moveToCurrentChild();
 }
 
-void AstBuilder::attachNegativeChild(BFNode * n)
+void AstBuilder::attachNegativeChild(BfNode * n)
 {
-        BFNegative * neg = new BFNegative();
+        BfNegative * neg = new BfNegative();
         (*neg).appendChild(n);
 	attachChild(neg);
 }
@@ -370,7 +399,7 @@ int main()
 {
 	cout << "Hello Semantic Parser!" << endl;
 
-	BFNode * ast;
+	BfNode * ast;
 
 	BfLexer lexer = BfLexer();
 	AstBuilder builder = AstBuilder();

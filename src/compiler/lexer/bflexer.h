@@ -26,7 +26,6 @@
 #include <vector>
 using namespace std;
 
-// TODO: Rename BfLexer -> BFLexer
 class BfLexer
 {
 public:

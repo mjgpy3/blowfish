@@ -23,15 +23,15 @@
 #include <cstdlib>
 using namespace std;
 
-BFNode::BFNode()
+BfNode::BfNode()
 {
 	infiniteCardinality = true;
         maxChildren = 0;
 	priority = none;
-	debugName = "BFNode";
+	debugName = "BfNode";
 }
 
-string BFNode::toString()
+string BfNode::toString()
 {
 	string result = debugName;
 
@@ -48,7 +48,7 @@ string BFNode::toString()
 	return result;
 }
 
-bool BFNode::higherPriorityThan(BFNode n)
+bool BfNode::higherPriorityThan(BfNode n)
 {
 	if (n.priority == none || priority == none)
 	{
@@ -57,23 +57,23 @@ bool BFNode::higherPriorityThan(BFNode n)
 	return priority > n.priority;
 }
 
-void BFNode::setCardinality(int max)
+void BfNode::setCardinality(int max)
 {
 	infiniteCardinality = false;
 	maxChildren = max;
 }
 
-bool BFNode::canHoldMoreChildren()
+bool BfNode::canHoldMoreChildren()
 {
 	return infiniteCardinality || maxChildren > children.size();
 }
 
-BFNode::BFNode(string val)
+BfNode::BfNode(string val)
 {
 	value = val;
 }
 
-void BFNode::appendChild(BFNode * n)
+void BfNode::appendChild(BfNode * n)
 {
 	if (!canHoldMoreChildren())
 	{
@@ -84,19 +84,19 @@ void BFNode::appendChild(BFNode * n)
 	children.push_back(n);
 }
 
-BFHolder * BFHolderFactory(string spec)
+BfHolder * BfHolderFactory(string spec)
 {
         if (spec == "l")
         {
-                return new BFList();
+                return new BfList();
         }
         if (spec == "s")
         {
-                return new BFSet();
+                return new BfSet();
         }
         if (spec == "d")
         {
-                return new BFDictionary();
+                return new BfDictionary();
         }
 
         cout << "Error! Unrecognized factory specifier: " << spec << endl;
@@ -104,9 +104,9 @@ BFHolder * BFHolderFactory(string spec)
 }
 
 
-BFNode * BFNode::popCurrentChild()
+BfNode * BfNode::popCurrentChild()
 {
-	BFNode * ptr;
+	BfNode * ptr;
         ptr = children.back();
 	children.pop_back();
 	return ptr;

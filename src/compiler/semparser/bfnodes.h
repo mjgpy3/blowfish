@@ -30,27 +30,27 @@ using namespace std;
 //!
 //! The base class for all Blowfish nodes in the AST
 //!
-class BFNode
+class BfNode
 {
 public:
-	BFNode(string val);
-	BFNode();
-	void appendChild(BFNode * n);
-	BFNode * currentChild() { return children.back(); }
-	BFNode * popCurrentChild();
-        BFNode * getParent() { return parent; }
+	BfNode(string val);
+	BfNode();
+	void appendChild(BfNode * n);
+	BfNode * currentChild() { return children.back(); }
+	BfNode * popCurrentChild();
+        BfNode * getParent() { return parent; }
 	int numChildren() { return children.size(); }
 	bool canHoldMoreChildren();
 	void setCardinality(int max);
-	bool higherPriorityThan(BFNode n);
+	bool higherPriorityThan(BfNode n);
 	string toString();
 	OperatorPriority priority;
 	string debugName;
 	int maxChildren;
 
 private:
-	vector<BFNode*> children;
-	BFNode * parent;
+	vector<BfNode*> children;
+	BfNode * parent;
 	TokenName * type;
 	int indexLast() { return children.size()-1; }
 	string value;
@@ -60,334 +60,362 @@ private:
 //!
 //! The global root of all of the blowfish AST
 //!
-class BFRoot : public BFNode
+class BfRoot : public BfNode
 {
 public:
-	BFRoot() : BFNode() { debugName = "Blowfish Root"; }
+	BfRoot() : BfNode() { debugName = "Blowfish Root"; }
 };
 
 //!
 //! An identifier, the AST doesn't care if it's a method call, a variable or your Auntie's casarole recipe... Later things will care
 //!
-class BFIdentifier : public BFNode
+class BfIdentifier : public BfNode
 {
 public:
-	BFIdentifier(string value) : BFNode(value) { setCardinality(0); debugName = string("Ident:") + value; }
+	BfIdentifier(string value) : BfNode(value) { setCardinality(0); debugName = string("Ident:") + value; }
 };
 
 //!
 //!
 //!
-class BFParameterIdentifier : public BFNode
+class BfParameterIdentifier : public BfNode
 {
 public:
-	BFParameterIdentifier(string value) : BFNode(value) { debugName = string("ParaIdent:") + value; }
+	BfParameterIdentifier(string value) : BfNode(value) { debugName = string("ParaIdent:") + value; }
 };
 
 //!
 //! The base of the real assignment classes
 //!
-class BFAssignment : public BFNode
+class BfAssignment : public BfNode
 {
 public:
-	BFAssignment() : BFNode() { setCardinality(2); priority = absoluteLowest; }
+	BfAssignment() : BfNode() { setCardinality(2); priority = absoluteLowest; }
 };
 
 //!
 //! A variable assignment... See any other language
 //!
-class BFVariableAssignment : public BFAssignment
+class BfVariableAssignment : public BfAssignment
 {
 public:
-	BFVariableAssignment() : BFAssignment() { debugName = "VarAssignment"; }
+	BfVariableAssignment() : BfAssignment() { debugName = "VarAssignment"; }
 };
 
 //!
 //! A constant assignment
 //!
-class BFConstantAssignment : public BFAssignment
+class BfConstantAssignment : public BfAssignment
 {
 public:
-	BFConstantAssignment() : BFAssignment() { debugName = "ConstAssignemnt"; }
+	BfConstantAssignment() : BfAssignment() { debugName = "ConstAssignemnt"; }
 };
 
 //!
 //! The base class for nodes that are definitions of something (e.g. class) that don't take parameters
 //!
-class BFParameterlessDef : public BFNode
+class BfParameterlessDef : public BfNode
 {
 public:
-	BFParameterlessDef() : BFNode() { setCardinality(2); }
+	BfParameterlessDef() : BfNode() { setCardinality(2); }
 };
 
-class BFFormsDef : public BFParameterlessDef
+class BfFormsDef : public BfParameterlessDef
 {
 public:
-	BFFormsDef() : BFParameterlessDef() { debugName = "Forms"; }
+	BfFormsDef() : BfParameterlessDef() { debugName = "Forms"; }
 };
 
-class BFPipe : public BFNode
+class BfPipe : public BfNode
 {
 public:
-	BFPipe() : BFNode() { setCardinality(0); debugName = "|"; }
+	BfPipe() : BfNode() { setCardinality(0); debugName = "|"; }
 };
 
-class BFIn : public BFNode
+class BfDot : public BfNode
 {
 public:
-	BFIn() : BFNode() { setCardinality(0); debugName = "In"; }
+	BfDot() : BfNode() { setCardinality(0); debugName = "."; }
+};
+
+class BfIn : public BfNode
+{
+public:
+	BfIn() : BfNode() { setCardinality(0); debugName = "In"; }
 };
 
 //!
 //! A class definition
 //!
-class BFClassDef : public BFParameterlessDef
+class BfClassDef : public BfParameterlessDef
 {
 public:
-	BFClassDef() : BFParameterlessDef() { debugName = "Class"; }
+	BfClassDef() : BfParameterlessDef() { debugName = "Class"; }
 };
 
 //!
 //! A module definition
 //!
-class BFModuleDef : public BFParameterlessDef
+class BfModuleDef : public BfParameterlessDef
 {
 public:
-	BFModuleDef() : BFParameterlessDef() { debugName = "Module"; }
+	BfModuleDef() : BfParameterlessDef() { debugName = "Module"; }
 };
 
 //!
 //! A method definition
 //!
-class BFMethodDef : public BFNode
+class BfMethodDef : public BfNode
 {
 public:
-	BFMethodDef() : BFNode() { debugName = "Method"; }
+	BfMethodDef() : BfNode() { debugName = "Method"; }
+};
+
+class BfForLoop : public BfNode
+{
+public:
+	BfForLoop() : BfNode() { debugName = "For"; }
+};
+
+class BfEnumLoop : public BfNode
+{
+public:
+	BfEnumLoop() : BfNode() { debugName = "Enum"; }
+};
+
+class BfRequire : public BfNode
+{
+public:
+	BfRequire() : BfNode() { setCardinality(1); debugName = "Require"; }
+};
+
+class BfImport : public BfNode
+{
+public:
+	BfImport() : BfNode() { setCardinality(1); debugName = "Import"; }
 };
 
 //!
 //! A negation operation, only takes one subnode
 //!
-class BFNot : public BFNode
+class BfNot : public BfNode
 {
 public:
-	BFNot() : BFNode() { setCardinality(1); debugName = "Not"; }
+	BfNot() : BfNode() { setCardinality(1); debugName = "Not"; }
 };
 
 //!
 //! Some expression, kind of a container for parenthesized (sp) expressions
 //!
-class BFExpression : public BFNode
+class BfExpression : public BfNode
 {
 public:
-	BFExpression() : BFNode() { debugName = "(...)"; }
+	BfExpression() : BfNode() { debugName = "(...)"; }
 };
 
 //!
 //! Some block of code, you know, like in a definition
 //!
-class BFBlock : public BFNode
+class BfBlock : public BfNode
 {
 public:
-	BFBlock() : BFNode() { debugName = "[...]"; }
+	BfBlock() : BfNode() { debugName = "[...]"; }
 };
 
 //!
 //! An if statement
 //!
-class BFIf : public BFNode
+class BfIf : public BfNode
 {
 public:
-	BFIf() : BFNode() { debugName = "if"; }
+	BfIf() : BfNode() { debugName = "if"; }
 };
 
 //!
 //! An if else statement
 //!
-class BFElseIf : public BFNode
+class BfElseIf : public BfNode
 {
 public:
-	BFElseIf() : BFNode() { debugName = "else if"; }
+	BfElseIf() : BfNode() { debugName = "else if"; }
 };
 
 //!
 //! An else statement, should only have 1 child (being a block)
 //!
-class BFElse : public BFNode
+class BfElse : public BfNode
 {
 public:
 	// Else should only contain a block...
-	BFElse() : BFNode() { setCardinality(1); debugName = "else"; }
+	BfElse() : BfNode() { setCardinality(1); debugName = "else"; }
 };
 
 //!
 //! A newline...  This is really a way to separate statements
 //!
-class BFNewline : public BFNode
+class BfNewline : public BfNode
 {
 public:
-	BFNewline() : BFNode() { setCardinality(0); debugName = "nl"; }
+	BfNewline() : BfNode() { setCardinality(0); debugName = "nl"; }
 };
 
-// TODO: Implement operators
-
-class BFBinaryOperator : public BFNode
+class BfBinaryOperator : public BfNode
 {
 public:
-	BFBinaryOperator(OperatorPriority p) : BFNode() { priority = p; setCardinality(2); }
+	BfBinaryOperator(OperatorPriority p) : BfNode() { priority = p; setCardinality(2); }
 
 };
 
-class BFOr : public BFBinaryOperator
+class BfOr : public BfBinaryOperator
 {
 public:
-	BFOr() : BFBinaryOperator(lowest) { debugName = "OR"; }
+	BfOr() : BfBinaryOperator(lowest) { debugName = "OR"; }
 };
 
-class BFAnd : public BFBinaryOperator
+class BfAnd : public BfBinaryOperator
 {
 public:
-	BFAnd() : BFBinaryOperator(lowest) { debugName = "AND"; }
+	BfAnd() : BfBinaryOperator(lowest) { debugName = "AND"; }
 };
 
-class BFGreaterThan : public BFBinaryOperator
+class BfGreaterThan : public BfBinaryOperator
 {
 public:
-	BFGreaterThan() : BFBinaryOperator(low) { debugName = ">"; }
+	BfGreaterThan() : BfBinaryOperator(low) { debugName = ">"; }
 };
 
-class BFLessThan : public BFBinaryOperator
+class BfLessThan : public BfBinaryOperator
 {
 public:
-	BFLessThan() : BFBinaryOperator(low) { debugName = "<"; }
+	BfLessThan() : BfBinaryOperator(low) { debugName = "<"; }
 };
 
-class BFGreaterThanOrEqual : public BFBinaryOperator
+class BfGreaterThanOrEqual : public BfBinaryOperator
 {
 public:
-	BFGreaterThanOrEqual() : BFBinaryOperator(low) { debugName = ">="; }
+	BfGreaterThanOrEqual() : BfBinaryOperator(low) { debugName = ">="; }
 };
 
-class BFLessThanOrEqual : public BFBinaryOperator
+class BfLessThanOrEqual : public BfBinaryOperator
 {
 public:
-        BFLessThanOrEqual() : BFBinaryOperator(low) { debugName = "<="; }
+        BfLessThanOrEqual() : BfBinaryOperator(low) { debugName = "<="; }
 };
 
-class BFEqual : public BFBinaryOperator
+class BfEqual : public BfBinaryOperator
 {
 public:
-	BFEqual() : BFBinaryOperator(low) { debugName = "="; }
+	BfEqual() : BfBinaryOperator(low) { debugName = "="; }
 };
 
-class BFNotEqual : public BFBinaryOperator
+class BfNotEqual : public BfBinaryOperator
 {
 public:
-	BFNotEqual() : BFBinaryOperator(low) { debugName = "/="; }
+	BfNotEqual() : BfBinaryOperator(low) { debugName = "/="; }
 };
 
-class BFPlus : public BFBinaryOperator
+class BfPlus : public BfBinaryOperator
 {
 public:
-	BFPlus() : BFBinaryOperator(medium) { debugName = "+"; }
+	BfPlus() : BfBinaryOperator(medium) { debugName = "+"; }
 };
 
-class BFMinus : public BFBinaryOperator
+class BfMinus : public BfBinaryOperator
 {
 public:
-	BFMinus() : BFBinaryOperator(medium) { debugName = "-"; }
+	BfMinus() : BfBinaryOperator(medium) { debugName = "-"; }
 };
 
-class BFConcat : public BFBinaryOperator
+class BfConcat : public BfBinaryOperator
 {
 public:
-	BFConcat() : BFBinaryOperator(medium) { debugName = "++"; }
+	BfConcat() : BfBinaryOperator(medium) { debugName = "++"; }
 };
 
-class BFMultiply : public BFBinaryOperator
+class BfMultiply : public BfBinaryOperator
 {
 public:
-	BFMultiply() : BFBinaryOperator(high) { debugName = "*";}
+	BfMultiply() : BfBinaryOperator(high) { debugName = "*";}
 };
 
-class BFDivide : public BFBinaryOperator
+class BfDivide : public BfBinaryOperator
 {
 public:
-	BFDivide() : BFBinaryOperator(high) { debugName = "/"; }
+	BfDivide() : BfBinaryOperator(high) { debugName = "/"; }
 };
 
-class BFModulus : public BFBinaryOperator
+class BfModulus : public BfBinaryOperator
 {
 public:
-	BFModulus() : BFBinaryOperator(high) { debugName = "%"; }
+	BfModulus() : BfBinaryOperator(high) { debugName = "%"; }
 };
 
-class BFPower : public BFBinaryOperator
+class BfPower : public BfBinaryOperator
 {
 public:
-	BFPower() : BFBinaryOperator(highest) { debugName = "^"; }
+	BfPower() : BfBinaryOperator(highest) { debugName = "^"; }
 };
 
-class BFEllipsis : public BFBinaryOperator
+class BfEllipsis : public BfBinaryOperator
 {
 public:
-	BFEllipsis() : BFBinaryOperator(highest) { debugName = ".."; }
+	BfEllipsis() : BfBinaryOperator(highest) { debugName = ".."; }
 };
 
-class BFLiteral : public BFNode
+class BfLiteral : public BfNode
 {
 public:
-	BFLiteral(string value) : BFNode(value) { setCardinality(0); debugName = value;  }
+	BfLiteral(string value) : BfNode(value) { setCardinality(0); debugName = value;  }
 };
 
-class BFString : public BFLiteral
+class BfString : public BfLiteral
 {
 public:
-	BFString(string value) : BFLiteral(value) { }
+	BfString(string value) : BfLiteral(value) { }
 };
 
-class BFInteger : public BFLiteral
+class BfInteger : public BfLiteral
 {
 public:
-	BFInteger(string value) : BFLiteral(value) { }
+	BfInteger(string value) : BfLiteral(value) { }
 };
 
-class BFFloat : public BFLiteral
+class BfFloat : public BfLiteral
 {
 public:
-	BFFloat(string value) : BFLiteral(value) { }
+	BfFloat(string value) : BfLiteral(value) { }
 };
 
-class BFNegative : public BFNode
+class BfNegative : public BfNode
 {
 public:
-	BFNegative() : BFNode() { debugName = "-"; setCardinality(1); }
+	BfNegative() : BfNode() { debugName = "-"; setCardinality(1); }
 };
 
-class BFHolder : public BFNode
+class BfHolder : public BfNode
 {
 public:
-	BFHolder() : BFNode() { }
+	BfHolder() : BfNode() { }
 };
 
-class BFList : public BFHolder
+class BfList : public BfHolder
 {
 public:
-	BFList() : BFHolder() { debugName = "l{...}"; }
+	BfList() : BfHolder() { debugName = "l{...}"; }
 };
 
-class BFSet : public BFHolder
+class BfSet : public BfHolder
 {
 public:
-	BFSet() : BFHolder() { debugName = "s{...}"; }
+	BfSet() : BfHolder() { debugName = "s{...}"; }
 };
 
-class BFDictionary : public BFHolder
+class BfDictionary : public BfHolder
 {
 public:
-	BFDictionary() : BFHolder() { debugName = "d{...}"; }
+	BfDictionary() : BfHolder() { debugName = "d{...}"; }
 };
 
-BFHolder * BFHolderFactory(string spec);
+BfHolder * BfHolderFactory(string spec);
 
 #endif

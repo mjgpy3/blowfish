@@ -29,20 +29,20 @@ class AstBuilder
 {
 public:
 	AstBuilder();
-	BFNode * buildAst(vector<FoundToken> tokens);
+	BfNode * buildAst(vector<FoundToken> tokens);
 	void buildNode(FoundToken tok);
 
-	void insertOperatorNode(BFBinaryOperator * n);
-	void attachChild(BFNode * n);
-	void attachChildAsCurrent(BFNode * n);
-	void attachNegativeChild(BFNode * n);
+	void insertOperatorNode(BfBinaryOperator * n);
+	void attachChild(BfNode * n);
+	void attachChildAsCurrent(BfNode * n);
+	void attachNegativeChild(BfNode * n);
 	void moveToCurrentChild();
 	void moveToParent();
-	void currentChildIsChildOf(BFNode * n);
+	void currentChildIsChildOf(BfNode * n);
 
 private:
-	BFNode * root;
-	BFNode * current;
+	BfNode * root;
+	BfNode * current;
 	bool careAboutNewline;
 	TokenName lastToken;
 };
