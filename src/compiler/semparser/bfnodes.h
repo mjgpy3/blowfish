@@ -27,6 +27,57 @@
 #include <string>
 using namespace std;
 
+enum NodeIdentifier
+{
+	id_naked_node = 424,
+	id_blowfish_root,
+	id_identifier,
+	id_parameter_identifier,
+	id_variable_assignment,
+	id_constant_assignment,
+	id_forms,
+	id_pipe,
+	id_dot,
+	id_in,
+	id_class,
+	id_module,
+	id_method,
+	id_for,
+	id_enum,
+	id_require,
+	id_import,
+	id_not,
+	id_expression,
+	id_block,
+	id_if,
+	id_else_if,
+	id_else,
+	id_or,
+	id_and,
+	id_plus,
+	id_minus,
+	id_power,
+	id_multiply,
+	id_divide,
+	id_concat,
+	id_modulus,
+	id_newline,
+	id_gt,
+	id_lt,
+	id_geq,
+	id_leq,
+	id_neq,
+	id_eq,
+	id_ellipsis,
+	id_negative,
+	id_set,
+	id_list,
+	id_dictionary,
+	id_string,
+	id_integer,
+	id_float,
+};
+
 //!
 //! The base class for all Blowfish nodes in the AST
 //!
@@ -47,6 +98,8 @@ public:
 	OperatorPriority priority;
 	string debugName;
 	int maxChildren;
+	NodeIdentifier getTypeId() { return nodeIdent; }
+	void setTypeId(NodeIdentifier id) { nodeIdent = id; }
 
 private:
 	vector<BfNode*> children;
@@ -55,6 +108,8 @@ private:
 	int indexLast() { return children.size()-1; }
 	string value;
 	bool infiniteCardinality;
+	NodeIdentifier nodeIdent;	
+
 };
 
 //!
@@ -63,7 +118,7 @@ private:
 class BfRoot : public BfNode
 {
 public:
-	BfRoot() : BfNode() { debugName = "Blowfish Root"; }
+	BfRoot() : BfNode() { debugName = "Blowfish Root"; setTypeId(id_blowfish_root); }
 };
 
 //!
@@ -72,7 +127,7 @@ public:
 class BfIdentifier : public BfNode
 {
 public:
-	BfIdentifier(string value) : BfNode(value) { setCardinality(0); debugName = string("Ident:") + value; }
+	BfIdentifier(string value) : BfNode(value) { setCardinality(0); debugName = string("Ident:") + value; setTypeId(id_identifier); }
 };
 
 //!
@@ -81,7 +136,7 @@ public:
 class BfParameterIdentifier : public BfNode
 {
 public:
-	BfParameterIdentifier(string value) : BfNode(value) { debugName = string("ParaIdent:") + value; }
+	BfParameterIdentifier(string value) : BfNode(value) { debugName = string("ParaIdent:") + value; setTypeId(id_parameter_identifier); }
 };
 
 //!
@@ -99,7 +154,7 @@ public:
 class BfVariableAssignment : public BfAssignment
 {
 public:
-	BfVariableAssignment() : BfAssignment() { debugName = "VarAssignment"; }
+	BfVariableAssignment() : BfAssignment() { debugName = "VarAssignment"; setTypeId(id_variable_assignment); }
 };
 
 //!
@@ -108,7 +163,7 @@ public:
 class BfConstantAssignment : public BfAssignment
 {
 public:
-	BfConstantAssignment() : BfAssignment() { debugName = "ConstAssignemnt"; }
+	BfConstantAssignment() : BfAssignment() { debugName = "ConstAssignemnt"; setTypeId(id_constant_assignment); }
 };
 
 //!
@@ -123,25 +178,25 @@ public:
 class BfFormsDef : public BfParameterlessDef
 {
 public:
-	BfFormsDef() : BfParameterlessDef() { debugName = "Forms"; }
+	BfFormsDef() : BfParameterlessDef() { debugName = "Forms"; setTypeId(id_forms); }
 };
 
 class BfPipe : public BfNode
 {
 public:
-	BfPipe() : BfNode() { setCardinality(0); debugName = "|"; }
+	BfPipe() : BfNode() { setCardinality(0); debugName = "|"; setTypeId(id_pipe); }
 };
 
 class BfDot : public BfNode
 {
 public:
-	BfDot() : BfNode() { setCardinality(0); debugName = "."; }
+	BfDot() : BfNode() { setCardinality(0); debugName = "."; setTypeId(id_dot); }
 };
 
 class BfIn : public BfNode
 {
 public:
-	BfIn() : BfNode() { setCardinality(0); debugName = "In"; }
+	BfIn() : BfNode() { setCardinality(0); debugName = "In"; setTypeId(id_in); }
 };
 
 //!
@@ -150,7 +205,7 @@ public:
 class BfClassDef : public BfParameterlessDef
 {
 public:
-	BfClassDef() : BfParameterlessDef() { debugName = "Class"; }
+	BfClassDef() : BfParameterlessDef() { debugName = "Class"; setTypeId(id_class); }
 };
 
 //!
@@ -159,7 +214,7 @@ public:
 class BfModuleDef : public BfParameterlessDef
 {
 public:
-	BfModuleDef() : BfParameterlessDef() { debugName = "Module"; }
+	BfModuleDef() : BfParameterlessDef() { debugName = "Module"; setTypeId(id_module); }
 };
 
 //!
@@ -168,31 +223,31 @@ public:
 class BfMethodDef : public BfNode
 {
 public:
-	BfMethodDef() : BfNode() { debugName = "Method"; }
+	BfMethodDef() : BfNode() { debugName = "Method"; setTypeId(id_method); }
 };
 
 class BfForLoop : public BfNode
 {
 public:
-	BfForLoop() : BfNode() { debugName = "For"; }
+	BfForLoop() : BfNode() { debugName = "For"; setTypeId(id_for); }
 };
 
 class BfEnumLoop : public BfNode
 {
 public:
-	BfEnumLoop() : BfNode() { debugName = "Enum"; }
+	BfEnumLoop() : BfNode() { debugName = "Enum"; setTypeId(id_enum); }
 };
 
 class BfRequire : public BfNode
 {
 public:
-	BfRequire() : BfNode() { setCardinality(1); debugName = "Require"; }
+	BfRequire() : BfNode() { setCardinality(1); debugName = "Require"; setTypeId(id_require); }
 };
 
 class BfImport : public BfNode
 {
 public:
-	BfImport() : BfNode() { setCardinality(1); debugName = "Import"; }
+	BfImport() : BfNode() { setCardinality(1); debugName = "Import";  setTypeId(id_import);}
 };
 
 //!
@@ -201,7 +256,7 @@ public:
 class BfNot : public BfNode
 {
 public:
-	BfNot() : BfNode() { setCardinality(1); debugName = "Not"; }
+	BfNot() : BfNode() { setCardinality(1); debugName = "Not"; setTypeId(id_not); }
 };
 
 //!
@@ -210,7 +265,7 @@ public:
 class BfExpression : public BfNode
 {
 public:
-	BfExpression() : BfNode() { debugName = "(...)"; }
+	BfExpression() : BfNode() { debugName = "(...)"; setTypeId(id_expression); }
 };
 
 //!
@@ -219,7 +274,7 @@ public:
 class BfBlock : public BfNode
 {
 public:
-	BfBlock() : BfNode() { debugName = "[...]"; }
+	BfBlock() : BfNode() { debugName = "[...]"; setTypeId(id_block); }
 };
 
 //!
@@ -228,7 +283,7 @@ public:
 class BfIf : public BfNode
 {
 public:
-	BfIf() : BfNode() { debugName = "if"; }
+	BfIf() : BfNode() { debugName = "if"; setTypeId(id_if); }
 };
 
 //!
@@ -237,7 +292,7 @@ public:
 class BfElseIf : public BfNode
 {
 public:
-	BfElseIf() : BfNode() { debugName = "else if"; }
+	BfElseIf() : BfNode() { debugName = "else if"; setTypeId(id_else_if); }
 };
 
 //!
@@ -247,7 +302,7 @@ class BfElse : public BfNode
 {
 public:
 	// Else should only contain a block...
-	BfElse() : BfNode() { setCardinality(1); debugName = "else"; }
+	BfElse() : BfNode() { setCardinality(1); debugName = "else"; setTypeId(id_else); }
 };
 
 //!
@@ -256,7 +311,7 @@ public:
 class BfNewline : public BfNode
 {
 public:
-	BfNewline() : BfNode() { setCardinality(0); debugName = "nl"; }
+	BfNewline() : BfNode() { setCardinality(0); debugName = "nl"; setTypeId(id_newline); }
 };
 
 class BfBinaryOperator : public BfNode
@@ -269,97 +324,98 @@ public:
 class BfOr : public BfBinaryOperator
 {
 public:
-	BfOr() : BfBinaryOperator(lowest) { debugName = "OR"; }
+	BfOr() : BfBinaryOperator(lowest) { debugName = "OR"; setTypeId(id_or); }
+
 };
 
 class BfAnd : public BfBinaryOperator
 {
 public:
-	BfAnd() : BfBinaryOperator(lowest) { debugName = "AND"; }
+	BfAnd() : BfBinaryOperator(lowest) { debugName = "AND"; setTypeId(id_and); }
 };
 
 class BfGreaterThan : public BfBinaryOperator
 {
 public:
-	BfGreaterThan() : BfBinaryOperator(low) { debugName = ">"; }
+	BfGreaterThan() : BfBinaryOperator(low) { debugName = ">"; setTypeId(id_gt); }
 };
 
 class BfLessThan : public BfBinaryOperator
 {
 public:
-	BfLessThan() : BfBinaryOperator(low) { debugName = "<"; }
+	BfLessThan() : BfBinaryOperator(low) { debugName = "<"; setTypeId(id_lt); }
 };
 
 class BfGreaterThanOrEqual : public BfBinaryOperator
 {
 public:
-	BfGreaterThanOrEqual() : BfBinaryOperator(low) { debugName = ">="; }
+	BfGreaterThanOrEqual() : BfBinaryOperator(low) { debugName = ">="; setTypeId(id_geq); }
 };
 
 class BfLessThanOrEqual : public BfBinaryOperator
 {
 public:
-        BfLessThanOrEqual() : BfBinaryOperator(low) { debugName = "<="; }
+        BfLessThanOrEqual() : BfBinaryOperator(low) { debugName = "<="; setTypeId(id_leq); }
 };
 
 class BfEqual : public BfBinaryOperator
 {
 public:
-	BfEqual() : BfBinaryOperator(low) { debugName = "="; }
+	BfEqual() : BfBinaryOperator(low) { debugName = "="; setTypeId(id_eq); }
 };
 
 class BfNotEqual : public BfBinaryOperator
 {
 public:
-	BfNotEqual() : BfBinaryOperator(low) { debugName = "/="; }
+	BfNotEqual() : BfBinaryOperator(low) { debugName = "/="; setTypeId(id_neq); }
 };
 
 class BfPlus : public BfBinaryOperator
 {
 public:
-	BfPlus() : BfBinaryOperator(medium) { debugName = "+"; }
+	BfPlus() : BfBinaryOperator(medium) { debugName = "+"; setTypeId(id_plus); }
 };
 
 class BfMinus : public BfBinaryOperator
 {
 public:
-	BfMinus() : BfBinaryOperator(medium) { debugName = "-"; }
+	BfMinus() : BfBinaryOperator(medium) { debugName = "-"; setTypeId(id_minus); }
 };
 
 class BfConcat : public BfBinaryOperator
 {
 public:
-	BfConcat() : BfBinaryOperator(medium) { debugName = "++"; }
+	BfConcat() : BfBinaryOperator(medium) { debugName = "++"; setTypeId(id_concat); }
 };
 
 class BfMultiply : public BfBinaryOperator
 {
 public:
-	BfMultiply() : BfBinaryOperator(high) { debugName = "*";}
+	BfMultiply() : BfBinaryOperator(high) { debugName = "*"; setTypeId(id_multiply);}
 };
 
 class BfDivide : public BfBinaryOperator
 {
 public:
-	BfDivide() : BfBinaryOperator(high) { debugName = "/"; }
+	BfDivide() : BfBinaryOperator(high) { debugName = "/"; setTypeId(id_divide); }
 };
 
 class BfModulus : public BfBinaryOperator
 {
 public:
-	BfModulus() : BfBinaryOperator(high) { debugName = "%"; }
+	BfModulus() : BfBinaryOperator(high) { debugName = "%"; setTypeId(id_modulus); }
 };
 
 class BfPower : public BfBinaryOperator
 {
 public:
-	BfPower() : BfBinaryOperator(highest) { debugName = "^"; }
+	BfPower() : BfBinaryOperator(highest) { debugName = "^"; setTypeId(id_power); }
 };
 
 class BfEllipsis : public BfBinaryOperator
 {
 public:
-	BfEllipsis() : BfBinaryOperator(highest) { debugName = ".."; }
+	BfEllipsis() : BfBinaryOperator(highest) { debugName = ".."; setTypeId(id_ellipsis); }
 };
 
 class BfLiteral : public BfNode
@@ -371,25 +427,25 @@ public:
 class BfString : public BfLiteral
 {
 public:
-	BfString(string value) : BfLiteral(value) { }
+	BfString(string value) : BfLiteral(value) { setTypeId(id_string); }
 };
 
 class BfInteger : public BfLiteral
 {
 public:
-	BfInteger(string value) : BfLiteral(value) { }
+	BfInteger(string value) : BfLiteral(value) { setTypeId(id_integer); }
 };
 
 class BfFloat : public BfLiteral
 {
 public:
-	BfFloat(string value) : BfLiteral(value) { }
+	BfFloat(string value) : BfLiteral(value) { setTypeId(id_float); }
 };
 
 class BfNegative : public BfNode
 {
 public:
-	BfNegative() : BfNode() { debugName = "-"; setCardinality(1); }
+	BfNegative() : BfNode() { debugName = "-"; setCardinality(1); setTypeId(id_negative); }
 };
 
 class BfHolder : public BfNode
@@ -401,19 +457,19 @@ public:
 class BfList : public BfHolder
 {
 public:
-	BfList() : BfHolder() { debugName = "l{...}"; }
+	BfList() : BfHolder() { debugName = "l{...}"; setTypeId(id_list); }
 };
 
 class BfSet : public BfHolder
 {
 public:
-	BfSet() : BfHolder() { debugName = "s{...}"; }
+	BfSet() : BfHolder() { debugName = "s{...}"; setTypeId(id_set); }
 };
 
 class BfDictionary : public BfHolder
 {
 public:
-	BfDictionary() : BfHolder() { debugName = "d{...}"; }
+	BfDictionary() : BfHolder() { debugName = "d{...}"; setTypeId(id_dictionary); }
 };
 
 BfHolder * BfHolderFactory(string spec);

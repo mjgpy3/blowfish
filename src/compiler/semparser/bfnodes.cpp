@@ -29,6 +29,7 @@ BfNode::BfNode()
         maxChildren = 0;
 	priority = none;
 	debugName = "BfNode";
+	nodeIdent = id_naked_node;
 }
 
 string BfNode::toString()
