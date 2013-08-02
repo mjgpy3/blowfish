@@ -26,7 +26,5 @@ using namespace std;
 bool childrenAreExactly(BfNode * node, NodeIdentifier types[]);
 bool isOperator(BfNode * node);
 bool isLiteral(BfNode * node);
-bool childrenAreAnyOf(BfNode * node, NodeIdentifier types[]);
-bool childrenObey(BfNode * node, bool (*ruleFunction)(vector<BfNode*>));
 	
 #endif

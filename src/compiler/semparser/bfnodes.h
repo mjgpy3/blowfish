@@ -90,6 +90,7 @@ public:
 	BfNode * currentChild() { return children.back(); }
 	BfNode * popCurrentChild();
         BfNode * getParent() { return parent; }
+	BfNode * child(int i) { return children[i]; }
 	int numChildren() { return children.size(); }
 	bool canHoldMoreChildren();
 	void setCardinality(int max);

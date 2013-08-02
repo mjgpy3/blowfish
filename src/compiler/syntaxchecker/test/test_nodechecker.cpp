@@ -38,6 +38,32 @@ int main()
 	// Then
 	tester.assertTrue(childrenAreExactly(aRoot, ids), "Attaching a few operator nodes are recognizable as being what they are (by id)");
 
+	// Given
+	aRoot;
+
+	// When
+	aRoot; // has operators as children
+
+	// Then
+	for (int i = 0; i < (*aRoot).numChildren(); i += 1)
+	{
+		tester.assertTrue(isOperator((*aRoot).child(i)), "Operator nodes are recognizable");
+	}
+
+	// Given
+	BfRoot * secondRoot = new BfRoot();
+
+	// When
+	(*secondRoot).appendChild(new BfString("Something"));
+	(*secondRoot).appendChild(new BfInteger("1"));
+	(*secondRoot).appendChild(new BfFloat("1.0"));
+
+	// Then
+	for (int i = 0; i < (*secondRoot).numChildren(); i += 1)
+	{
+		tester.assertTrue(isLiteral((*secondRoot).child(i)), "Literal nodes are recognizable");
+	}
+	
 	tester.printResults();
 
 	return 0;

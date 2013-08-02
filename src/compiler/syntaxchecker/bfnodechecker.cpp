@@ -17,10 +17,56 @@
 */
 
 #include "bfnodechecker.h"
+#include <vector>
 using namespace std;
 
 bool childrenAreExactly(BfNode * node, NodeIdentifier types[])
 {
-	// TODO: Continue TDD here
+	int i;
+	for (i = 0; i < (*node).numChildren(); i += 1)
+	{
+		try
+		{
+			types[i];
+		}
+		catch (...)
+		{
+			return false;
+		}
+
+		if ((*(*node).child(i)).getTypeId() != types[i])
+		{
+			return false;
+		}
+	}
 	return true;
+}
+
+bool isOperator(BfNode * node)
+{
+	return (*node).getTypeId() == id_or ||
+	 	(*node).getTypeId() == id_and ||
+		(*node).getTypeId() == id_plus ||
+		(*node).getTypeId() == id_minus ||
+		(*node).getTypeId() == id_power ||
+		(*node).getTypeId() == id_multiply ||
+		(*node).getTypeId() == id_divide ||
+		(*node).getTypeId() == id_concat ||
+		(*node).getTypeId() == id_modulus ||
+		(*node).getTypeId() == id_gt ||
+		(*node).getTypeId() == id_lt ||
+		(*node).getTypeId() == id_geq ||
+		(*node).getTypeId() == id_leq ||
+		(*node).getTypeId() == id_neq ||
+		(*node).getTypeId() == id_eq ||
+		(*node).getTypeId() == id_ellipsis;
+
+}
+
+bool isLiteral(BfNode * node)
+{
+	return (*node).getTypeId() == id_string ||
+		(*node).getTypeId() == id_integer ||
+		(*node).getTypeId() == id_float;
+
 }
