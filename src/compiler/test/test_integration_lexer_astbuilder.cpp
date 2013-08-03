@@ -176,6 +176,46 @@ void there_is_differentiation_between_negative_terms_when_there_are_no_spaces(Mi
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - subtraction, difficult to tell 5 - 2 from 5 -2");
 }
 
+void complexish_math_is_parsed_correctly(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "-(5.23 * -2 + -2.5)";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfExpression * exp1 = new BfExpression();
+	BfMultiply * mult1 = new BfMultiply();
+	BfNegative * neg1 = new BfNegative();
+	BfNegative * neg2 = new BfNegative();
+	BfNegative * neg3 = new BfNegative();
+	BfPlus * plus1 = new BfPlus();
+
+	(*neg1).appendChild(new BfInteger("2"));
+	(*neg2).appendChild(new BfFloat("2.5"));
+
+	(*mult1).appendChild(new BfFloat("5.23"));
+	(*mult1).appendChild(neg1);
+
+	(*plus1).appendChild(mult1);
+	(*plus1).appendChild(neg2);
+
+	(*exp1).appendChild(plus1);
+
+	(*neg3).appendChild(exp1);
+
+	(*expected).appendChild(neg3);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - somewhat complex expression");
+}
+
+
 
 int main()
 {
@@ -188,6 +228,7 @@ int main()
 	mathematical_asts_with_negative_numbers_are_handled_alright(tester, lex);
 	asts_with_differently_ordered_operations_are_handled_properly(tester, lex);
 	there_is_differentiation_between_negative_terms_when_there_are_no_spaces(tester, lex);
+	complexish_math_is_parsed_correctly(tester, lex);
 
 	tester.printResults();
 	return 0;
