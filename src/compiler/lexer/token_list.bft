@@ -40,7 +40,7 @@ neg_integer  -> '-'{int}
 neg_float    -> '-'{flt}
 [save_text]
 
-float        -> ({flt})|('-'{flt})
+float        -> {flt}
 [save_text]
 
 char         -> '\''{char_inside}'\''

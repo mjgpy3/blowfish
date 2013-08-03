@@ -36,7 +36,7 @@ const int NUM_TOKENS = 54;
 int Ignore[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int SaveText[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0};
 
-string Matches[] = {"class", "module", "meth", "if", "else_if", "else", "is", "is_now", "not", "forms", "or", "and", "for", "in", "enum", "require", "import", "until", "unless", "\\.\\.", "[a-zA-Z][a-zA-Z_]*:", "[0-9]+", "-[0-9]+", "-[0-9]*\\.[0-9]*", "([0-9]*\\.[0-9]*)|(-[0-9]*\\.[0-9]*)", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\.", "[a-zA-Z][a-zA-Z_]*", "-[a-zA-Z][a-zA-Z_]*", "\\n", "=", "<", "<=", ">", ">=", "/=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "-\\(", "\\)"};
+string Matches[] = {"class", "module", "meth", "if", "else_if", "else", "is", "is_now", "not", "forms", "or", "and", "for", "in", "enum", "require", "import", "until", "unless", "\\.\\.", "[a-zA-Z][a-zA-Z_]*:", "[0-9]+", "-[0-9]+", "-[0-9]*\\.[0-9]*", "[0-9]*\\.[0-9]*", "'(.)|(\\\\[nt])'", "\".*\"", "[\\t ]", "\\+", "-", "\\*", "/", "%", ":=", "^", "\\+\\+", "\\.", "[a-zA-Z][a-zA-Z_]*", "-[a-zA-Z][a-zA-Z_]*", "\\n", "=", "<", "<=", ">", ">=", "/=", "\\|", "[lsd]\\{", "\\}", "\\[", "\\]", "\\(", "-\\(", "\\)"};
 
 #endif
 
@@ -66,7 +66,6 @@ bool BfLexer::matchesSomeToken(string value)
 	MiGrep matcher;
 	for (int i = 0; i < numTokens; i += 1)
 	{
-		//cout << "Trying to match with: " << i << endl;
 		if (matcher.isMatch(value, AllTokens[i].match))
 		{
 			currentToken = &AllTokens[i];
@@ -97,7 +96,6 @@ void BfLexer::parseTokensFromFile(string fileName)
 		{
 			buffer.push_back(reader.get());
 		}
-		cout << "Processing: (" << buffer << ')' << endl;
 		matchFound = false;
 
 		if (buffer == CommentStart)
@@ -111,11 +109,9 @@ void BfLexer::parseTokensFromFile(string fileName)
 		while (matchesSomeToken(buffer))
 		{
 			buffer.push_back(reader.get());
-			cout << "(IN WHILE) Processing: (" << buffer << ')' << endl;
 		}
 		if (matchFound)
 		{
-			cout << "--------->Found match with type: " <<  (*currentToken).type << " with pattern: /" << (*currentToken).match << "/" << endl;
 			if (!(*currentToken).isIgnored)
 			{
 				foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
@@ -126,7 +122,6 @@ void BfLexer::parseTokensFromFile(string fileName)
 			buffer = "";
 			buffer.push_back(endOfBuffer);
 			justCreatedNewBuffer = true;
-			cout << "New buffer: (" << buffer << ")" << endl;
 		}
 		else
 		{
@@ -139,16 +134,3 @@ vector<FoundToken> BfLexer::getTokens()
 {
 	return foundTokens;
 }
-
-/*
-int main()
-{
-	cout << "Hello Lexer!\n";
-	BfLexer lexer = BfLexer();
-
-        int a[] = {1,2,3,4};
-	lexer.parseTokensFromFile(string("hello_world.bf"));
-
-	return 0;
-}
-*/

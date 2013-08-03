@@ -47,10 +47,6 @@ BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 
 void AstBuilder::buildNode(FoundToken tok)
 {
-	cout << "Processing: " << tok.getTokenValue() << endl;
-	cout << "Current node's number of children: " << (*current).numChildren() << endl;
-	// The switches that are met here are the ones that actually generate nodes
-
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
@@ -349,7 +345,6 @@ void AstBuilder::buildNode(FoundToken tok)
 void AstBuilder::attachChild(BfNode * n)
 {
 	(*current).appendChild(n);
-	cout << "Attached Child\n";
 }
 
 void AstBuilder::attachChildAsCurrent(BfNode * n)
@@ -361,14 +356,11 @@ void AstBuilder::attachChildAsCurrent(BfNode * n)
 void AstBuilder::moveToCurrentChild()
 {
 	current = (*current).currentChild();
-	cout << "Moved to current child\n";
 }
 
 void AstBuilder::moveToParent()
 {
-	cout << "Trying to move to parent" << endl;
 	current = (*current).getParent();
-	cout << "Moved to parent\n";
 }
 
 void AstBuilder::currentChildIsChildOf(BfNode * n)
@@ -396,22 +388,3 @@ void AstBuilder::attachNegativeChild(BfNode * n)
         (*neg).appendChild(n);
 	attachChild(neg);
 }
-
-/*
-int main()
-{
-	cout << "Hello Semantic Parser!" << endl;
-
-	BfNode * ast;
-
-	BfLexer lexer = BfLexer();
-	AstBuilder builder = AstBuilder();
-	lexer.parseTokensFromFile("hello_world.bf");
-
-	ast = builder.buildAst(lexer.getTokens());
-
-	cout << (*ast).toString() << endl;
-
-	return 0;
-}
-*/
