@@ -152,6 +152,31 @@ void asts_with_differently_ordered_operations_are_handled_properly(MiTester & te
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition then multiplication (scattered floats)");
 }
 
+void there_is_differentiation_between_negative_terms_when_there_are_no_spaces(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "5-2";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfMinus * minus = new BfMinus();
+
+	(*minus).appendChild(new BfInteger("5"));
+	(*minus).appendChild(new BfInteger("2"));
+	
+	(*expected).appendChild(minus);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - subtraction, difficult to tell 5 - 2 from 5 -2");
+}
+
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -162,6 +187,7 @@ int main()
 	simple_asts_with_operation_chaining_when_ooo_is_same_are_right_to_left(tester, lex);
 	mathematical_asts_with_negative_numbers_are_handled_alright(tester, lex);
 	asts_with_differently_ordered_operations_are_handled_properly(tester, lex);
+	there_is_differentiation_between_negative_terms_when_there_are_no_spaces(tester, lex);
 
 	tester.printResults();
 	return 0;

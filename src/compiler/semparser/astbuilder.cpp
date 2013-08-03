@@ -18,6 +18,7 @@
 
 #include "astbuilder.h"
 #include "bflexer.h"
+#include "bfnodechecker.h"
 #include <iostream>
 #include <typeinfo>
 #include <cstdlib>
@@ -382,9 +383,24 @@ void AstBuilder::insertOperatorNode(BfBinaryOperator * n)
 	moveToCurrentChild();
 }
 
+// PCFR: fix logic
 void AstBuilder::attachNegativeChild(BfNode * n)
 {
-        BfNegative * neg = new BfNegative();
-        (*neg).appendChild(n);
-	attachChild(neg);
+	if (isOperator(current))
+	{
+		BfNegative * neg = new BfNegative();
+                (*neg).appendChild(n);
+                attachChild(neg);
+	}
+	else if ((*current).numChildren() != 0)
+	{
+		insertOperatorNode(new BfMinus());
+                attachChild(n);
+	}
+	else
+	{
+		BfNegative * neg = new BfNegative();
+                (*neg).appendChild(n);
+                attachChild(neg);
+	}
 }
