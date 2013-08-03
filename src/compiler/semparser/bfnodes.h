@@ -29,7 +29,8 @@ using namespace std;
 
 enum NodeIdentifier
 {
-	id_naked_node = 424,
+	begin_identifiers = 424,
+	id_naked_node,
 	id_blowfish_root,
 	id_identifier,
 	id_parameter_identifier,
@@ -76,6 +77,7 @@ enum NodeIdentifier
 	id_string,
 	id_integer,
 	id_float,
+	end_identifiers,
 };
 
 //!

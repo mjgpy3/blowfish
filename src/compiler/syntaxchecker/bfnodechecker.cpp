@@ -23,23 +23,17 @@ using namespace std;
 bool childrenAreExactly(BfNode * node, NodeIdentifier types[])
 {
 	int i;
+
 	for (i = 0; i < (*node).numChildren(); i += 1)
 	{
-		try
-		{
-			types[i];
-		}
-		catch (...)
-		{
-			return false;
-		}
-
 		if ((*(*node).child(i)).getTypeId() != types[i])
 		{
 			return false;
 		}
 	}
-	return true;
+	
+	return types[i] <= begin_identifiers ||
+		types[i] >= end_identifiers;
 }
 
 bool isOperator(BfNode * node)
@@ -69,4 +63,16 @@ bool isLiteral(BfNode * node)
 		(*node).getTypeId() == id_integer ||
 		(*node).getTypeId() == id_float;
 
+}
+
+bool impliesScope(BfNode * node)
+{
+	return (*node).getTypeId() == id_if ||
+		(*node).getTypeId() == id_else_if ||
+		(*node).getTypeId() == id_else ||
+		(*node).getTypeId() == id_module ||
+		(*node).getTypeId() == id_method ||
+		(*node).getTypeId() == id_class || 
+		(*node).getTypeId() == id_for || 
+		(*node).getTypeId() == id_enum;
 }

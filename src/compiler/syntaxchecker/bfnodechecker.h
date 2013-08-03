@@ -26,5 +26,6 @@ using namespace std;
 bool childrenAreExactly(BfNode * node, NodeIdentifier types[]);
 bool isOperator(BfNode * node);
 bool isLiteral(BfNode * node);
+bool impliesScope(BfNode * node);
 	
 #endif
