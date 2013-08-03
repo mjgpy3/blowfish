@@ -58,6 +58,8 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BfIdentifier(tok.getValue()));
 		} break;
 
+		// TODO: Make negatives smarter (operation or sign)
+
 		case t_neg_ident:
 		{
 			attachNegativeChild(new BfIdentifier(tok.getValue().substr(1)));
