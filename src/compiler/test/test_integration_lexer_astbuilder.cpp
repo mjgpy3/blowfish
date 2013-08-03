@@ -13,18 +13,20 @@ void write_temp_bf_file(string text)
 {
 	ofstream fout;
 
+	remove(temp_file_name.c_str());
+
 	fout.open(temp_file_name.c_str());
 	fout << text;
 	fout.close();
 }
 
-void the_ast_thats_built_for_hello_world_looks_correct(MiTester & tester, BfLexer lexer, AstBuilder builder)
+void the_ast_thats_built_for_hello_world_is_correct(MiTester & tester, BfLexer lexer)
 {
+	// Given
 	string code = "say \"Hello blowfish!\"\n";
+	AstBuilder builder = AstBuilder();
 
 	write_temp_bf_file(code);
-        lexer.parseTokensFromFile(temp_file_name);
-        BfNode * ast = builder.buildAst(lexer.getTokens());
 
 	BfRoot * expected = new BfRoot();
 
@@ -32,17 +34,134 @@ void the_ast_thats_built_for_hello_world_looks_correct(MiTester & tester, BfLexe
 	(*expected).appendChild(new BfString("\"Hello blowfish!\""));
 	(*expected).appendChild(new BfNewline());
 
+	// When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+	// Then
 	tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - hello world");
 }
 
+void the_ast_thats_built_for_a_simple_math_operation_is_correct(MiTester & tester, BfLexer lexer)
+{
+	// Given
+	string code = "5 + 1\n";
+	AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfPlus * plus = new BfPlus();
+
+	(*plus).appendChild(new BfInteger("5"));
+	(*plus).appendChild(new BfInteger("1"));
+
+	(*expected).appendChild(plus);
+	(*expected).appendChild(new BfNewline());
+
+	// When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+	// Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition");
+}
+
+void simple_asts_with_operation_chaining_when_ooo_is_same_are_right_to_left(MiTester & tester, BfLexer lexer)
+{
+	// Given
+        string code = "5 + 1 - 2\n";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+        BfPlus * plus = new BfPlus();
+	BfMinus * minus = new BfMinus();
+
+        (*plus).appendChild(new BfInteger("5"));
+        (*plus).appendChild(new BfInteger("1"));
+
+	(*minus).appendChild(plus);
+	(*minus).appendChild(new BfInteger("2"));
+
+        (*expected).appendChild(minus);
+        (*expected).appendChild(new BfNewline());
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition then subtraction");
+}
+
+void mathematical_asts_with_negative_numbers_are_handled_alright(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "5 + -2\n";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+        BfPlus * plus = new BfPlus();
+        BfNegative * negative = new BfNegative();
+
+	(*negative).appendChild(new BfInteger("2"));
+
+        (*plus).appendChild(new BfInteger("5"));
+        (*plus).appendChild(negative);
+
+	(*expected).appendChild(plus);
+        (*expected).appendChild(new BfNewline());
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition where one is negative");
+}
+
+void asts_with_differently_ordered_operations_are_handled_properly(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "5 + 1.5 * 2.0";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+        BfPlus * plus = new BfPlus();
+        BfMultiply * multiply = new BfMultiply();
+
+	(*multiply).appendChild(new BfFloat("1.5"));
+	(*multiply).appendChild(new BfFloat("2.0"));
+
+	(*plus).appendChild(new BfInteger("5"));
+	(*plus).appendChild(multiply);
+
+	(*expected).appendChild(plus);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition then multiplication (scattered floats)");
+}
 
 int main()
 {
 	MiTester tester = MiTester();
 	BfLexer lex;
-	AstBuilder build;
 
-	the_ast_thats_built_for_hello_world_looks_correct(tester, lex, build);
+	the_ast_thats_built_for_hello_world_is_correct(tester, lex);
+	the_ast_thats_built_for_a_simple_math_operation_is_correct(tester, lex);
+	simple_asts_with_operation_chaining_when_ooo_is_same_are_right_to_left(tester, lex);
+	mathematical_asts_with_negative_numbers_are_handled_alright(tester, lex);
+	asts_with_differently_ordered_operations_are_handled_properly(tester, lex);
 
 	tester.printResults();
 	return 0;

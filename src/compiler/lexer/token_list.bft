@@ -3,7 +3,7 @@ ident        -> [a-zA-Z][a-zA-Z_]*
 char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
 int          -> [0-9]+
-flt          -> [0-9]*'.'[0-9]+
+flt          -> [0-9]*'.'[0-9]*
 
 section_tokens:
 kwd_class    -> 'class'
