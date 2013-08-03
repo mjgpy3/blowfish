@@ -383,24 +383,17 @@ void AstBuilder::insertOperatorNode(BfBinaryOperator * n)
 	moveToCurrentChild();
 }
 
-// PCFR: fix logic
 void AstBuilder::attachNegativeChild(BfNode * n)
 {
-	if (isOperator(current))
+	if (isOperator(current) || (*current).numChildren() == 0)
 	{
 		BfNegative * neg = new BfNegative();
                 (*neg).appendChild(n);
                 attachChild(neg);
-	}
-	else if ((*current).numChildren() != 0)
-	{
-		insertOperatorNode(new BfMinus());
-                attachChild(n);
 	}
 	else
 	{
-		BfNegative * neg = new BfNegative();
-                (*neg).appendChild(n);
-                attachChild(neg);
+		insertOperatorNode(new BfMinus());
+                attachChild(n);
 	}
 }
