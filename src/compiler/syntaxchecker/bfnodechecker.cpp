@@ -76,3 +76,27 @@ bool impliesScope(BfNode * node)
 		(*node).getTypeId() == id_for || 
 		(*node).getTypeId() == id_enum;
 }
+
+bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
+{
+	if ((*aNode).numChildren() != (*anotherNode).numChildren())
+	{
+		return false;
+	}
+	if ((*aNode).getTypeId() != (*anotherNode).getTypeId())
+	{
+		return false;
+	}
+	if ((*aNode).numChildren() != 0)
+	{
+		for (int i = 0; i < (*aNode).numChildren(); i += 1)
+		{
+			if (!haveSameNodeStructure((*aNode).child(i), (*anotherNode).child(i)))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+

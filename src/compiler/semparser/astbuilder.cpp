@@ -395,6 +395,7 @@ void AstBuilder::attachNegativeChild(BfNode * n)
 	attachChild(neg);
 }
 
+/*
 int main()
 {
 	cout << "Hello Semantic Parser!" << endl;
@@ -411,3 +412,4 @@ int main()
 
 	return 0;
 }
+*/

@@ -108,6 +108,51 @@ void can_identify_nodes_that_indicate_a_scope(MiTester & tester)
         }
 }
 
+void two_simple_trees_that_have_the_same_node_ids_all_the_way_down_can_be_identified_as_such(MiTester & tester)
+{
+	// Given
+	BfRoot * rootOne = new BfRoot();
+	BfRoot * rootTwo = new BfRoot();
+	BfMinus * someNodeOne = new BfMinus();
+	BfMinus * someNodeTwo = new BfMinus();
+
+	// When
+	(*someNodeOne).appendChild(new BfInteger("1"));
+	(*someNodeTwo).appendChild(new BfInteger("100"));
+
+	(*rootOne).appendChild(new BfPlus());
+	(*rootTwo).appendChild(new BfPlus());
+
+	(*rootOne).appendChild(someNodeOne);
+	(*rootTwo).appendChild(someNodeTwo);
+
+	// Then
+	tester.assertTrue(haveSameNodeStructure(rootOne, rootTwo), "Two node structures have same types should be identified as such");
+}
+
+void two_simple_different_trees_do_not_have_the_same_node_structure(MiTester & tester)
+{
+	// Given
+        BfRoot * rootOne = new BfRoot();
+        BfRoot * rootTwo = new BfRoot();
+        BfMinus * someNodeOne = new BfMinus();
+        BfMinus * someNodeTwo = new BfMinus();
+
+        // When
+        (*someNodeOne).appendChild(new BfInteger("1"));
+        (*someNodeTwo).appendChild(new BfFloat("1.0"));
+
+        (*rootOne).appendChild(new BfPlus());
+        (*rootTwo).appendChild(new BfPlus());
+
+        (*rootOne).appendChild(someNodeOne);
+        (*rootTwo).appendChild(someNodeTwo);
+
+        // Then
+        tester.assertFalse(haveSameNodeStructure(rootOne, rootTwo), "Two node structures have different types should be identified as such");
+
+}
+
 int main()
 {
         MiTester tester = MiTester();
@@ -117,6 +162,8 @@ int main()
 	operator_nodes_can_be_identified_as_such(tester);
 	literals_can_be_identified_as_such(tester);
 	can_identify_nodes_that_indicate_a_scope(tester);
+	two_simple_trees_that_have_the_same_node_ids_all_the_way_down_can_be_identified_as_such(tester);
+	two_simple_different_trees_do_not_have_the_same_node_structure(tester);
 
 	tester.printResults();
 	return 0;
