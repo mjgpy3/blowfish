@@ -246,6 +246,89 @@ void a_basic_mathematical_expression_with_a_fuction_in_it_is_parsed_into_an_ast_
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
 }
 
+void a_basic_assignment_is_parsed_into_an_ast_correctly(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "my_var := 5";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfVariableAssignment * assign = new BfVariableAssignment();
+
+	(*assign).appendChild(new BfIdentifier("my_var"));
+	(*assign).appendChild(new BfInteger("5"));
+
+	(*expected).appendChild(assign);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+}
+
+void negative_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "-(sqrt ofTheNumber: 5)";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfNegative * neg = new BfNegative();
+	BfExpression * exp = new BfExpression();
+
+	(*exp).appendChild(new BfIdentifier("sqrt"));
+	(*exp).appendChild(new BfParameterIdentifier("ofTheNumber:"));
+	(*exp).appendChild(new BfInteger("5"));
+
+	(*neg).appendChild(exp);
+
+	(*expected).appendChild(neg);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+}
+
+void embedded_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "(sqrt (power 1.3 toThe: 5))";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+        BfExpression * exp1 = new BfExpression();
+	BfExpression * exp2 = new BfExpression();
+
+	(*exp1).appendChild(new BfIdentifier("power"));
+	(*exp1).appendChild(new BfFloat("1.3"));
+	(*exp1).appendChild(new BfParameterIdentifier("toThe:"));
+	(*exp1).appendChild(new BfInteger("5"));
+
+	(*exp2).appendChild(new BfIdentifier("sqrt"));
+	(*exp2).appendChild(exp1);
+
+	(*expected).appendChild(exp2);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -259,6 +342,9 @@ int main()
 	there_is_differentiation_between_negative_terms_when_there_are_no_spaces(tester, lex);
 	complexish_math_is_parsed_correctly(tester, lex);
 	a_basic_mathematical_expression_with_a_fuction_in_it_is_parsed_into_an_ast_correctly(tester, lex);
+	a_basic_assignment_is_parsed_into_an_ast_correctly(tester, lex);
+	negative_expressions_are_parsed_correctly_into_an_ast(tester, lex);
+	embedded_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 
 	tester.printResults();
 	return 0;

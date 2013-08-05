@@ -1,1 +1,1 @@
--5.34 * (sqrt 7)
+(sqrt (power 1.3 toThe: 5))
