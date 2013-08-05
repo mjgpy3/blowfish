@@ -215,7 +215,36 @@ void complexish_math_is_parsed_correctly(MiTester & tester, BfLexer lexer)
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - somewhat complex expression");
 }
 
+void a_basic_mathematical_expression_with_a_fuction_in_it_is_parsed_into_an_ast_correctly(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code = "-5.34 * (sqrt 7)";
+        AstBuilder builder = AstBuilder();
 
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+	BfMultiply * mult = new BfMultiply();
+	BfExpression * exp = new BfExpression();
+	BfNegative * neg = new BfNegative();
+
+	(*exp).appendChild(new BfIdentifier("sqrt"));
+	(*exp).appendChild(new BfInteger("7"));
+
+	(*neg).appendChild(new BfFloat("5.34"));
+
+	(*mult).appendChild(neg);
+	(*mult).appendChild(exp);
+
+	(*expected).appendChild(mult);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+}
 
 int main()
 {
@@ -229,6 +258,7 @@ int main()
 	asts_with_differently_ordered_operations_are_handled_properly(tester, lex);
 	there_is_differentiation_between_negative_terms_when_there_are_no_spaces(tester, lex);
 	complexish_math_is_parsed_correctly(tester, lex);
+	a_basic_mathematical_expression_with_a_fuction_in_it_is_parsed_into_an_ast_correctly(tester, lex);
 
 	tester.printResults();
 	return 0;
