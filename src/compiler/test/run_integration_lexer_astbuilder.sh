@@ -4,3 +4,4 @@ c++ test_integration_lexer_astbuilder.cpp ../syntaxchecker/bfnodechecker.cpp ../
 
 ./a.out
 rm a.out
+rm test_file.bf

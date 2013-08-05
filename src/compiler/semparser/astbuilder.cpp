@@ -62,6 +62,11 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachNegativeChild(new BfIdentifier(tok.getValue().substr(1)));
 		} break;
 
+		case t_kwd_self:
+		{
+			attachChild(new BfSelf());
+		} break;
+
 		case t_param_ident:
 		{
 			attachChild(new BfParameterIdentifier(tok.getValue()));

@@ -72,6 +72,7 @@ enum NodeIdentifier
 	id_ellipsis,
 	id_negative,
 	id_set,
+	id_self,
 	id_list,
 	id_dictionary,
 	id_string,
@@ -667,6 +668,17 @@ public:
 	{
 		debugName = "s{...}";
 		setTypeId(id_set);
+	}
+};
+
+class BfSelf : public BfNode
+{
+public:
+	BfSelf() : BfNode()
+	{
+		setCardinality(0);
+		debugName = "Self";
+		setTypeId(id_self);
 	}
 };
 

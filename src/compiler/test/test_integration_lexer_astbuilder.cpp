@@ -326,6 +326,37 @@ void embedded_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, Bf
 
         // Then
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+}
+
+void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer lexer)
+{
+        // Given
+        string code = 	"class Car [\n"
+			"    meth new [\n"
+			"        self.miles := 0\n"
+			"    ]\n"
+			"\n"
+			"    meth drive theDistance: d [\n"
+			"        self.miles = self.miles + d\n"
+			"    ]\n"
+			"]";
+
+	cout << code << endl;
+
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+	cout << (*ast).toString() << endl;
+
+        // Then
+        //tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
 
 }
 
@@ -345,6 +376,7 @@ int main()
 	a_basic_assignment_is_parsed_into_an_ast_correctly(tester, lex);
 	negative_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	embedded_expressions_are_parsed_correctly_into_an_ast(tester, lex);
+	a_simple_class_gets_parsed_correctly_into_an_ast(tester, lex);
 
 	tester.printResults();
 	return 0;

@@ -1,1 +1,0 @@
-(sqrt (power 1.3 toThe: 5))
