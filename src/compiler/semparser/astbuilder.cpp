@@ -55,8 +55,6 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BfIdentifier(tok.getValue()));
 		} break;
 
-		// TODO: Make negatives smarter (operation or sign)
-
 		case t_neg_ident:
 		{
 			attachNegativeChild(new BfIdentifier(tok.getValue().substr(1)));
@@ -74,20 +72,23 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_isnow:
 		{
-			currentChildIsChildOf(new BfVariableAssignment());
-			moveToCurrentChild();
+			//currentChildIsChildOf(new BfVariableAssignment());
+			//moveToCurrentChild();
+			insertAssignmentNode(new BfVariableAssignment());
 		} break;
 
 		case t_op_assign:
 		{
-			currentChildIsChildOf(new BfVariableAssignment());
-                        moveToCurrentChild();
+			//currentChildIsChildOf(new BfVariableAssignment());
+                        //moveToCurrentChild();
+			insertAssignmentNode(new BfVariableAssignment());
 		} break;
 
 		case t_kwd_is:
 		{
-			currentChildIsChildOf(new BfConstantAssignment());
-			moveToCurrentChild();
+			//currentChildIsChildOf(new BfConstantAssignment());
+			//moveToCurrentChild();
+			insertAssignmentNode(new BfConstantAssignment());
 		} break;
 
 		case t_kwd_class:
@@ -401,4 +402,31 @@ void AstBuilder::attachNegativeChild(BfNode * n)
 		insertOperatorNode(new BfMinus());
                 attachChild(n);
 	}
+}
+
+void AstBuilder::insertAssignmentNode(BfAssignment * n)
+{
+	BfExpression * exp = new BfExpression();
+	currentChildrenAreChildrenOf(exp, id_newline);
+	attachChildAsCurrent(n);
+}
+
+void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
+{
+	// PCFR: Nasty
+	vector<BfNode *> temp;
+
+	cout << "Current number of children: " << (*current).numChildren() << endl;
+	while ((*current).numChildren() != 0 && (*((*current).currentChild())).getTypeId() != until)
+	{
+		temp.push_back((*current).popCurrentChild());
+		cout << (*current).numChildren() << endl;
+	}
+
+	for (int i = temp.size()-1; i >= 0; i -= 1)
+	{
+		(*n).appendChild(temp[i]);
+	}
+
+	attachChild(n);
 }

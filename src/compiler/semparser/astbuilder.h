@@ -33,12 +33,14 @@ public:
 	void buildNode(FoundToken tok);
 
 	void insertOperatorNode(BfBinaryOperator * n);
+	void insertAssignmentNode(BfAssignment * n);
 	void attachChild(BfNode * n);
 	void attachChildAsCurrent(BfNode * n);
 	void attachNegativeChild(BfNode * n);
 	void moveToCurrentChild();
 	void moveToParent();
 	void currentChildIsChildOf(BfNode * n);
+	void currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until);
 
 private:
 	BfNode * root;

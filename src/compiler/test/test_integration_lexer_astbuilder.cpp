@@ -262,6 +262,8 @@ void a_basic_assignment_is_parsed_into_an_ast_correctly(MiTester & tester, BfLex
 
 	(*expected).appendChild(assign);
 
+	// TODO: fix me, expression expected, code is right, I'm wrong
+
         // When
         lexer.parseTokensFromFile(temp_file_name);
         BfNode * ast = builder.buildAst(lexer.getTokens());
@@ -337,7 +339,7 @@ void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer l
 			"    ]\n"
 			"\n"
 			"    meth drive theDistance: d [\n"
-			"        self.miles = self.miles + d\n"
+			"        self.miles := self.miles + d\n"
 			"    ]\n"
 			"]";
 
@@ -357,7 +359,24 @@ void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer l
 
         // Then
         //tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+}
 
+void popping_a_child_works(MiTester & tester)
+{
+	// Given
+	BfNode * top = new BfNode();
+
+	(*top).appendChild(new BfMinus());
+	(*top).appendChild(new BfPlus());
+	(*top).appendChild(new BfMultiply());
+
+	// When
+	(*top).popCurrentChild();
+
+	cout << (*top).toString() << endl;
+
+	// Then
+	tester.assertTrue((*top).numChildren() == 2, "When we pop a child, there should be N-1 left");
 }
 
 int main()
@@ -377,6 +396,7 @@ int main()
 	negative_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	embedded_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	a_simple_class_gets_parsed_correctly_into_an_ast(tester, lex);
+	popping_a_child_works(tester);
 
 	tester.printResults();
 	return 0;
