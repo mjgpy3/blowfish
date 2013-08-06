@@ -408,7 +408,8 @@ void AstBuilder::insertAssignmentNode(BfAssignment * n)
 {
 	BfExpression * exp = new BfExpression();
 	currentChildrenAreChildrenOf(exp, id_newline);
-	attachChildAsCurrent(n);
+	currentChildIsChildOf(n);
+	moveToCurrentChild();
 }
 
 void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
@@ -416,7 +417,6 @@ void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
 	// PCFR: Nasty
 	vector<BfNode *> temp;
 
-	cout << "Current number of children: " << (*current).numChildren() << endl;
 	while ((*current).numChildren() != 0 && (*((*current).currentChild())).getTypeId() != until)
 	{
 		temp.push_back((*current).popCurrentChild());

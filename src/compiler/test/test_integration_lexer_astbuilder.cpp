@@ -256,20 +256,23 @@ void a_basic_assignment_is_parsed_into_an_ast_correctly(MiTester & tester, BfLex
 
         BfRoot * expected = new BfRoot();
 	BfVariableAssignment * assign = new BfVariableAssignment();
+	BfExpression * exp = new BfExpression();
 
-	(*assign).appendChild(new BfIdentifier("my_var"));
+	(*exp).appendChild(new BfIdentifier("my_var"));
+	(*assign).appendChild(exp);
 	(*assign).appendChild(new BfInteger("5"));
 
 	(*expected).appendChild(assign);
-
-	// TODO: fix me, expression expected, code is right, I'm wrong
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
         BfNode * ast = builder.buildAst(lexer.getTokens());
 
+	cout << (*expected).toString() << endl;
+	cout << (*ast).toString() << endl;
+
         // Then
-        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - simple assignment");
 }
 
 void negative_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, BfLexer lexer)
