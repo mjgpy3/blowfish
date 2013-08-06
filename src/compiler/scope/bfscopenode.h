@@ -16,3 +16,22 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#ifndef BLOWFISH_SCOPE_NODE
+#define BLOWFISH_SCOPE_NODE
+
+#include <vector>
+using namespace std;
+
+class BfScopeNode
+{
+public:
+	int numChildren();
+	void appendChild(BfScopeNode * n);
+	bool parentIs(BfScopeNode * n);
+
+private:
+	vector<BfScopeNode*> children;
+	BfScopeNode * parent;
+};
+
+#endif
