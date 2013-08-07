@@ -35,3 +35,14 @@ bool BfScopeNode::parentIs(BfScopeNode * n)
 {
 	return (*this).parent == n;
 }
+
+void BfScopeNode::addIdentifer(BfNode * n)
+{
+	identifiers[(*n).getValue()] = new BfNode();
+}
+
+bool BfScopeNode::containsIdentifier(BfNode * n)
+{
+	return identifiers.count((*n).getValue()) == 1;
+}
+

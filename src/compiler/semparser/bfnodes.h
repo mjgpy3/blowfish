@@ -99,6 +99,7 @@ public:
 	void setCardinality(int max);
 	bool higherPriorityThan(BfNode n);
 	string toString();
+	string getValue() { return value; }
 	OperatorPriority priority;
 	string debugName;
 	int maxChildren;

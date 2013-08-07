@@ -17,6 +17,7 @@
 */
 
 #include "bfscopenode.h"
+#include "bfnodes.h"
 #include "mitest.h"
 using namespace std;
 
@@ -56,6 +57,19 @@ void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_th
 	tester.assertTrue((*anotherNode).parentIs(node), "An appended node's parent is the node that it was appended to");
 }
 
+void given_an_empty_scope_node_when_we_add_an_identifer_to_that_node_we_can_find_that_identifer_in_that_scope_node(MiTester & tester)
+{
+        // Given
+        BfScopeNode * node = new BfScopeNode();
+
+        // When
+	BfIdentifier * ident = new BfIdentifier("SomeIdent");
+        (*node).addIdentifer(ident);
+
+        // Then
+        tester.assertTrue((*node).containsIdentifier(ident), "An identifer that is added to a scope can be found in that scope");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -63,6 +77,7 @@ int main()
 	given_a_scope_node_when_we_have_done_nothing_to_that_node_then_its_number_of_children_is_zero(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_that_node_should_have_one_child(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(tester);
+	given_an_empty_scope_node_when_we_add_an_identifer_to_that_node_we_can_find_that_identifer_in_that_scope_node(tester);
 
 	tester.printResults();
 
