@@ -12,7 +12,9 @@ if __name__ == "__main__":
 
         for a_file in files:
             with open(a_file, 'r') as f:
+                line_no = 0
                 for line in f.read().split('\n'):
+                    line_no += 1
                     if len(line) > 80:
                         report = True
                         for ignore in IGNORE_IF_CONTAINS:
@@ -20,4 +22,4 @@ if __name__ == "__main__":
                                 report = False
                                 break
                         if report:
-                            print a_file + ":", line
+                            print a_file + "(" + str(line_no) + "):", line
