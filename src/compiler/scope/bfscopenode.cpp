@@ -36,6 +36,11 @@ void BfScopeNode::appendChild(BfScopeNode * n)
 	children.push_back(n);
 }
 
+bool BfScopeNode::isNamed()
+{
+	return name != "";
+}
+
 bool BfScopeNode::parentIs(BfScopeNode * n)
 {
 	return this->parent == n;

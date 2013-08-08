@@ -30,6 +30,7 @@ public:
 	int numChildren();
 	void appendChild(BfScopeNode * n);
 	bool parentIs(BfScopeNode * n);
+	bool isNamed();
 	void setName(string n);
 	string getName();
 

@@ -69,6 +69,40 @@ void given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retr
 	tester.assertEqual("Monkey", node->getName(), "A node's name can be set and gotten");
 }
 
+void given_a_scope_with_no_name_when_nothing_is_done_about_that_then_its_name_is_the_empty_string(MiTester & tester)
+{
+	// Given
+	BfScopeNode * node = new BfScopeNode();
+
+	// When
+	
+	// Then
+	tester.assertEqual("", node->getName(), "A node with no name should actually have the empty string as its name");
+}
+
+void given_a_scope_with_no_name_when_nothing_is_done_about_that_then_it_is_considered_to_have_no_name(MiTester & tester)
+{
+	// Given
+	BfScopeNode * node = new BfScopeNode();
+
+	// When
+
+	// Then
+	tester.assertFalse(node->isNamed(), "Node with empty string as a name is considered to have no name");
+}
+
+void given_a_scope_when_it_is_given_a_name_then_it_is_considered_to_be_named(MiTester & tester)
+{
+	// Given
+	BfScopeNode * node = new BfScopeNode();
+
+	// When
+	node->setName("Money");
+
+	// Then
+	tester.assertTrue(node->isNamed(), "A node with a name is considered named");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -77,6 +111,9 @@ int main()
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_that_node_should_have_one_child(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(tester);
 	given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retrieved(tester);
+	given_a_scope_with_no_name_when_nothing_is_done_about_that_then_its_name_is_the_empty_string(tester);
+	given_a_scope_with_no_name_when_nothing_is_done_about_that_then_it_is_considered_to_have_no_name(tester);
+	given_a_scope_when_it_is_given_a_name_then_it_is_considered_to_be_named(tester);
 
 	tester.printResults();
 
