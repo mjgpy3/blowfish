@@ -48,6 +48,9 @@ BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 
 void AstBuilder::buildNode(FoundToken tok)
 {
+	// TODO: PCFR: Rewrite me nicely (factories would be legit!)
+
+
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
@@ -244,7 +247,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		{
 			if (careAboutNewline &&
                             lastToken != t_line_ending && 
-                            (*current).canHoldMoreChildren())
+                            current->canHoldMoreChildren())
 			{
 				attachChild(new BfNewline());
 			}

@@ -43,7 +43,7 @@ string BfNode::toString()
 		result += string(" -> [ ");
 		for (int i = 0; i < children.size(); i += 1)
 		{
-			result += (*children[i]).toString() + string(", ");
+			result += children[i]->toString() + string(", ");
 		}
 
 		return result + string("]"); 
@@ -93,7 +93,7 @@ void BfNode::appendChild(BfNode * n)
 		cout << "Error: Tried to append a child to a full parent" << endl;
 		exit(1);
 	}
-	(*n).parent = this;
+	n->parent = this;
 	children.push_back(n);
 }
 

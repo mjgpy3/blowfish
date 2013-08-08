@@ -7,6 +7,8 @@
 #include "bfnodechecker.h"
 using namespace std;
 
+// TODO: Remove "all" (*something). ... type operations from this file (use '->')
+
 string temp_file_name = "test_file.bf";
 
 void write_temp_bf_file(string text)
