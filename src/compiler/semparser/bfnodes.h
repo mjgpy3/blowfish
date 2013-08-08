@@ -41,6 +41,7 @@ enum NodeIdentifier
 	id_pipe,
 	id_dot,
 	id_in,
+	id_return,
 	id_class,
 	id_module,
 	id_method,
@@ -694,6 +695,17 @@ public:
 	{
 		debugName = "d{...}";
 		setTypeId(id_dictionary);
+	}
+};
+
+class BfReturn : public BfNode
+{
+public:
+	BfReturn() : BfNode()
+	{
+		debugName = "Return";
+		setTypeId(id_return);
+		setCardinality(0);
 	}
 };
 

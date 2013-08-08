@@ -27,6 +27,7 @@ kwd_require  -> 'require'
 kwd_import   -> 'import'
 kwd_until    -> 'until'
 kwd_unless   -> 'unless'
+kwd_return   -> 'return'
 
 ellipsis     -> '..'
 

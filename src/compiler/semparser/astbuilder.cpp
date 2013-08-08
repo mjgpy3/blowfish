@@ -141,6 +141,11 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachChild(new BfPipe());
 		} break;
 
+		case t_kwd_return:
+		{
+			attachChild(new BfReturn());
+		} break;
+
 		case t_kwd_in:
 		{
 			attachChild(new BfIn());
