@@ -7,8 +7,6 @@
 #include "bfnodechecker.h"
 using namespace std;
 
-// TODO: Remove "all" (*something). ... type operations from this file (use '->')
-
 string temp_file_name = "test_file.bf";
 
 void write_temp_bf_file(string text)
@@ -32,9 +30,9 @@ void the_ast_thats_built_for_hello_world_is_correct(MiTester & tester, BfLexer l
 
 	BfRoot * expected = new BfRoot();
 
-	(*expected).appendChild(new BfIdentifier("say"));
-	(*expected).appendChild(new BfString("\"Hello blowfish!\""));
-	(*expected).appendChild(new BfNewline());
+	expected->appendChild(new BfIdentifier("say"));
+	expected->appendChild(new BfString("\"Hello blowfish!\""));
+	expected->appendChild(new BfNewline());
 
 	// When
         lexer.parseTokensFromFile(temp_file_name);
@@ -55,11 +53,11 @@ void the_ast_thats_built_for_a_simple_math_operation_is_correct(MiTester & teste
         BfRoot * expected = new BfRoot();
 	BfPlus * plus = new BfPlus();
 
-	(*plus).appendChild(new BfInteger("5"));
-	(*plus).appendChild(new BfInteger("1"));
+	plus->appendChild(new BfInteger("5"));
+	plus->appendChild(new BfInteger("1"));
 
-	(*expected).appendChild(plus);
-	(*expected).appendChild(new BfNewline());
+	expected->appendChild(plus);
+	expected->appendChild(new BfNewline());
 
 	// When
         lexer.parseTokensFromFile(temp_file_name);
@@ -81,14 +79,14 @@ void simple_asts_with_operation_chaining_when_ooo_is_same_are_right_to_left(MiTe
         BfPlus * plus = new BfPlus();
 	BfMinus * minus = new BfMinus();
 
-        (*plus).appendChild(new BfInteger("5"));
-        (*plus).appendChild(new BfInteger("1"));
+        plus->appendChild(new BfInteger("5"));
+        plus->appendChild(new BfInteger("1"));
 
-	(*minus).appendChild(plus);
-	(*minus).appendChild(new BfInteger("2"));
+	minus->appendChild(plus);
+	minus->appendChild(new BfInteger("2"));
 
-        (*expected).appendChild(minus);
-        (*expected).appendChild(new BfNewline());
+        expected->appendChild(minus);
+        expected->appendChild(new BfNewline());
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -110,13 +108,13 @@ void mathematical_asts_with_negative_numbers_are_handled_alright(MiTester & test
         BfPlus * plus = new BfPlus();
         BfNegative * negative = new BfNegative();
 
-	(*negative).appendChild(new BfInteger("2"));
+	negative->appendChild(new BfInteger("2"));
 
-        (*plus).appendChild(new BfInteger("5"));
-        (*plus).appendChild(negative);
+        plus->appendChild(new BfInteger("5"));
+        plus->appendChild(negative);
 
-	(*expected).appendChild(plus);
-        (*expected).appendChild(new BfNewline());
+	expected->appendChild(plus);
+        expected->appendChild(new BfNewline());
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -138,13 +136,13 @@ void asts_with_differently_ordered_operations_are_handled_properly(MiTester & te
         BfPlus * plus = new BfPlus();
         BfMultiply * multiply = new BfMultiply();
 
-	(*multiply).appendChild(new BfFloat("1.5"));
-	(*multiply).appendChild(new BfFloat("2.0"));
+	multiply->appendChild(new BfFloat("1.5"));
+	multiply->appendChild(new BfFloat("2.0"));
 
-	(*plus).appendChild(new BfInteger("5"));
-	(*plus).appendChild(multiply);
+	plus->appendChild(new BfInteger("5"));
+	plus->appendChild(multiply);
 
-	(*expected).appendChild(plus);
+	expected->appendChild(plus);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -165,10 +163,10 @@ void there_is_differentiation_between_negative_terms_when_there_are_no_spaces(Mi
         BfRoot * expected = new BfRoot();
 	BfMinus * minus = new BfMinus();
 
-	(*minus).appendChild(new BfInteger("5"));
-	(*minus).appendChild(new BfInteger("2"));
+	minus->appendChild(new BfInteger("5"));
+	minus->appendChild(new BfInteger("2"));
 	
-	(*expected).appendChild(minus);
+	expected->appendChild(minus);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -194,20 +192,20 @@ void complexish_math_is_parsed_correctly(MiTester & tester, BfLexer lexer)
 	BfNegative * neg3 = new BfNegative();
 	BfPlus * plus1 = new BfPlus();
 
-	(*neg1).appendChild(new BfInteger("2"));
-	(*neg2).appendChild(new BfFloat("2.5"));
+	neg1->appendChild(new BfInteger("2"));
+	neg2->appendChild(new BfFloat("2.5"));
 
-	(*mult1).appendChild(new BfFloat("5.23"));
-	(*mult1).appendChild(neg1);
+	mult1->appendChild(new BfFloat("5.23"));
+	mult1->appendChild(neg1);
 
-	(*plus1).appendChild(mult1);
-	(*plus1).appendChild(neg2);
+	plus1->appendChild(mult1);
+	plus1->appendChild(neg2);
 
-	(*exp1).appendChild(plus1);
+	exp1->appendChild(plus1);
 
-	(*neg3).appendChild(exp1);
+	neg3->appendChild(exp1);
 
-	(*expected).appendChild(neg3);
+	expected->appendChild(neg3);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -230,15 +228,15 @@ void a_basic_mathematical_expression_with_a_fuction_in_it_is_parsed_into_an_ast_
 	BfExpression * exp = new BfExpression();
 	BfNegative * neg = new BfNegative();
 
-	(*exp).appendChild(new BfIdentifier("sqrt"));
-	(*exp).appendChild(new BfInteger("7"));
+	exp->appendChild(new BfIdentifier("sqrt"));
+	exp->appendChild(new BfInteger("7"));
 
-	(*neg).appendChild(new BfFloat("5.34"));
+	neg->appendChild(new BfFloat("5.34"));
 
-	(*mult).appendChild(neg);
-	(*mult).appendChild(exp);
+	mult->appendChild(neg);
+	mult->appendChild(exp);
 
-	(*expected).appendChild(mult);
+	expected->appendChild(mult);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -260,11 +258,11 @@ void a_basic_assignment_is_parsed_into_an_ast_correctly(MiTester & tester, BfLex
 	BfVariableAssignment * assign = new BfVariableAssignment();
 	BfExpression * exp = new BfExpression();
 
-	(*exp).appendChild(new BfIdentifier("my_var"));
-	(*assign).appendChild(exp);
-	(*assign).appendChild(new BfInteger("5"));
+	exp->appendChild(new BfIdentifier("my_var"));
+	assign->appendChild(exp);
+	assign->appendChild(new BfInteger("5"));
 
-	(*expected).appendChild(assign);
+	expected->appendChild(assign);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -286,13 +284,13 @@ void negative_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, Bf
 	BfNegative * neg = new BfNegative();
 	BfExpression * exp = new BfExpression();
 
-	(*exp).appendChild(new BfIdentifier("sqrt"));
-	(*exp).appendChild(new BfParameterIdentifier("ofTheNumber:"));
-	(*exp).appendChild(new BfInteger("5"));
+	exp->appendChild(new BfIdentifier("sqrt"));
+	exp->appendChild(new BfParameterIdentifier("ofTheNumber:"));
+	exp->appendChild(new BfInteger("5"));
 
-	(*neg).appendChild(exp);
+	neg->appendChild(exp);
 
-	(*expected).appendChild(neg);
+	expected->appendChild(neg);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -314,15 +312,15 @@ void embedded_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, Bf
         BfExpression * exp1 = new BfExpression();
 	BfExpression * exp2 = new BfExpression();
 
-	(*exp1).appendChild(new BfIdentifier("power"));
-	(*exp1).appendChild(new BfFloat("1.3"));
-	(*exp1).appendChild(new BfParameterIdentifier("toThe:"));
-	(*exp1).appendChild(new BfInteger("5"));
+	exp1->appendChild(new BfIdentifier("power"));
+	exp1->appendChild(new BfFloat("1.3"));
+	exp1->appendChild(new BfParameterIdentifier("toThe:"));
+	exp1->appendChild(new BfInteger("5"));
 
-	(*exp2).appendChild(new BfIdentifier("sqrt"));
-	(*exp2).appendChild(exp1);
+	exp2->appendChild(new BfIdentifier("sqrt"));
+	exp2->appendChild(exp1);
 
-	(*expected).appendChild(exp2);
+	expected->appendChild(exp2);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
@@ -364,15 +362,15 @@ void popping_a_child_works(MiTester & tester)
 	// Given
 	BfNode * top = new BfNode();
 
-	(*top).appendChild(new BfMinus());
-	(*top).appendChild(new BfPlus());
-	(*top).appendChild(new BfMultiply());
+	top->appendChild(new BfMinus());
+	top->appendChild(new BfPlus());
+	top->appendChild(new BfMultiply());
 
 	// When
-	(*top).popCurrentChild();
+	top->popCurrentChild();
 
 	// Then
-	tester.assertTrue((*top).numChildren() == 2, "When we pop a child, there should be N-1 left");
+	tester.assertTrue(top->numChildren() == 2, "When we pop a child, there should be N-1 left");
 }
 
 int main()
