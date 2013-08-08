@@ -114,7 +114,8 @@ void BfLexer::parseTokensFromFile(string fileName)
 		{
 			if (!(*currentToken).isIgnored)
 			{
-				foundTokens.push_back(FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)));
+				foundTokens.push_back(
+					FoundToken(*currentToken, buffer.substr(0, buffer.length()-1)) );
 			}
 
 			// Buffer needs to be where the match stopped

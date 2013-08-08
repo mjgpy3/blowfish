@@ -3,7 +3,7 @@
 from os import popen
 
 SRC_FILES = ["*.cpp", "*.py", "*.h", "*.sh"]
-IGNORE_IF_CONTAINS = ["//", "tester", "MiTester", "c++", "Franklin"]
+IGNORE_IF_CONTAINS = ["//", "tester", "MiTester", "c++", "g++", "Franklin"]
 
 if __name__ == "__main__":
     for file_type in SRC_FILES:
