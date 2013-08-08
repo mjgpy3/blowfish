@@ -268,9 +268,6 @@ void a_basic_assignment_is_parsed_into_an_ast_correctly(MiTester & tester, BfLex
         lexer.parseTokensFromFile(temp_file_name);
         BfNode * ast = builder.buildAst(lexer.getTokens());
 
-	cout << (*expected).toString() << endl;
-	cout << (*ast).toString() << endl;
-
         // Then
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - simple assignment");
 }
@@ -346,8 +343,6 @@ void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer l
 			"    ]\n"
 			"]";
 
-	cout << code << endl;
-
         AstBuilder builder = AstBuilder();
 
         write_temp_bf_file(code);
@@ -357,8 +352,6 @@ void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer l
         // When
         lexer.parseTokensFromFile(temp_file_name);
         BfNode * ast = builder.buildAst(lexer.getTokens());
-
-	cout << (*ast).toString() << endl;
 
         // Then
         //tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
@@ -375,8 +368,6 @@ void popping_a_child_works(MiTester & tester)
 
 	// When
 	(*top).popCurrentChild();
-
-	cout << (*top).toString() << endl;
 
 	// Then
 	tester.assertTrue((*top).numChildren() == 2, "When we pop a child, there should be N-1 left");

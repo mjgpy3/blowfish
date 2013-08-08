@@ -420,7 +420,6 @@ void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
 	while ((*current).numChildren() != 0 && (*((*current).currentChild())).getTypeId() != until)
 	{
 		temp.push_back((*current).popCurrentChild());
-		cout << (*current).numChildren() << endl;
 	}
 
 	for (int i = temp.size()-1; i >= 0; i -= 1)
