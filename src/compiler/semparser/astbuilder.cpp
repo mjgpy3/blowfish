@@ -72,22 +72,16 @@ void AstBuilder::buildNode(FoundToken tok)
 
 		case t_kwd_isnow:
 		{
-			//currentChildIsChildOf(new BfVariableAssignment());
-			//moveToCurrentChild();
 			insertAssignmentNode(new BfVariableAssignment());
 		} break;
 
 		case t_op_assign:
 		{
-			//currentChildIsChildOf(new BfVariableAssignment());
-                        //moveToCurrentChild();
 			insertAssignmentNode(new BfVariableAssignment());
 		} break;
 
 		case t_kwd_is:
 		{
-			//currentChildIsChildOf(new BfConstantAssignment());
-			//moveToCurrentChild();
 			insertAssignmentNode(new BfConstantAssignment());
 		} break;
 
@@ -343,7 +337,7 @@ void AstBuilder::buildNode(FoundToken tok)
 
 	lastToken = tok.getTokenValue();
 
-	while (!(*current).canHoldMoreChildren())
+	while (!current->canHoldMoreChildren())
 	{
 		moveToParent();
 	}
@@ -351,7 +345,7 @@ void AstBuilder::buildNode(FoundToken tok)
 
 void AstBuilder::attachChild(BfNode * n)
 {
-	(*current).appendChild(n);
+	current->appendChild(n);
 }
 
 void AstBuilder::attachChildAsCurrent(BfNode * n)
@@ -362,25 +356,25 @@ void AstBuilder::attachChildAsCurrent(BfNode * n)
 
 void AstBuilder::moveToCurrentChild()
 {
-	current = (*current).currentChild();
+	current = current->currentChild();
 }
 
 void AstBuilder::moveToParent()
 {
-	current = (*current).getParent();
+	current = current->getParent();
 }
 
 void AstBuilder::currentChildIsChildOf(BfNode * n)
 {
 	BfNode * ptr;
-	ptr = (*current).popCurrentChild();
-        (*n).appendChild(ptr);
+	ptr = current->popCurrentChild();
+        n->appendChild(ptr);
         attachChild(n);
 }
 
 void AstBuilder::insertOperatorNode(BfBinaryOperator * n)
 {
-	while ((*current).numChildren() != 0 && (*n).higherPriorityThan(*((*current).currentChild())))
+	while (current->numChildren() != 0 && n->higherPriorityThan(*(current->currentChild())))
 	{
 		moveToCurrentChild();
 	}
@@ -391,10 +385,10 @@ void AstBuilder::insertOperatorNode(BfBinaryOperator * n)
 
 void AstBuilder::attachNegativeChild(BfNode * n)
 {
-	if (isOperator(current) || (*current).numChildren() == 0)
+	if (isOperator(current) || current->numChildren() == 0)
 	{
 		BfNegative * neg = new BfNegative();
-                (*neg).appendChild(n);
+                neg->appendChild(n);
                 attachChild(neg);
 	}
 	else
@@ -417,14 +411,14 @@ void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
 	// PCFR: Nasty
 	vector<BfNode *> temp;
 
-	while ((*current).numChildren() != 0 && (*((*current).currentChild())).getTypeId() != until)
+	while (current->numChildren() != 0 && current->currentChild()->getTypeId() != until)
 	{
-		temp.push_back((*current).popCurrentChild());
+		temp.push_back( current->popCurrentChild() );
 	}
 
 	for (int i = temp.size()-1; i >= 0; i -= 1)
 	{
-		(*n).appendChild(temp[i]);
+		n->appendChild(temp[i]);
 	}
 
 	attachChild(n);

@@ -20,6 +20,11 @@
 #include <vector>
 using namespace std;
 
+BfScopeNode::BfScopeNode()
+{
+	name = "";
+}
+
 int BfScopeNode::numChildren()
 {
 	children.size();
@@ -27,22 +32,21 @@ int BfScopeNode::numChildren()
 
 void BfScopeNode::appendChild(BfScopeNode * n)
 {
-	(*n).parent = this;
+	n->parent = this;
 	children.push_back(n);
 }
 
 bool BfScopeNode::parentIs(BfScopeNode * n)
 {
-	return (*this).parent == n;
+	return this->parent == n;
 }
 
-void BfScopeNode::addIdentifer(BfNode * n)
+void BfScopeNode::setName(string n)
 {
-	identifiers[(*n).getValue()] = new BfNode();
+	name = n;
 }
 
-bool BfScopeNode::containsIdentifier(BfNode * n)
+string BfScopeNode::getName()
 {
-	return identifiers.count((*n).getValue()) == 1;
+	return name;
 }
-

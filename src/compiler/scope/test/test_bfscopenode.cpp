@@ -29,7 +29,7 @@ void given_a_scope_node_when_we_have_done_nothing_to_that_node_then_its_number_o
 	// When
 
 	// Then
-	tester.assertTrue((*node).numChildren() == 0, "A node with no children should have 0 children");
+	tester.assertTrue(node->numChildren() == 0, "A node with no children should have 0 children");
 }
 
 void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_that_node_should_have_one_child(MiTester & tester)
@@ -38,10 +38,10 @@ void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_th
 	BfScopeNode * node = new BfScopeNode();
 
 	// When
-	(*node).appendChild(new BfScopeNode());
+	node->appendChild(new BfScopeNode());
 
 	// Then
-	tester.assertTrue((*node).numChildren() == 1, "A node with another node appended to it has 1 child");
+	tester.assertTrue(node->numChildren() == 1, "A node with another node appended to it has 1 child");
 }
 
 void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(MiTester & tester)
@@ -51,23 +51,22 @@ void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_th
 	BfScopeNode * anotherNode = new BfScopeNode();
 
 	// When
-	(*node).appendChild(anotherNode);
+	node->appendChild(anotherNode);
 
 	// Then
-	tester.assertTrue((*anotherNode).parentIs(node), "An appended node's parent is the node that it was appended to");
+	tester.assertTrue(anotherNode->parentIs(node), "An appended node's parent is the node that it was appended to");
 }
 
-void given_an_empty_scope_node_when_we_add_an_identifer_to_that_node_we_can_find_that_identifer_in_that_scope_node(MiTester & tester)
+void given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retrieved(MiTester & tester)
 {
-        // Given
-        BfScopeNode * node = new BfScopeNode();
+	// Given
+	BfScopeNode * node = new BfScopeNode();
 
-        // When
-	BfIdentifier * ident = new BfIdentifier("SomeIdent");
-        (*node).addIdentifer(ident);
+	// When
+	node->setName("Monkey");
 
-        // Then
-        tester.assertTrue((*node).containsIdentifier(ident), "An identifer that is added to a scope can be found in that scope");
+	// Then
+	tester.assertEqual("Monkey", node->getName(), "A node's name can be set and gotten");
 }
 
 int main()
@@ -77,7 +76,7 @@ int main()
 	given_a_scope_node_when_we_have_done_nothing_to_that_node_then_its_number_of_children_is_zero(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_that_node_should_have_one_child(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(tester);
-	given_an_empty_scope_node_when_we_add_an_identifer_to_that_node_we_can_find_that_identifer_in_that_scope_node(tester);
+	given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retrieved(tester);
 
 	tester.printResults();
 

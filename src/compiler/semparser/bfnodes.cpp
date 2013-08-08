@@ -18,6 +18,7 @@
 
 #include "bfnodes.h"
 #include "bfoperatorpriority.h"
+#include "bfscopenode.h"
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -30,6 +31,7 @@ BfNode::BfNode()
 	priority = none;
 	debugName = "BfNode";
 	nodeIdent = id_naked_node;
+	scope = NULL;
 }
 
 string BfNode::toString()
@@ -67,6 +69,16 @@ void BfNode::setCardinality(int max)
 bool BfNode::canHoldMoreChildren()
 {
 	return infiniteCardinality || maxChildren > children.size();
+}
+
+void BfNode::attachScope(BfScopeNode * scopeNode)
+{
+	scope = scopeNode;
+}
+
+BfScopeNode * BfNode::getScope()
+{
+	return scope;
 }
 
 BfNode::BfNode(string val)

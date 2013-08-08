@@ -21,6 +21,7 @@
 
 #include "bftokennames.h"
 #include "bfoperatorpriority.h"
+#include "bfscopenode.h"
 #include <vector>
 #include <iostream>
 #include <cstdlib>
@@ -97,12 +98,13 @@ public:
 	int numChildren() { return children.size(); }
 	bool canHoldMoreChildren();
 	void setCardinality(int max);
+	void attachScope(BfScopeNode * scopeNode);
+	BfScopeNode * getScope();
 	bool higherPriorityThan(BfNode n);
 	string toString();
+	string debugName;
 	string getValue() { return value; }
 	OperatorPriority priority;
-	string debugName;
-	int maxChildren;
 	NodeIdentifier getTypeId() { return nodeIdent; }
 	void setTypeId(NodeIdentifier id) { nodeIdent = id; }
 
@@ -110,7 +112,9 @@ private:
 	vector<BfNode*> children;
 	BfNode * parent;
 	TokenName * type;
+	BfScopeNode * scope;
 	int indexLast() { return children.size()-1; }
+	int maxChildren;
 	string value;
 	bool infiniteCardinality;
 	NodeIdentifier nodeIdent;	
