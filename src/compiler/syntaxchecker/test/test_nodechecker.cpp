@@ -18,6 +18,7 @@
 
 #include "bfnodechecker.h"
 #include "mitest.h"
+#include "bftokennames.h"
 #include "bfnodes.h"
 using namespace std;
 
@@ -25,7 +26,7 @@ void children_of_a_node_can_be_identified_exactly_as_they_are_by_type(MiTester &
 {
 	// Given
         BfRoot * aRoot = new BfRoot();
-        NodeIdentifier ids[] = { id_plus, id_minus, id_concat };
+        TokenName ids[] = { t_op_plus, t_op_minus, t_op_concat };
 
         // When
         aRoot->appendChild(new BfPlus());
@@ -40,7 +41,7 @@ void if_all_children_dont_exactly_match_then_identification_is_false(MiTester & 
 {
 	// Given
 	BfRoot * aRoot = new BfRoot();
-	NodeIdentifier ids[] = { id_plus, id_minus };
+	TokenName ids[] = { t_op_plus, t_op_minus };
 
 	// When
 	aRoot->appendChild(new BfPlus());
@@ -55,7 +56,7 @@ void operator_nodes_can_be_identified_as_such(MiTester & tester)
 {
         // Given
         BfRoot * aRoot = new BfRoot();
-        NodeIdentifier ids[] = { id_plus, id_minus, id_concat };
+        TokenName ids[] = { t_op_plus, t_op_minus, t_op_concat };
 
         // When
         aRoot->appendChild(new BfPlus());

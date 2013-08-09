@@ -17,10 +17,11 @@
 */
 
 #include "bfnodechecker.h"
+#include "bftokennames.h"
 #include <vector>
 using namespace std;
 
-bool childrenAreExactly(BfNode * node, NodeIdentifier types[])
+bool childrenAreExactly(BfNode * node, TokenName types[])
 {
 	int i;
 
@@ -32,49 +33,48 @@ bool childrenAreExactly(BfNode * node, NodeIdentifier types[])
 		}
 	}
 	
-	return types[i] <= begin_identifiers ||
-		types[i] >= end_identifiers;
+	return types[i] < (TokenName)0 ||
+		types[i] >= end_tokens;
 }
 
 bool isOperator(BfNode * node)
 {
-	return node->getTypeId() == id_or ||
-	 	node->getTypeId() == id_and ||
-		node->getTypeId() == id_plus ||
-		node->getTypeId() == id_minus ||
-		node->getTypeId() == id_power ||
-		node->getTypeId() == id_multiply ||
-		node->getTypeId() == id_divide ||
-		node->getTypeId() == id_concat ||
-		node->getTypeId() == id_modulus ||
-		node->getTypeId() == id_gt ||
-		node->getTypeId() == id_lt ||
-		node->getTypeId() == id_geq ||
-		node->getTypeId() == id_leq ||
-		node->getTypeId() == id_neq ||
-		node->getTypeId() == id_eq ||
-		node->getTypeId() == id_ellipsis;
-
+	return node->getTypeId() == t_kwd_or ||
+	 	node->getTypeId() == t_kwd_and ||
+		node->getTypeId() == t_op_plus ||
+		node->getTypeId() == t_op_minus ||
+		node->getTypeId() == t_op_pow ||
+		node->getTypeId() == t_op_times ||
+		node->getTypeId() == t_op_divide ||
+		node->getTypeId() == t_op_concat ||
+		node->getTypeId() == t_op_modulus ||
+		node->getTypeId() == t_op_gt ||
+		node->getTypeId() == t_op_lt ||
+		node->getTypeId() == t_op_geq ||
+		node->getTypeId() == t_op_leq ||
+		node->getTypeId() == t_op_noteq ||
+		node->getTypeId() == t_op_eq ||
+		node->getTypeId() == t_ellipsis;
 }
 
 bool isLiteral(BfNode * node)
 {
-	return node->getTypeId() == id_string ||
-		node->getTypeId() == id_integer ||
-		node->getTypeId() == id_float;
+	return node->getTypeId() == t_string ||
+		node->getTypeId() == t_integer ||
+		node->getTypeId() == t_float;
 
 }
 
 bool impliesScope(BfNode * node)
 {
-	return node->getTypeId() == id_if ||
-		node->getTypeId() == id_else_if ||
-		node->getTypeId() == id_else ||
-		node->getTypeId() == id_module ||
-		node->getTypeId() == id_method ||
-		node->getTypeId() == id_class || 
-		node->getTypeId() == id_for || 
-		node->getTypeId() == id_enum;
+	return node->getTypeId() == t_kwd_if ||
+		node->getTypeId() == t_kwd_elseif ||
+		node->getTypeId() == t_kwd_else ||
+		node->getTypeId() == t_kwd_module ||
+		node->getTypeId() == t_kwd_meth ||
+		node->getTypeId() == t_kwd_class || 
+		node->getTypeId() == t_kwd_for || 
+		node->getTypeId() == t_kwd_enum;
 }
 
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)

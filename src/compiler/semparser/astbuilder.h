@@ -22,6 +22,7 @@
 #include "bfnodes.h"
 #include "foundtoken.h"
 #include "bfscopenode.h"
+#include "bftokennames.h"
 #include "bflexer.h"
 #include <vector>
 using namespace std;
@@ -41,7 +42,7 @@ public:
 	void moveToCurrentChild();
 	void moveToParent();
 	void currentChildIsChildOf(BfNode * n);
-	void currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until);
+	void currentChildrenAreChildrenOf(BfNode * n, TokenName until);
 	void currentBlockDefinesNewScope();
 
 private:

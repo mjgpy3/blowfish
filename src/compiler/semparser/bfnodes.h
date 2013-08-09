@@ -28,61 +28,6 @@
 #include <string>
 using namespace std;
 
-enum NodeIdentifier
-{
-	begin_identifiers = 424,
-	id_naked_node,
-	id_blowfish_root,
-	id_identifier,
-	id_parameter_identifier,
-	id_variable_assignment,
-	id_constant_assignment,
-	id_forms,
-	id_pipe,
-	id_dot,
-	id_in,
-	id_return,
-	id_class,
-	id_module,
-	id_method,
-	id_for,
-	id_enum,
-	id_require,
-	id_import,
-	id_not,
-	id_expression,
-	id_block,
-	id_if,
-	id_else_if,
-	id_else,
-	id_or,
-	id_and,
-	id_plus,
-	id_minus,
-	id_power,
-	id_multiply,
-	id_divide,
-	id_concat,
-	id_modulus,
-	id_newline,
-	id_gt,
-	id_lt,
-	id_geq,
-	id_leq,
-	id_neq,
-	id_eq,
-	id_ellipsis,
-	id_negative,
-	id_set,
-	id_self,
-	id_list,
-	id_dictionary,
-	id_string,
-	id_integer,
-	id_float,
-	end_identifiers,
-};
-
 //!
 //! The base class for all Blowfish nodes in the AST
 //!
@@ -106,19 +51,18 @@ public:
 	string debugName;
 	string getValue() { return value; }
 	OperatorPriority priority;
-	NodeIdentifier getTypeId() { return nodeIdent; }
-	void setTypeId(NodeIdentifier id) { nodeIdent = id; }
+	TokenName getTypeId() { return nodeIdent; }
+	void setTypeId(TokenName id) { nodeIdent = id; }
 
 private:
 	vector<BfNode*> children;
 	BfNode * parent;
-	TokenName * type;
 	BfScopeNode * scope;
 	int indexLast() { return children.size()-1; }
 	int maxChildren;
 	string value;
 	bool infiniteCardinality;
-	NodeIdentifier nodeIdent;	
+	TokenName nodeIdent;
 
 };
 
@@ -131,7 +75,7 @@ public:
 	BfRoot() : BfNode() 
 	{ 
 		debugName = "Blowfish Root";
-		setTypeId(id_blowfish_root);
+		setTypeId(t_root);
 	}
 };
 
@@ -145,7 +89,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = string("Ident:") + value;
-		setTypeId(id_identifier);
+		setTypeId(t_identifier);
 	}
 };
 
@@ -158,7 +102,7 @@ public:
 	BfParameterIdentifier(string value) : BfNode(value)
 	{
 		debugName = string("ParaIdent:") + value;
-		setTypeId(id_parameter_identifier);
+		setTypeId(t_param_ident);
 	}
 };
 
@@ -184,7 +128,7 @@ public:
 	BfVariableAssignment() : BfAssignment() 
 	{
 		debugName = "VarAssignment";
-		setTypeId(id_variable_assignment);
+		setTypeId(t_op_assign);
 	}
 };
 
@@ -197,7 +141,7 @@ public:
 	BfConstantAssignment() : BfAssignment()
 	{
 		debugName = "ConstAssignemnt";
-		setTypeId(id_constant_assignment);
+		setTypeId(t_kwd_is);
 	}
 };
 
@@ -219,7 +163,7 @@ public:
 	BfFormsDef() : BfParameterlessDef()
 	{
 		debugName = "Forms";
-		setTypeId(id_forms);
+		setTypeId(t_kwd_forms);
 	}
 };
 
@@ -230,7 +174,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = "|";
-		setTypeId(id_pipe);
+		setTypeId(t_pipe);
 	}
 };
 
@@ -241,7 +185,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = ".";
-		setTypeId(id_dot);
+		setTypeId(t_op_dot);
 	}
 };
 
@@ -252,7 +196,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = "In";
-		setTypeId(id_in);
+		setTypeId(t_kwd_in);
 	}
 };
 
@@ -265,7 +209,7 @@ public:
 	BfClassDef() : BfParameterlessDef()
 	{
 		debugName = "Class";
-		setTypeId(id_class);
+		setTypeId(t_kwd_class);
 	}
 };
 
@@ -278,7 +222,7 @@ public:
 	BfModuleDef() : BfParameterlessDef()
 	{
 		debugName = "Module";
-		setTypeId(id_module);
+		setTypeId(t_kwd_module);
 	}
 };
 
@@ -291,7 +235,7 @@ public:
 	BfMethodDef() : BfNode()
 	{
 		debugName = "Method";
-		setTypeId(id_method);
+		setTypeId(t_kwd_meth);
 	}
 };
 
@@ -301,7 +245,7 @@ public:
 	BfForLoop() : BfNode()
 	{
 		debugName = "For";
-		setTypeId(id_for);
+		setTypeId(t_kwd_for);
 	}
 };
 
@@ -311,7 +255,7 @@ public:
 	BfEnumLoop() : BfNode()
 	{
 		debugName = "Enum";
-		setTypeId(id_enum);
+		setTypeId(t_kwd_enum);
 	}
 };
 
@@ -322,7 +266,7 @@ public:
 	{
 		setCardinality(1);
 		debugName = "Require";
-		setTypeId(id_require);
+		setTypeId(t_kwd_require);
 	}
 };
 
@@ -333,7 +277,7 @@ public:
 	{
 		setCardinality(1);
 		debugName = "Import";
-		setTypeId(id_import);
+		setTypeId(t_kwd_import);
 	}
 };
 
@@ -347,7 +291,7 @@ public:
 	{
 		setCardinality(1);
 		debugName = "Not";
-		setTypeId(id_not);
+		setTypeId(t_kwd_not);
 	}
 };
 
@@ -360,7 +304,7 @@ public:
 	BfExpression() : BfNode()
 	{
 		debugName = "(...)";
-		setTypeId(id_expression);
+		setTypeId(t_paran_begin);
 	}
 };
 
@@ -373,7 +317,7 @@ public:
 	BfBlock() : BfNode()
 	{
 		debugName = "[...]";
-		setTypeId(id_block);
+		setTypeId(t_block_begin);
 	}
 };
 
@@ -386,7 +330,7 @@ public:
 	BfIf() : BfNode()
 	{
 		debugName = "if";
-		setTypeId(id_if);
+		setTypeId(t_kwd_if);
 	}
 };
 
@@ -399,7 +343,7 @@ public:
 	BfElseIf() : BfNode()
 	{
 		debugName = "else if";
-		setTypeId(id_else_if);
+		setTypeId(t_kwd_elseif);
 	}
 };
 
@@ -414,7 +358,7 @@ public:
 	{
 		setCardinality(1);
 		debugName = "else";
-		setTypeId(id_else);
+		setTypeId(t_kwd_else);
 	}
 };
 
@@ -428,7 +372,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = "nl";
-		setTypeId(id_newline);
+		setTypeId(t_line_ending);
 	}
 };
 
@@ -449,7 +393,7 @@ public:
 	BfOr() : BfBinaryOperator(lowest)
 	{
 		debugName = "OR";
-		setTypeId(id_or);
+		setTypeId(t_kwd_or);
 	}
 
 };
@@ -460,7 +404,7 @@ public:
 	BfAnd() : BfBinaryOperator(lowest)
 	{
 		debugName = "AND";
-		setTypeId(id_and);
+		setTypeId(t_kwd_and);
 	}
 };
 
@@ -470,7 +414,7 @@ public:
 	BfGreaterThan() : BfBinaryOperator(low)
 	{
 		debugName = ">";
-		setTypeId(id_gt);
+		setTypeId(t_op_gt);
 	}
 };
 
@@ -480,7 +424,7 @@ public:
 	BfLessThan() : BfBinaryOperator(low)
 	{
 		debugName = "<";
-		setTypeId(id_lt);
+		setTypeId(t_op_lt);
 	}
 };
 
@@ -490,7 +434,7 @@ public:
 	BfGreaterThanOrEqual() : BfBinaryOperator(low)
 	{
 		debugName = ">=";
-		setTypeId(id_geq);
+		setTypeId(t_op_geq);
 	}
 };
 
@@ -500,7 +444,7 @@ public:
         BfLessThanOrEqual() : BfBinaryOperator(low)
 	{
 		debugName = "<=";
-		setTypeId(id_leq);
+		setTypeId(t_op_leq);
 	}
 };
 
@@ -510,7 +454,7 @@ public:
 	BfEqual() : BfBinaryOperator(low)
 	{
 		debugName = "=";
-		setTypeId(id_eq);
+		setTypeId(t_op_eq);
 	}
 };
 
@@ -520,7 +464,7 @@ public:
 	BfNotEqual() : BfBinaryOperator(low)
 	{
 		debugName = "/=";
-		setTypeId(id_neq);
+		setTypeId(t_op_noteq);
 	}
 };
 
@@ -530,7 +474,7 @@ public:
 	BfPlus() : BfBinaryOperator(medium)
 	{
 		debugName = "+";
-		setTypeId(id_plus);
+		setTypeId(t_op_plus);
 	}
 };
 
@@ -540,7 +484,7 @@ public:
 	BfMinus() : BfBinaryOperator(medium)
 	{
 		debugName = "-";
-		setTypeId(id_minus);
+		setTypeId(t_op_minus);
 	}
 };
 
@@ -550,7 +494,7 @@ public:
 	BfConcat() : BfBinaryOperator(medium)
 	{
 		debugName = "++";
-		setTypeId(id_concat);
+		setTypeId(t_op_concat);
 	}
 };
 
@@ -560,7 +504,7 @@ public:
 	BfMultiply() : BfBinaryOperator(high)
 	{
 		debugName = "*";
-		setTypeId(id_multiply);}
+		setTypeId(t_op_times);}
 };
 
 class BfDivide : public BfBinaryOperator
@@ -569,7 +513,7 @@ public:
 	BfDivide() : BfBinaryOperator(high)
 	{
 		debugName = "/";
-		setTypeId(id_divide);
+		setTypeId(t_op_divide);
 	}
 };
 
@@ -579,7 +523,7 @@ public:
 	BfModulus() : BfBinaryOperator(high)
 	{
 		debugName = "%";
-		setTypeId(id_modulus);
+		setTypeId(t_op_modulus);
 	}
 };
 
@@ -589,7 +533,7 @@ public:
 	BfPower() : BfBinaryOperator(highest)
 	{
 		debugName = "^";
-		setTypeId(id_power);
+		setTypeId(t_op_pow);
 	}
 };
 
@@ -599,7 +543,7 @@ public:
 	BfEllipsis() : BfBinaryOperator(highest)
 	{
 		debugName = "..";
-		setTypeId(id_ellipsis);
+		setTypeId(t_ellipsis);
 	}
 };
 
@@ -618,7 +562,7 @@ class BfString : public BfLiteral
 public:
 	BfString(string value) : BfLiteral(value) 
 	{
-		setTypeId(id_string);
+		setTypeId(t_string);
 	}
 };
 
@@ -627,7 +571,7 @@ class BfInteger : public BfLiteral
 public:
 	BfInteger(string value) : BfLiteral(value) 
 	{
-		setTypeId(id_integer);
+		setTypeId(t_integer);
 	}
 };
 
@@ -636,7 +580,7 @@ class BfFloat : public BfLiteral
 public:
 	BfFloat(string value) : BfLiteral(value) 
 	{
-		setTypeId(id_float);
+		setTypeId(t_float);
 	}
 };
 
@@ -647,7 +591,7 @@ public:
 	{
 		debugName = "-";
 		setCardinality(1);
-		setTypeId(id_negative);
+		setTypeId(t_neg);
 	}
 };
 
@@ -663,7 +607,7 @@ public:
 	BfList() : BfHolder()
 	{
 		debugName = "l{...}";
-		setTypeId(id_list);
+		setTypeId(t_list);
 	}
 };
 
@@ -673,7 +617,7 @@ public:
 	BfSet() : BfHolder()
 	{
 		debugName = "s{...}";
-		setTypeId(id_set);
+		setTypeId(t_set);
 	}
 };
 
@@ -684,7 +628,7 @@ public:
 	{
 		setCardinality(0);
 		debugName = "Self";
-		setTypeId(id_self);
+		setTypeId(t_kwd_self);
 	}
 };
 
@@ -694,7 +638,7 @@ public:
 	BfDictionary() : BfHolder()
 	{
 		debugName = "d{...}";
-		setTypeId(id_dictionary);
+		setTypeId(t_dict);
 	}
 };
 
@@ -704,7 +648,7 @@ public:
 	BfReturn() : BfNode()
 	{
 		debugName = "Return";
-		setTypeId(id_return);
+		setTypeId(t_kwd_return);
 		setCardinality(0);
 	}
 };

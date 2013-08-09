@@ -18,6 +18,7 @@
 
 #include "bfnodefactory.h"
 #include "bfnodes.h"
+#include "bftokennames.h"
 #include "mitest.h"
 using namespace std;
 
@@ -30,7 +31,7 @@ void given_a_plus_token_name_when_it_is_given_to_the_operator_node_factory_then_
 	BfNode * node = BfOperatorNodeFactory(tok);
 
 	// Then
-	tester.assertTrue(node->getTypeId() == id_plus, "Op factory generates plus node");
+	tester.assertTrue(node->getTypeId() == t_op_plus, "Op factory generates plus node");
 }
 
 void given_a_minus_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfMinus_node_is_built(MiTester & tester)
@@ -42,7 +43,7 @@ void given_a_minus_token_name_when_it_is_given_to_the_operator_node_factory_then
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_minus, "Op factory generates minus node");
+        tester.assertTrue(node->getTypeId() == t_op_minus, "Op factory generates minus node");
 }
 
 void given_an_or_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfOr_node_is_built(MiTester & tester)
@@ -54,7 +55,7 @@ void given_an_or_token_name_when_it_is_given_to_the_operator_node_factory_then_a
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_or, "Op factory generates or node");
+        tester.assertTrue(node->getTypeId() == t_kwd_or, "Op factory generates or node");
 }
 
 void given_an_and_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfAnd_node_is_built(MiTester & tester)
@@ -66,7 +67,7 @@ void given_an_and_token_name_when_it_is_given_to_the_operator_node_factory_then_
         BfNode * node = BfOperatorNodeFactory(tok);
         
         // Then
-        tester.assertTrue(node->getTypeId() == id_and, "Op factory generates and node");
+        tester.assertTrue(node->getTypeId() == t_kwd_and, "Op factory generates and node");
 }
 
 void given_a_greater_than_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfGreaterThan_node_is_built(MiTester & tester)
@@ -78,7 +79,7 @@ void given_a_greater_than_token_name_when_it_is_given_to_the_operator_node_facto
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_gt, "Op factory generates greater-than node");
+        tester.assertTrue(node->getTypeId() == t_op_gt, "Op factory generates greater-than node");
 }
 
 void given_a_less_than_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfLessThan_node_is_built(MiTester & tester)
@@ -90,7 +91,7 @@ void given_a_less_than_token_name_when_it_is_given_to_the_operator_node_factory_
         BfNode * node = BfOperatorNodeFactory(tok);
         
         // Then
-        tester.assertTrue(node->getTypeId() == id_lt, "Op factory generates less-than node");
+        tester.assertTrue(node->getTypeId() == t_op_lt, "Op factory generates less-than node");
 }
 
 void given_a_greater_than_or_equal_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfGreaterThanOrEqual_node_is_built(MiTester & tester)
@@ -102,7 +103,7 @@ void given_a_greater_than_or_equal_token_name_when_it_is_given_to_the_operator_n
         BfNode * node = BfOperatorNodeFactory(tok);
         
         // Then
-        tester.assertTrue(node->getTypeId() == id_geq, "Op factory generates greater than or equal node");
+        tester.assertTrue(node->getTypeId() == t_op_geq, "Op factory generates greater than or equal node");
 }
 
 void given_a_less_than_or_equal_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfLessThanOrEqual_node_is_built(MiTester & tester)
@@ -114,7 +115,7 @@ void given_a_less_than_or_equal_token_name_when_it_is_given_to_the_operator_node
         BfNode * node = BfOperatorNodeFactory(tok);
         
         // Then
-        tester.assertTrue(node->getTypeId() == id_leq, "Op factory generates less than or equal node");
+        tester.assertTrue(node->getTypeId() == t_op_leq, "Op factory generates less than or equal node");
 }
 
 void given_an_equal_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfEqual_node_is_built(MiTester & tester)
@@ -126,7 +127,7 @@ void given_an_equal_token_name_when_it_is_given_to_the_operator_node_factory_the
         BfNode * node = BfOperatorNodeFactory(tok);
         
         // Then
-        tester.assertTrue(node->getTypeId() == id_eq, "Op factory generates equal node");
+        tester.assertTrue(node->getTypeId() == t_op_eq, "Op factory generates equal node");
 } 
 
 void given_a_not_equal_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfNotEqual_node_is_built(MiTester & tester)
@@ -138,7 +139,7 @@ void given_a_not_equal_token_name_when_it_is_given_to_the_operator_node_factory_
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_neq, "Op factory generates not equal node");
+        tester.assertTrue(node->getTypeId() == t_op_noteq, "Op factory generates not equal node");
 }
 
 void given_a_concat_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfConcat_node_is_built(MiTester & tester)
@@ -150,7 +151,7 @@ void given_a_concat_token_name_when_it_is_given_to_the_operator_node_factory_the
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_concat, "Op factory generates concat node");
+        tester.assertTrue(node->getTypeId() == t_op_concat, "Op factory generates concat node");
 }
 
 void given_a_modulus_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfModulus_node_is_built(MiTester & tester)
@@ -162,7 +163,7 @@ void given_a_modulus_token_name_when_it_is_given_to_the_operator_node_factory_th
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_modulus, "Op factory generates modulus node");
+        tester.assertTrue(node->getTypeId() == t_op_modulus, "Op factory generates modulus node");
 }
 
 void given_a_times_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfTimes_node_is_built(MiTester & tester)
@@ -174,7 +175,7 @@ void given_a_times_token_name_when_it_is_given_to_the_operator_node_factory_then
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_multiply, "Op factory generates times node");
+        tester.assertTrue(node->getTypeId() == t_op_times, "Op factory generates times node");
 }
 
 void given_a_divide_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfDivide_node_is_built(MiTester & tester)
@@ -186,7 +187,7 @@ void given_a_divide_token_name_when_it_is_given_to_the_operator_node_factory_the
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_divide, "Op factory generates divide node");
+        tester.assertTrue(node->getTypeId() == t_op_divide, "Op factory generates divide node");
 }
 
 void given_power_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfPower_node_is_built(MiTester & tester)
@@ -198,7 +199,19 @@ void given_power_token_name_when_it_is_given_to_the_operator_node_factory_then_a
         BfNode * node = BfOperatorNodeFactory(tok);
 
         // Then
-        tester.assertTrue(node->getTypeId() == id_power, "Op factory generates power node");
+        tester.assertTrue(node->getTypeId() == t_op_pow, "Op factory generates power node");
+}
+
+void given_ellipsis_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfEllipsis_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_ellipsis;
+
+        // When
+        BfNode * node = BfOperatorNodeFactory(tok);
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_ellipsis, "Op factory generates ellipsis node");
 }
 
 int main()
@@ -220,6 +233,7 @@ int main()
 	given_a_times_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfTimes_node_is_built(tester);
 	given_a_divide_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfDivide_node_is_built(tester);
 	given_power_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfPower_node_is_built(tester);
+	given_ellipsis_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfEllipsis_node_is_built(tester);
 
 	tester.printResults();
 	return 0;

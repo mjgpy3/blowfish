@@ -167,6 +167,13 @@ class TokensToCPlusPlus(object):
         self.array_name = "AllTokens"
         self.array_size_name = "NUM_TOKENS"
         self.enum_name = "TokenName"
+	self.special_tokens = ["t_root",
+                               "t_neg",
+                               "t_list",
+                               "t_dict",
+                               "t_set",
+                               "t_empty",
+                               "end_tokens"]
 
     def write_tokens_to_file(self, tokens, definition_name):
         with open("bflexer.cpp", 'r') as file_reader:
@@ -281,7 +288,11 @@ class TokensToCPlusPlus(object):
                 attr + " = ")
 
     def get_token_enum(self, tokens):
-        return "enum " + self.enum_name + " \n{\n" + ",\n".join("\tt_" + i.name + " = " + str(j) for j, i in enumerate(tokens)) + "\n};"
+        return "enum " + self.enum_name +\
+               " \n{\n" + ",\n".join("\tt_" +\
+               i.name + " = " + str(j) for j, i in enumerate(tokens)) +\
+                "".join(",\n\t"+l for l in self.special_tokens) +\
+                "\n};"
 
     def get_token_array_declaration(self, tokens):
         return (self.struct_name + " * " + self.array_name + " = new " + 

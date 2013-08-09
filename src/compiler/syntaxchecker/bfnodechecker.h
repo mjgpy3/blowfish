@@ -20,10 +20,11 @@
 #define BLOWFISH_NODE_CHECKER
 
 #include "bfnodes.h"
+#include "bftokennames.h"
 #include <vector>
 using namespace std;
 
-bool childrenAreExactly(BfNode * node, NodeIdentifier types[]);
+bool childrenAreExactly(BfNode * node, TokenName types[]);
 bool isOperator(BfNode * node);
 bool isLiteral(BfNode * node);
 bool impliesScope(BfNode * node);

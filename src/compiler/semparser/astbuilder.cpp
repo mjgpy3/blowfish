@@ -20,6 +20,7 @@
 #include "astbuilder.h"
 #include "bflexer.h"
 #include "bfnodechecker.h"
+#include "bfnodefactory.h"
 #include "bfnodes.h"
 #include "foundtoken.h"
 using namespace std;
@@ -406,12 +407,12 @@ void AstBuilder::attachNegativeChild(BfNode * n)
 void AstBuilder::insertAssignmentNode(BfAssignment * n)
 {
 	BfExpression * exp = new BfExpression();
-	currentChildrenAreChildrenOf(exp, id_newline);
+	currentChildrenAreChildrenOf(exp, t_line_ending);
 	currentChildIsChildOf(n);
 	moveToCurrentChild();
 }
 
-void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
+void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, TokenName until)
 {
 	// PCFR: Nasty
 	vector<BfNode *> temp;

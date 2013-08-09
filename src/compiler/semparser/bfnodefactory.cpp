@@ -82,5 +82,9 @@ BfBinaryOperator * BfOperatorNodeFactory(TokenName tok)
 	{
 		return new BfPower();
 	}
+	if (tok == t_ellipsis)
+	{
+		return new BfEllipsis();
+	}
 }
 
