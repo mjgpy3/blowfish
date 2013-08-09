@@ -4,6 +4,7 @@ from os import popen
 
 if __name__ == '__main__':
     files = [ i for i in popen("find .. -name 'run*'").read().split("\n") if not i in ['', "../tools/run_all_tests.py"] ]
+    files += [ i for i in popen("find .. -name 'test*py'").read().split("\n") if not i in ['', "../tools/run_all_tests.py"] ]
 
     for a_file in files:
         print a_file + ":"

@@ -16,14 +16,12 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <iostream>
 #include "astbuilder.h"
 #include "bflexer.h"
 #include "bfnodechecker.h"
-#include <iostream>
-#include <typeinfo>
-#include <cstdlib>
-#include "foundtoken.h"
 #include "bfnodes.h"
+#include "foundtoken.h"
 using namespace std;
 
 AstBuilder::AstBuilder()
@@ -49,7 +47,6 @@ BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 void AstBuilder::buildNode(FoundToken tok)
 {
 	// TODO: PCFR: Rewrite me nicely (factories would be legit!)
-
 
 	switch (tok.getTokenValue())
 	{
@@ -421,7 +418,7 @@ void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, NodeIdentifier until)
 
 	while (current->numChildren() != 0 && current->currentChild()->getTypeId() != until)
 	{
-		temp.push_back( current->popCurrentChild() );
+		temp.push_back(current->popCurrentChild());
 	}
 
 	for (int i = temp.size()-1; i >= 0; i -= 1)

@@ -113,7 +113,6 @@ class TokenFileParser(object):
         ignore_next = False
 
         for i, c in enumerate(value):
-            print "Processing", c
             if ignore_next:
                 ignore_next = False
                 continue
