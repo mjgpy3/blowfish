@@ -26,6 +26,7 @@ using namespace std;
 
 bool childrenAreExactly(BfNode * node, TokenName types[]);
 bool isOperator(BfNode * node);
+bool isOperatorToken(TokenName name);
 bool isLiteral(BfNode * node);
 bool impliesScope(BfNode * node);
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode);

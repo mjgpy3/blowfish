@@ -49,6 +49,16 @@ void AstBuilder::buildNode(FoundToken tok)
 {
 	// TODO: PCFR: Rewrite me nicely (factories would be legit!)
 
+	TokenName currentToken = tok.getTokenValue();
+
+	if (isOperatorToken(currentToken))
+	{
+		insertOperatorNode(
+			 BfOperatorNodeFactory(currentToken) );
+	}
+	else
+	{
+
 	switch (tok.getTokenValue())
 	{
 		case t_identifier:
@@ -251,94 +261,15 @@ void AstBuilder::buildNode(FoundToken tok)
 			}
 		} break;
 
-		case t_kwd_or:
-		{
-			insertOperatorNode(new BfOr());
-		} break;
-
-		case t_kwd_and:
-		{
-			insertOperatorNode(new BfAnd());
-		} break;
-
 		case t_op_dot:
 		{
 			attachChild(new BfDot());
 		} break;
 
-		case t_op_eq:
-		{
-			insertOperatorNode(new BfEqual());
-		} break;
-
-		case t_op_noteq:
-		{
-			insertOperatorNode(new BfNotEqual());
-		} break;
-
-		case t_op_lt:
-		{
-			insertOperatorNode(new BfLessThan());
-		} break;
-
-		case t_op_gt:
-		{
-			insertOperatorNode(new BfGreaterThan());
-		} break;
-
-		case t_op_geq:
-		{
-			insertOperatorNode(new BfGreaterThanOrEqual());
-		} break;
-
-		case t_op_leq:
-		{
-			insertOperatorNode(new BfLessThanOrEqual());
-		} break;
-
-		case t_op_plus:
-		{
-			insertOperatorNode(new BfPlus());
-		} break;
-
-		case t_op_minus:
-		{
-			insertOperatorNode(new BfMinus());
-		} break;
-
-		case t_op_concat:
-		{
-			insertOperatorNode(new BfConcat());
-		} break;
-
-		case t_op_times:
-		{
-			insertOperatorNode(new BfMultiply());
-		} break;
-
-		case t_op_divide:
-		{
-			insertOperatorNode(new BfDivide());
-		} break;
-
-		case t_op_modulus:
-		{
-			insertOperatorNode(new BfModulus());
-		} break;
-
-		case t_op_pow:
-		{
-			insertOperatorNode(new BfPower());
-		} break;
-
-		case t_ellipsis:
-		{
-			insertOperatorNode(new BfEllipsis());
-		} break;
-
 		default:
 			cout << "Error: Unsupported token!" << endl;
 			exit(1);
+	}
 	}
 
 	lastToken = tok.getTokenValue();

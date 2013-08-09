@@ -16,6 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include "bfnodefactory.h"
 #include "bfnodes.h"
 #include "bftokennames.h"
 using namespace std;

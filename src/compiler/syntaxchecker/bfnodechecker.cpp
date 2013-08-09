@@ -39,22 +39,27 @@ bool childrenAreExactly(BfNode * node, TokenName types[])
 
 bool isOperator(BfNode * node)
 {
-	return node->getTypeId() == t_kwd_or ||
-	 	node->getTypeId() == t_kwd_and ||
-		node->getTypeId() == t_op_plus ||
-		node->getTypeId() == t_op_minus ||
-		node->getTypeId() == t_op_pow ||
-		node->getTypeId() == t_op_times ||
-		node->getTypeId() == t_op_divide ||
-		node->getTypeId() == t_op_concat ||
-		node->getTypeId() == t_op_modulus ||
-		node->getTypeId() == t_op_gt ||
-		node->getTypeId() == t_op_lt ||
-		node->getTypeId() == t_op_geq ||
-		node->getTypeId() == t_op_leq ||
-		node->getTypeId() == t_op_noteq ||
-		node->getTypeId() == t_op_eq ||
-		node->getTypeId() == t_ellipsis;
+	return isOperatorToken(node->getTypeId());
+}
+
+bool isOperatorToken(TokenName name)
+{
+	return name == t_kwd_or ||
+                name == t_kwd_and ||
+                name == t_op_plus ||
+                name == t_op_minus ||
+                name == t_op_pow ||
+                name == t_op_times ||
+                name == t_op_divide ||
+                name == t_op_concat ||
+                name == t_op_modulus ||
+                name == t_op_gt ||
+                name == t_op_lt ||
+                name == t_op_geq ||
+                name == t_op_leq ||
+                name == t_op_noteq ||
+                name == t_op_eq ||
+                name == t_ellipsis;
 }
 
 bool isLiteral(BfNode * node)
