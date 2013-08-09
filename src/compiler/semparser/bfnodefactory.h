@@ -19,11 +19,14 @@
 #ifndef BLOWFISH_NODE_FACTORY
 #define BLOWFISH_NDOE_FACTORY
 
+#include <string>
 #include "bfnodes.h"
 #include "bftokennames.h"
 using namespace std;
 
 BfBinaryOperator * BfOperatorNodeFactory(TokenName tok);
 BfAssignment * BfAssignmentNodeFactory(TokenName tok);
+BfLiteral * BfLiteralNodeFactory(TokenName tok, string value);
+BfNode * BfBlockStarterNodeFactory(TokenName tok);
 
 #endif

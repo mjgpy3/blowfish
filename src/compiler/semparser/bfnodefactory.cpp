@@ -16,6 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <string>
 #include "bfnodefactory.h"
 #include "bfnodes.h"
 #include "bftokennames.h"
@@ -98,5 +99,57 @@ BfAssignment * BfAssignmentNodeFactory(TokenName tok)
 	if (tok == t_kwd_is)
 	{
 		return new BfConstantAssignment();
+	}
+}
+
+BfLiteral * BfLiteralNodeFactory(TokenName tok, string value)
+{
+	if (tok == t_string)
+	{
+		return new BfString(value);
+	}
+	if (tok == t_integer)
+	{
+		return new BfInteger(value);
+	}
+	if (tok == t_float)
+	{
+		return new BfFloat(value);
+	}
+}
+
+BfNode * BfBlockStarterNodeFactory(TokenName tok)
+{
+	if (tok == t_kwd_if)
+	{
+		return new BfIf();
+	}
+        if (tok == t_kwd_elseif)
+	{
+		return new BfElseIf();
+	}
+        if (tok == t_kwd_else)
+	{
+		return new BfElse();
+	}
+        if (tok == t_kwd_module)
+	{
+		return new BfModuleDef();
+	}
+        if (tok == t_kwd_meth)
+	{
+		return new BfMethodDef();
+	}
+        if (tok == t_kwd_class)
+	{
+		return new BfClassDef();
+	}
+        if (tok == t_kwd_for)
+	{
+		return new BfForLoop();
+	}
+        if (tok == t_kwd_enum)
+	{
+		return new BfEnumLoop();
 	}
 }

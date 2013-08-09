@@ -64,9 +64,14 @@ bool isOperatorToken(TokenName name)
 
 bool isLiteral(BfNode * node)
 {
-	return node->getTypeId() == t_string ||
-		node->getTypeId() == t_integer ||
-		node->getTypeId() == t_float;
+	return isLiteralToken(node->getTypeId());
+}
+
+bool isLiteralToken(TokenName name)
+{
+	return name == t_string ||
+                name == t_integer ||
+                name == t_float;
 
 }
 

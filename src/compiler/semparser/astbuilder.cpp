@@ -61,6 +61,18 @@ void AstBuilder::buildNode(FoundToken tok)
 		insertAssignmentNode(
 			BfAssignmentNodeFactory(currentToken) );
 	}
+	else if (isLiteralToken(currentToken))
+	{
+		attachChild(
+			BfLiteralNodeFactory(currentToken, tok.getValue()) );
+	}
+	else if (tokenImpliesScope(currentToken))
+	{
+		attachChildAsCurrent(
+			BfBlockStarterNodeFactory(currentToken) );
+
+                careAboutNewline = false;
+	}
 	else
 	{
 
@@ -84,36 +96,6 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_param_ident:
 		{
 			attachChild(new BfParameterIdentifier(tok.getValue()));
-		} break;
-
-		case t_kwd_class:
-		{
-			attachChildAsCurrent(new BfClassDef());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_module:
-		{
-			attachChildAsCurrent(new BfModuleDef());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_meth:
-		{
-			attachChildAsCurrent(new BfMethodDef());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_for:
-		{
-			attachChildAsCurrent(new BfForLoop());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_enum:
-		{
-			attachChildAsCurrent(new BfEnumLoop());
-			careAboutNewline = false;
 		} break;
 
 		case t_kwd_forms:
@@ -193,42 +175,9 @@ void AstBuilder::buildNode(FoundToken tok)
 			moveToParent();
 		} break;
 
-		case t_kwd_if:
-		{
-			attachChildAsCurrent(new BfIf());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_elseif:
-		{
-			attachChildAsCurrent(new BfElseIf());
-			careAboutNewline = false;
-		} break;
-
-		case t_kwd_else:
-		{
-			attachChildAsCurrent(new BfElse());
-			careAboutNewline = false;
-		} break;
-
-		case t_string:
-		{
-			attachChild(new BfString(tok.getValue()));
-		} break;
-
-		case t_integer:
-		{
-			attachChild(new BfInteger(tok.getValue()));
-		} break;
-
 		case t_neg_integer:
 		{
 			attachNegativeChild(new BfInteger(tok.getValue().substr(1)));
-		} break;
-
-		case t_float:
-		{
-			attachChild(new BfFloat(tok.getValue()));
 		} break;
 
 		case t_char:

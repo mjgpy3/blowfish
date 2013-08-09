@@ -16,6 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <string>
 #include "bfnodefactory.h"
 #include "bfnodes.h"
 #include "bftokennames.h"
@@ -250,6 +251,65 @@ void given_is_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_
         tester.assertTrue(node->getTypeId() == t_kwd_is, "Assign factory generates const assign using is node");
 } 
 
+void given_string_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfString_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_string;
+
+        // When
+        BfNode * node = BfLiteralNodeFactory(tok, "something");
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_string, "Literal factory generates string node");
+}
+
+void given_integer_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfInteger_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_integer;
+
+        // When
+        BfNode * node = BfLiteralNodeFactory(tok, "42");
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_integer, "Literal factory generates integer node");
+}
+
+void given_float_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfFloat_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_float;
+
+        // When
+        BfNode * node = BfLiteralNodeFactory(tok, "4.2");
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_float, "Literal factory generates float node");
+}
+
+void given_a_batch_of_tokens_that_define_scope_when_they_are_given_to_the_block_starter_node_factory_then_their_nodes_are_built(MiTester & tester)
+{
+	// Given
+	TokenName toks[] = { t_kwd_module, t_kwd_meth,
+				t_kwd_if, t_kwd_elseif,
+			 	t_kwd_else, t_kwd_class,
+				t_kwd_for, t_kwd_enum };
+	BfNode * nodes[8];
+
+	// When
+	for (int i = 0; i < 8; i += 1)
+	{
+		nodes[i] = BfBlockStarterNodeFactory(toks[i]);
+	}
+
+	// Then
+	for (int i = 0; i < 8; i += 1)
+        {
+                tester.assertTrue(nodes[i]->getTypeId() == toks[i], "Block starters work");
+        }
+}
+
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -272,6 +332,10 @@ int main()
 	given_ellipsis_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfEllipsis_node_is_built(tester);
 	given_isnow_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(tester);
 	given_op_assign_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(tester);
+	given_string_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfString_node_is_built(tester);
+	given_integer_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfInteger_node_is_built(tester);
+	given_float_token_name_when_it_is_given_to_the_literal_node_factory_then_a_BfFloat_node_is_built(tester);
+	given_a_batch_of_tokens_that_define_scope_when_they_are_given_to_the_block_starter_node_factory_then_their_nodes_are_built(tester);
 
 	tester.printResults();
 	return 0;
