@@ -214,6 +214,42 @@ void given_ellipsis_token_name_when_it_is_given_to_the_operator_node_factory_the
         tester.assertTrue(node->getTypeId() == t_ellipsis, "Op factory generates ellipsis node");
 }
 
+void given_isnow_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_kwd_isnow;
+
+        // When
+        BfNode * node = BfAssignmentNodeFactory(tok);
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_op_assign, "Assign factory generates var assign using isnow node");
+}
+
+void given_op_assign_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_op_assign;
+
+        // When
+        BfNode * node = BfAssignmentNodeFactory(tok);
+
+        // Then
+        tester.assertTrue(node->getTypeId() == t_op_assign, "Assign factory generates var assign using op-assign node");
+}
+
+void given_is_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfConstantAssignment_node_is_built(MiTester & tester)
+{
+        // Given
+        TokenName tok = t_kwd_is;
+        
+        // When
+        BfNode * node = BfAssignmentNodeFactory(tok);
+        
+        // Then
+        tester.assertTrue(node->getTypeId() == t_kwd_is, "Assign factory generates const assign using is node");
+} 
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -234,6 +270,8 @@ int main()
 	given_a_divide_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfDivide_node_is_built(tester);
 	given_power_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfPower_node_is_built(tester);
 	given_ellipsis_token_name_when_it_is_given_to_the_operator_node_factory_then_a_BfEllipsis_node_is_built(tester);
+	given_isnow_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(tester);
+	given_op_assign_token_name_when_it_is_given_to_the_assignment_node_factory_then_a_BfVariableAssignment_node_is_built(tester);
 
 	tester.printResults();
 	return 0;

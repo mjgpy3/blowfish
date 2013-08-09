@@ -28,7 +28,10 @@ bool childrenAreExactly(BfNode * node, TokenName types[]);
 bool isOperator(BfNode * node);
 bool isOperatorToken(TokenName name);
 bool isLiteral(BfNode * node);
+bool isAssignment(BfNode * node);
+bool isAssignmentToken(TokenName name);
 bool impliesScope(BfNode * node);
+bool tokenImpliesScope(TokenName name);
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode);
 	
 #endif

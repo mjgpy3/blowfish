@@ -109,6 +109,23 @@ void can_identify_nodes_that_indicate_a_scope(MiTester & tester)
         }
 }
 
+void can_identify_nodes_that_indicate_an_assignment(MiTester & tester)
+{
+        // Given
+        BfRoot * aRoot = new BfRoot();
+
+        // When
+        aRoot->appendChild(new BfVariableAssignment());
+        aRoot->appendChild(new BfConstantAssignment());
+
+        // Then
+        for (int i = 0; i < aRoot->numChildren(); i += 1)
+        {
+                tester.assertTrue(isAssignment(aRoot->child(i)), "Assignment nodes are recognizable");
+        }
+
+}
+
 void two_simple_trees_that_have_the_same_node_ids_all_the_way_down_can_be_identified_as_such(MiTester & tester)
 {
 	// Given

@@ -56,6 +56,11 @@ void AstBuilder::buildNode(FoundToken tok)
 		insertOperatorNode(
 			 BfOperatorNodeFactory(currentToken) );
 	}
+	else if (isAssignmentToken(currentToken))
+	{
+		insertAssignmentNode(
+			BfAssignmentNodeFactory(currentToken) );
+	}
 	else
 	{
 
@@ -79,21 +84,6 @@ void AstBuilder::buildNode(FoundToken tok)
 		case t_param_ident:
 		{
 			attachChild(new BfParameterIdentifier(tok.getValue()));
-		} break;
-
-		case t_kwd_isnow:
-		{
-			insertAssignmentNode(new BfVariableAssignment());
-		} break;
-
-		case t_op_assign:
-		{
-			insertAssignmentNode(new BfVariableAssignment());
-		} break;
-
-		case t_kwd_is:
-		{
-			insertAssignmentNode(new BfConstantAssignment());
 		} break;
 
 		case t_kwd_class:

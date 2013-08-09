@@ -70,16 +70,33 @@ bool isLiteral(BfNode * node)
 
 }
 
+bool isAssignment(BfNode * node)
+{
+	return isAssignmentToken(node->getTypeId());
+}
+
+bool isAssignmentToken(TokenName name)
+{
+	return name == t_kwd_is ||
+		name == t_op_assign ||
+		name == t_kwd_isnow;
+}
+
 bool impliesScope(BfNode * node)
 {
-	return node->getTypeId() == t_kwd_if ||
-		node->getTypeId() == t_kwd_elseif ||
-		node->getTypeId() == t_kwd_else ||
-		node->getTypeId() == t_kwd_module ||
-		node->getTypeId() == t_kwd_meth ||
-		node->getTypeId() == t_kwd_class || 
-		node->getTypeId() == t_kwd_for || 
-		node->getTypeId() == t_kwd_enum;
+	return tokenImpliesScope(node->getTypeId());
+}
+
+bool tokenImpliesScope(TokenName name)
+{
+	return name == t_kwd_if ||
+                name == t_kwd_elseif ||
+                name == t_kwd_else ||
+                name == t_kwd_module ||
+                name == t_kwd_meth ||
+                name == t_kwd_class ||
+                name == t_kwd_for ||
+                name == t_kwd_enum;
 }
 
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)

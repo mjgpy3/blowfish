@@ -89,3 +89,14 @@ BfBinaryOperator * BfOperatorNodeFactory(TokenName tok)
 	}
 }
 
+BfAssignment * BfAssignmentNodeFactory(TokenName tok)
+{
+	if (tok == t_kwd_isnow || tok == t_op_assign)
+	{
+		return new BfVariableAssignment();
+	}
+	if (tok == t_kwd_is)
+	{
+		return new BfConstantAssignment();
+	}
+}

@@ -24,5 +24,6 @@
 using namespace std;
 
 BfBinaryOperator * BfOperatorNodeFactory(TokenName tok);
+BfAssignment * BfAssignmentNodeFactory(TokenName tok);
 
 #endif
