@@ -152,4 +152,8 @@ BfNode * BfBlockStarterNodeFactory(TokenName tok)
 	{
 		return new BfEnumLoop();
 	}
+	if (tok == t_kwd_lambda)
+	{
+		return new BfLambda();
+	}
 }

@@ -239,6 +239,16 @@ public:
 	}
 };
 
+class BfLambda : public BfNode
+{
+public:
+	BfLambda() : BfNode()
+	{
+		debugName = "\\";
+		setTypeId(t_kwd_lambda);
+	}
+};
+
 class BfForLoop : public BfNode
 {
 public:

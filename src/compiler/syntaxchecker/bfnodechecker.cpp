@@ -101,7 +101,8 @@ bool tokenImpliesScope(TokenName name)
                 name == t_kwd_meth ||
                 name == t_kwd_class ||
                 name == t_kwd_for ||
-                name == t_kwd_enum;
+                name == t_kwd_enum ||
+		name == t_kwd_lambda;
 }
 
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
