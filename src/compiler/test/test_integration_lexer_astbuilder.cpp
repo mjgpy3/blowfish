@@ -330,17 +330,11 @@ void embedded_expressions_are_parsed_correctly_into_an_ast(MiTester & tester, Bf
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
 }
 
-void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer lexer)
+void a_simple_lambda_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer lexer)
 {
         // Given
-        string code = 	"class Car [\n"
-			"    meth new [\n"
-			"        self.miles := 0\n"
-			"    ]\n"
-			"\n"
-			"    meth drive theDistance: d [\n"
-			"        self.miles := self.miles + d\n"
-			"    ]\n"
+        string code = 	"lambda id: id fire [\n"
+			"return 5\n"
 			"]";
 
         AstBuilder builder = AstBuilder();
@@ -348,13 +342,27 @@ void a_simple_class_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer l
         write_temp_bf_file(code);
 
         BfRoot * expected = new BfRoot();
+	BfLambda * lambda = new BfLambda();
+	BfBlock * block = new BfBlock();
+
+	block->appendChild(new BfNewline());
+	block->appendChild(new BfReturn());
+	block->appendChild(new BfInteger("5"));
+	block->appendChild(new BfNewline());
+
+	lambda->appendChild(new BfParameterIdentifier("id:"));
+	lambda->appendChild(new BfIdentifier("id"));
+	lambda->appendChild(new BfIdentifier("fire"));
+	lambda->appendChild(block);
+
+	expected->appendChild(lambda);
 
         // When
         lexer.parseTokensFromFile(temp_file_name);
         BfNode * ast = builder.buildAst(lexer.getTokens());
 
         // Then
-        //tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - negative float, multiplication, expression with sqrt function");
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - lambda expression");
 }
 
 void popping_a_child_works(MiTester & tester)
@@ -389,7 +397,7 @@ int main()
 	a_basic_assignment_is_parsed_into_an_ast_correctly(tester, lex);
 	negative_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	embedded_expressions_are_parsed_correctly_into_an_ast(tester, lex);
-	a_simple_class_gets_parsed_correctly_into_an_ast(tester, lex);
+	a_simple_lambda_gets_parsed_correctly_into_an_ast(tester, lex);
 	popping_a_child_works(tester);
 
 	tester.printResults();
