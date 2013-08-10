@@ -293,17 +293,19 @@ void given_a_batch_of_tokens_that_define_scope_when_they_are_given_to_the_block_
 	TokenName toks[] = { t_kwd_module, t_kwd_meth,
 				t_kwd_if, t_kwd_elseif,
 			 	t_kwd_else, t_kwd_class,
-				t_kwd_for, t_kwd_enum };
-	BfNode * nodes[8];
+				t_kwd_for, t_kwd_enum,
+				t_kwd_lambda };
+	const int NUM_NODES = 9;
+	BfNode * nodes[NUM_NODES];
 
 	// When
-	for (int i = 0; i < 8; i += 1)
+	for (int i = 0; i < NUM_NODES; i += 1)
 	{
 		nodes[i] = BfBlockStarterNodeFactory(toks[i]);
 	}
 
 	// Then
-	for (int i = 0; i < 8; i += 1)
+	for (int i = 0; i < NUM_NODES; i += 1)
         {
                 tester.assertTrue(nodes[i]->getTypeId() == toks[i], "Block starters work");
         }
