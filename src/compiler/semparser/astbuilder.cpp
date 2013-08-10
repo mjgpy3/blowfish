@@ -66,6 +66,11 @@ void AstBuilder::buildNode(FoundToken tok)
 		attachChild(
 			BfLiteralNodeFactory(currentToken, tok.getValue()) );
 	}
+	else if (isNegativeLiteralToken(currentToken))
+	{
+		attachNegativeChild(
+			BfNegativeLiteralFactory(currentToken, tok.getValue()) );
+	}
 	else if (tokenImpliesScope(currentToken))
 	{
 		attachChildAsCurrent(
@@ -174,16 +179,6 @@ void AstBuilder::buildNode(FoundToken tok)
 			moveToParent();
 			moveToParent();
 		} break;
-
-		case t_neg_integer:
-		{
-			attachNegativeChild(new BfInteger(tok.getValue().substr(1)));
-		} break;
-
-                case t_neg_float:
-                {
-                        attachNegativeChild(new BfFloat(tok.getValue().substr(1)));
-                } break;
 
 		case t_line_ending:
 		{

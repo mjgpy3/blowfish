@@ -118,6 +118,18 @@ BfLiteral * BfLiteralNodeFactory(TokenName tok, string value)
 	}
 }
 
+BfLiteral * BfNegativeLiteralFactory(TokenName tok, string value)
+{
+	if (tok == t_neg_integer)
+	{
+		return new BfInteger(value.substr(1));
+	}
+	if (tok == t_neg_float)
+	{
+		return new BfFloat(value.substr(1));
+	}
+}
+
 BfNode * BfBlockStarterNodeFactory(TokenName tok)
 {
 	if (tok == t_kwd_if)

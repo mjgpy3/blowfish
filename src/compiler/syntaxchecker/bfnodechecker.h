@@ -31,6 +31,8 @@ bool isLiteral(BfNode * node);
 bool isLiteralToken(TokenName name);
 bool isAssignment(BfNode * node);
 bool isAssignmentToken(TokenName name);
+bool isNegativeLiteral(BfNode * node, TokenName name);
+bool isNegativeLiteralToken(TokenName name);
 bool impliesScope(BfNode * node);
 bool tokenImpliesScope(TokenName name);
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode);

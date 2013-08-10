@@ -105,6 +105,17 @@ bool tokenImpliesScope(TokenName name)
 		name == t_kwd_lambda;
 }
 
+bool isNegativeLiteral(BfNode * node)
+{
+	return isNegativeLiteralToken(node->getTypeId());
+}
+
+bool isNegativeLiteralToken(TokenName name)
+{
+	return name == t_neg_integer ||
+		name == t_neg_float;
+}
+
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
 {
 	if (aNode->numChildren() != anotherNode->numChildren())
@@ -127,4 +138,3 @@ bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
 	}
 	return true;
 }
-
