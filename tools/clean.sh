@@ -11,7 +11,7 @@ done
 
 }
 
-for ext in "*.swp" "*.pyc" "*.out"
+for ext in "*.swp" "*.pyc" "*.out" ".gch"
 do
   remove_by_extension $ext
 done
