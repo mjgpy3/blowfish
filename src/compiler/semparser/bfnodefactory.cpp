@@ -106,7 +106,7 @@ BfLiteral * BfLiteralNodeFactory(TokenName tok, string value)
 {
 	if (tok == t_string)
 	{
-		return new BfString(value);
+		return new BfString(value.substr(1, value.length()-2) );
 	}
 	if (tok == t_integer)
 	{

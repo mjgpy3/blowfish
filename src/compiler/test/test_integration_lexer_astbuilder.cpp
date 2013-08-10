@@ -365,6 +365,47 @@ void a_simple_lambda_gets_parsed_correctly_into_an_ast(MiTester tester, BfLexer 
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - lambda expression");
 }
 
+void given_a_string_with_single_quotes_and_a_string_with_double_quotes_when_they_are_lexed_and_parsed_then_they_are_the_same(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string code =   "'This is a string'\n"
+                        "\"This is a string\"";
+
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        BfRoot * expected = new BfRoot();
+
+        expected->appendChild(new BfString("This is a string"));
+	expected->appendChild(new BfNewline());
+	expected->appendChild(new BfString("This is a string"));
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Both quote types denote strings");
+}
+
+void given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(MiTester & tester, BfLexer lexer)
+{
+	// Given
+	string value = "This is a string";
+	string  code = "\"" + value + "\"";
+	AstBuilder builder = AstBuilder();
+
+	write_temp_bf_file(code);
+
+	// When
+	lexer.parseTokensFromFile(temp_file_name);
+	BfNode * ast = builder.buildAst(lexer.getTokens());
+
+	// Then
+	tester.assertEqual(ast->child(0)->getValue(), value, "String's value contents have no quotes");
+}
+
 void popping_a_child_works(MiTester & tester)
 {
 	// Given
@@ -398,6 +439,8 @@ int main()
 	negative_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	embedded_expressions_are_parsed_correctly_into_an_ast(tester, lex);
 	a_simple_lambda_gets_parsed_correctly_into_an_ast(tester, lex);
+	given_a_string_with_single_quotes_and_a_string_with_double_quotes_when_they_are_lexed_and_parsed_then_they_are_the_same(tester, lex);
+	given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(tester, lex);
 	popping_a_child_works(tester);
 
 	tester.printResults();

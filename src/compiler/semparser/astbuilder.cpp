@@ -180,11 +180,6 @@ void AstBuilder::buildNode(FoundToken tok)
 			attachNegativeChild(new BfInteger(tok.getValue().substr(1)));
 		} break;
 
-		case t_char:
-		{
-			attachChild(new BfString(tok.getValue()));
-		} break;
-
                 case t_neg_float:
                 {
                         attachNegativeChild(new BfFloat(tok.getValue().substr(1)));

@@ -1,6 +1,5 @@
 section_helpers:
 ident        -> [a-zA-Z][a-zA-Z_]*
-char_inside  -> (.)|(\\[nt])
 holder_ident -> [lsd]
 int          -> [0-9]+
 flt          -> [0-9]*'.'[0-9]*
@@ -47,9 +46,7 @@ neg_float    -> '-'{flt}
 float        -> {flt}
 [save_text]
 
-char         -> '\''{char_inside}'\''
-
-string       -> '"'.*'"'
+string       -> ('"'.*'"')|('\''.*'\'')
 [save_text]
 
 white_space  -> [\t ]
