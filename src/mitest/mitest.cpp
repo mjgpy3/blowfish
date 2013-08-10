@@ -60,7 +60,7 @@ void MiTester::assertTrue(bool a, string message)
 	}
 	else
 	{
-		cout << "E";
+		cout << "F";
 		cout << endl;
 		cout << message << endl;
 		numFails += 1;
