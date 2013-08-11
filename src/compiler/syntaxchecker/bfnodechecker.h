@@ -36,5 +36,9 @@ bool isNegativeLiteralToken(TokenName name);
 bool impliesScope(BfNode * node);
 bool tokenImpliesScope(TokenName name);
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode);
+bool isChildlessNode(BfNode * node);
+bool isChildlessNodeToken(TokenName name);
+bool becomesCurrentNode(BfNode * node);
+bool becomesCurrentNodeToken(TokenName name);
 	
 #endif

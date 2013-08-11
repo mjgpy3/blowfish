@@ -102,6 +102,7 @@ public:
 	BfParameterIdentifier(string value) : BfNode(value)
 	{
 		debugName = string("ParaIdent:") + value;
+		setCardinality(0);
 		setTypeId(t_param_ident);
 	}
 };
@@ -639,6 +640,17 @@ public:
 		setCardinality(0);
 		debugName = "Self";
 		setTypeId(t_kwd_self);
+	}
+};
+
+class BfSuper : public BfNode
+{
+public:
+	BfSuper() : BfNode()
+	{
+		setCardinality(0);
+		debugName = "Super";
+		setTypeId(t_kwd_super);
 	}
 };
 

@@ -169,3 +169,63 @@ BfNode * BfBlockStarterNodeFactory(TokenName tok)
 		return new BfLambda();
 	}
 }
+
+BfNode * BfChildlessNodeFactory(TokenName tok, string value)
+{
+	if (tok == t_identifier)
+	{
+		return new BfIdentifier(value);
+	}
+	if (tok == t_param_ident)
+	{
+		return new BfParameterIdentifier(value);
+	}
+	if (tok == t_pipe)
+	{
+		return new BfPipe();
+	}
+	if (tok == t_op_dot)
+	{
+		return new BfDot();
+	}
+	if (tok == t_kwd_in)
+	{
+		return new BfIn();
+	}
+	if (tok == t_kwd_self)
+	{
+		return new BfSelf();
+	}
+	if (tok == t_kwd_super)
+	{
+		return new BfSuper();
+	}
+	if (tok == t_kwd_return)
+	{
+		return new BfReturn();
+	}
+}
+
+BfNode * BfBecomesCurrentNodeFactory(TokenName tok)
+{
+	if (tok == t_kwd_not)
+	{
+		return new BfNot();
+	}
+	if (tok == t_kwd_require)
+	{
+		return new BfRequire();
+	}
+	if (tok == t_kwd_import)
+	{
+		return new BfImport();
+	}
+	if (tok == t_paran_begin)
+	{
+		return new BfExpression();
+	}
+	if (tok == t_kwd_forms)
+	{
+		return new BfFormsDef();
+	}
+}

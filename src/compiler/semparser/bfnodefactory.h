@@ -29,5 +29,7 @@ BfAssignment * BfAssignmentNodeFactory(TokenName tok);
 BfLiteral * BfLiteralNodeFactory(TokenName tok, string value);
 BfLiteral * BfNegativeLiteralFactory(TokenName tok, string value);
 BfNode * BfBlockStarterNodeFactory(TokenName tok);
+BfNode * BfChildlessNodeFactory(TokenName tok, string value);
+BfNode * BfBecomesCurrentNodeFactory(TokenName tok);
 
 #endif

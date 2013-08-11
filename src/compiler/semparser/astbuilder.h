@@ -49,6 +49,7 @@ private:
 	BfNode * root;
 	BfNode * current;
 	bool careAboutNewline;
+	TokenName startCaringWhenYouSee;
 	TokenName lastToken;
 };
 

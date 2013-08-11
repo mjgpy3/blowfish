@@ -116,6 +116,37 @@ bool isNegativeLiteralToken(TokenName name)
 		name == t_neg_float;
 }
 
+bool isChildlessNode(BfNode * node)
+{
+	return isChildlessNodeToken(node->getTypeId());
+}
+
+bool isChildlessNodeToken(TokenName name)
+{
+       return name == t_identifier ||
+		name == t_param_ident ||
+		name == t_pipe ||
+		name == t_op_dot ||
+		name == t_kwd_in ||
+		name == t_kwd_self ||
+		name == t_kwd_super ||
+		name == t_kwd_return;
+}
+
+bool becomesCurrentNode(BfNode * node)
+{
+	return becomesCurrentNodeToken(node->getTypeId());
+}
+
+bool becomesCurrentNodeToken(TokenName name)
+{
+	return name == t_kwd_forms ||
+		name == t_kwd_not ||
+		name == t_kwd_require ||
+		name == t_kwd_import ||
+		name == t_paran_begin;	
+}
+
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
 {
 	if (aNode->numChildren() != anotherNode->numChildren())
