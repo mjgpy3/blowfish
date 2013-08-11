@@ -406,6 +406,49 @@ void given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(MiT
 	tester.assertEqual(ast->child(0)->getValue(), value, "String's value contents have no quotes");
 }
 
+void given_a_list_within_a_list_with_a_bunch_of_newlines_when_it_is_lexed_and_parsed_then_all_newlines_are_ignored(MiTester & tester, BfLexer lexer)
+{
+	// Given
+        string  code = "l{ car 5 \n l{ the_mighty_blowfish (-3.14) \n } (-7) \n heart }\n";
+
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+	BfRoot * expected = new BfRoot();
+	BfList * innerList = new BfList();
+	BfList * outerList = new BfList();
+	BfExpression * innerExp = new BfExpression();
+	BfExpression * outerExp = new BfExpression();
+	BfNegative * innerNeg = new BfNegative();
+	BfNegative * outerNeg = new BfNegative();
+
+	innerNeg->appendChild(new BfFloat("3.14"));
+	outerNeg->appendChild(new BfInteger("7"));
+
+	innerExp->appendChild(innerNeg);
+	outerExp->appendChild(outerNeg);
+
+	innerList->appendChild(new BfIdentifier("the_mighty_blowfish"));
+	innerList->appendChild(innerExp);
+
+	outerList->appendChild(new BfIdentifier("car"));
+	outerList->appendChild(new BfInteger("5"));
+	outerList->appendChild(innerList);
+	outerList->appendChild(outerExp);
+	outerList->appendChild(new BfIdentifier("heart"));
+
+	expected->appendChild(outerList);
+	expected->appendChild(new BfNewline());
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Newlines are ignored in nested lists");
+}
+
 void popping_a_child_works(MiTester & tester)
 {
 	// Given
@@ -441,6 +484,7 @@ int main()
 	a_simple_lambda_gets_parsed_correctly_into_an_ast(tester, lex);
 	given_a_string_with_single_quotes_and_a_string_with_double_quotes_when_they_are_lexed_and_parsed_then_they_are_the_same(tester, lex);
 	given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(tester, lex);
+	given_a_list_within_a_list_with_a_bunch_of_newlines_when_it_is_lexed_and_parsed_then_all_newlines_are_ignored(tester, lex);
 	popping_a_child_works(tester);
 
 	tester.printResults();

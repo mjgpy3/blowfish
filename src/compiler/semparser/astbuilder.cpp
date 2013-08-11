@@ -32,12 +32,10 @@ AstBuilder::AstBuilder()
 
 	root = blowfish;
 	current = root;
-	careAboutNewline = true;
 }
 
 BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 {
-	startCaringWhenYouSee = tokens[0].getTokenValue();
 	for (int i = 0; i < tokens.size(); i += 1)
 	{
 		buildNode(tokens[i]);
@@ -48,13 +46,11 @@ BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 
 void AstBuilder::buildNode(FoundToken tok)
 {
-	// TODO: PCFR: Rewrite me nicely (factories would be legit!)
-
 	TokenName currentToken = tok.getTokenValue();
 
-	if (currentToken == startCaringWhenYouSee)
+	if (ignoreNewlineStack.size() != 0 && currentToken == ignoreNewlineStack.back())
 	{
-		careAboutNewline = true;
+		ignoreNewlineStack.pop_back();
 	}
 
 	if (isOperatorToken(currentToken))
@@ -82,8 +78,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		attachChildAsCurrent(
 			BfBlockStarterNodeFactory(currentToken) );
 
-                careAboutNewline = false;
-		startCaringWhenYouSee = t_block_begin;
+		ignoreNewlineStack.push_back(t_block_begin);
 	}
 	else if (isChildlessNodeToken(currentToken))
 	{
@@ -100,10 +95,7 @@ void AstBuilder::buildNode(FoundToken tok)
 		attachChildAsCurrent(
 			BfHolderFactory(tok.getValue().substr(0, 1)) );
 
-		careAboutNewline = false;
-		// TODO: Fix this, what if you have a list within a list?
-		// TODO: Using a stack would work
-		startCaringWhenYouSee = t_holder_end;
+		ignoreNewlineStack.push_back(t_holder_end);
 	}
 	else if (currentToken == t_neg_ident)
 	{
@@ -134,14 +126,15 @@ void AstBuilder::buildNode(FoundToken tok)
 		moveToParent();
 	}
 	else if (currentToken == t_line_ending &&
-		 careAboutNewline              &&
+		 ignoreNewlineStack.size() == 0 &&
 		 lastToken != t_line_ending)
 	{
                 attachChild(new BfNewline());
 	}
-	else
+	else if (currentToken != t_line_ending)
 	{
 		cout << "Error: Unsupported token!" << endl;
+		cout << "TokenId: " << currentToken << endl;
 		exit(1);
 	}
 

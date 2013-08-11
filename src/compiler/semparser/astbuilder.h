@@ -48,8 +48,7 @@ public:
 private:
 	BfNode * root;
 	BfNode * current;
-	bool careAboutNewline;
-	TokenName startCaringWhenYouSee;
+	vector<TokenName> ignoreNewlineStack;
 	TokenName lastToken;
 };
 
