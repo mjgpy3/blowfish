@@ -27,12 +27,13 @@ class BfScopeNode
 {
 public:
 	BfScopeNode();
+	BfScopeNode(string scopeName);
 	int numChildren();
 	void appendChild(BfScopeNode * n);
-	bool parentIs(BfScopeNode * n);
 	bool isNamed();
 	void setName(string n);
 	string getName();
+	BfScopeNode * getParent() { return parent; }
 
 private:
 	vector<BfScopeNode*> children;

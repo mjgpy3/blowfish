@@ -54,7 +54,7 @@ void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_th
 	node->appendChild(anotherNode);
 
 	// Then
-	tester.assertTrue(anotherNode->parentIs(node), "An appended node's parent is the node that it was appended to");
+	tester.assertTrue(anotherNode->getParent() == node, "An appended node's parent is the node that it was appended to");
 }
 
 void given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retrieved(MiTester & tester)

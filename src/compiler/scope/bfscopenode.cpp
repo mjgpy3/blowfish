@@ -25,6 +25,11 @@ BfScopeNode::BfScopeNode()
 	name = "";
 }
 
+BfScopeNode::BfScopeNode(string scopeName)
+{
+	name = scopeName;
+}
+
 int BfScopeNode::numChildren()
 {
 	children.size();
@@ -39,11 +44,6 @@ void BfScopeNode::appendChild(BfScopeNode * n)
 bool BfScopeNode::isNamed()
 {
 	return name != "";
-}
-
-bool BfScopeNode::parentIs(BfScopeNode * n)
-{
-	return this->parent == n;
 }
 
 void BfScopeNode::setName(string n)
