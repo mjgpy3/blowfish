@@ -90,6 +90,11 @@ void AstBuilder::buildNode(FoundToken tok)
 		attachChildAsCurrent(
 			BfBecomesCurrentNodeFactory(currentToken) );
 	}
+	else if (currentToken == t_paran_begin)
+	{
+		attachChildAsCurrent(
+			new BfExpression() );
+	}
 	else if (currentToken == t_holder_begin)
 	{
 		attachChildAsCurrent(

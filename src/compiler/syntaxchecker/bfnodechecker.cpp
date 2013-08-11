@@ -143,8 +143,7 @@ bool becomesCurrentNodeToken(TokenName name)
 	return name == t_kwd_forms ||
 		name == t_kwd_not ||
 		name == t_kwd_require ||
-		name == t_kwd_import ||
-		name == t_paran_begin;	
+		name == t_kwd_import;
 }
 
 bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)

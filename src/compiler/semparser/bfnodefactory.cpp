@@ -220,10 +220,6 @@ BfNode * BfBecomesCurrentNodeFactory(TokenName tok)
 	{
 		return new BfImport();
 	}
-	if (tok == t_paran_begin)
-	{
-		return new BfExpression();
-	}
 	if (tok == t_kwd_forms)
 	{
 		return new BfFormsDef();
