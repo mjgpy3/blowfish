@@ -243,7 +243,6 @@ void AstBuilder::insertAssignmentNode(BfAssignment * n)
 
 void AstBuilder::currentChildrenAreChildrenOf(BfNode * n, TokenName until)
 {
-	// PCFR: Nasty, maybe use a queue...
 	vector<BfNode *> temp;
 
 	while (current->numChildren() != 0 && current->currentChild()->getTypeId() != until)
