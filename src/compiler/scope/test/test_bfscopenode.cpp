@@ -44,6 +44,23 @@ void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_th
 	tester.assertTrue(node->numChildren() == 1, "A node with another node appended to it has 1 child");
 }
 
+void given_a_scope_node_with_two_children_when_we_append_another_child_then_it_should_have_three_children(MiTester & tester)
+{
+	// Given
+	BfScopeNode * parent = new BfScopeNode();
+
+	parent->appendChild(new BfScopeNode());
+	parent->appendChild(new BfScopeNode());
+
+	tester.assertTrue(parent->numChildren() == 2, "Appended two");
+
+	// When
+	parent->appendChild(new BfScopeNode());
+
+	// Then
+	tester.assertTrue(parent->numChildren() == 3, "After appending a third child, it has three children");
+}
+
 void given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(MiTester & tester)
 {
 	// Given
@@ -110,6 +127,7 @@ int main()
 	given_a_scope_node_when_we_have_done_nothing_to_that_node_then_its_number_of_children_is_zero(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_that_node_should_have_one_child(tester);
 	given_an_empty_scope_node_when_we_append_a_pointer_to_another_scope_node_then_the_append_nodes_parent_should_be_the_original_node(tester);
+	given_a_scope_node_with_two_children_when_we_append_another_child_then_it_should_have_three_children(tester);
 	given_a_scope_with_no_name_when_that_scopes_name_is_set_then_it_can_be_retrieved(tester);
 	given_a_scope_with_no_name_when_nothing_is_done_about_that_then_its_name_is_the_empty_string(tester);
 	given_a_scope_with_no_name_when_nothing_is_done_about_that_then_it_is_considered_to_have_no_name(tester);
