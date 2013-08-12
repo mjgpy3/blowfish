@@ -18,6 +18,7 @@
 
 #include "bfscopenode.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 BfScopeNode::BfScopeNode()
