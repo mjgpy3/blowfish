@@ -38,6 +38,13 @@ string BfNode::toString()
 {
 	string result = debugName;
 
+	if (hasScope())
+	{
+		result += "$";
+		result += scope->getName();
+		result += "$";
+	}
+
 	if (children.size() != 0)
 	{
 		result += string(" -> [ ");
@@ -49,6 +56,12 @@ string BfNode::toString()
 		return result + string("]"); 
 	}
 	return result;
+}
+
+bool BfNode::hasScope()
+{
+	return nodeIdent == t_block_begin ||
+		nodeIdent == t_root;
 }
 
 bool BfNode::higherPriorityThan(BfNode n)

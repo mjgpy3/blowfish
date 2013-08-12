@@ -465,6 +465,31 @@ void popping_a_child_works(MiTester & tester)
 	tester.assertTrue(top->numChildren() == 2, "When we pop a child, there should be N-1 left");
 }
 
+void interesting(BfLexer lexer)
+{
+        string code =   "module AModule [\n"
+			"	meth a_method a [\n"
+			"		return a\n"
+			"	]\n"
+			"	class Fido [\n"
+			"		meth a_class_method id: id card: card [\n"
+			"			if a = 5 [\n"
+			"				return (sqrt 5)"
+			"			]\n"
+			"		]\n"
+			"	]\n"
+			"]\n";
+
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+	cout << endl << ast->toString() << endl;
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -486,6 +511,7 @@ int main()
 	given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(tester, lex);
 	given_a_list_within_a_list_with_a_bunch_of_newlines_when_it_is_lexed_and_parsed_then_all_newlines_are_ignored(tester, lex);
 	popping_a_child_works(tester);
+	interesting(lex);
 
 	tester.printResults();
 	return 0;

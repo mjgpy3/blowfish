@@ -50,6 +50,9 @@ private:
 	BfNode * current;
 	vector<TokenName> ignoreNewlineStack;
 	TokenName lastToken;
+	vector<BfScopeNode*> scopeStack;
+	BfScopeNode * nextScope;
+	bool nextIdentifierNamesScope;
 };
 
 #endif

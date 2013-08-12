@@ -47,6 +47,7 @@ public:
 	void attachScope(BfScopeNode * scopeNode);
 	BfScopeNode * getScope();
 	bool higherPriorityThan(BfNode n);
+	bool hasScope();
 	string toString();
 	string debugName;
 	string getValue() { return value; }

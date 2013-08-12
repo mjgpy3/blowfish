@@ -97,12 +97,17 @@ bool tokenImpliesScope(TokenName name)
 	return name == t_kwd_if ||
                 name == t_kwd_elseif ||
                 name == t_kwd_else ||
-                name == t_kwd_module ||
-                name == t_kwd_meth ||
-                name == t_kwd_class ||
                 name == t_kwd_for ||
                 name == t_kwd_enum ||
-		name == t_kwd_lambda;
+		name == t_kwd_lambda ||
+		tokenImpliesNamedScope(name);
+}
+
+bool tokenImpliesNamedScope(TokenName name)
+{
+	return name == t_kwd_module ||
+		name == t_kwd_meth ||
+		name == t_kwd_class;
 }
 
 bool isNegativeLiteral(BfNode * node)

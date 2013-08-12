@@ -29,9 +29,16 @@ AstBuilder::AstBuilder()
 {
 	// The global namespace, BfRoot
 	BfNode * blowfish = new BfRoot(); 
+	BfScopeNode * globalScope = new BfScopeNode("blowfish");
+
+	blowfish->attachScope(globalScope);
+	scopeStack.push_back(globalScope);
 
 	root = blowfish;
 	current = root;
+
+	nextScope = new BfScopeNode();
+	nextIdentifierNamesScope = false;
 }
 
 BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
@@ -79,11 +86,22 @@ void AstBuilder::buildNode(FoundToken tok)
 			BfBlockStarterNodeFactory(currentToken) );
 
 		ignoreNewlineStack.push_back(t_block_begin);
+
+		if (tokenImpliesNamedScope(currentToken))
+		{
+			nextIdentifierNamesScope = true;
+		}
 	}
 	else if (isChildlessNodeToken(currentToken))
 	{
 		attachChild(
 			BfChildlessNodeFactory(currentToken, tok.getValue()) );
+
+		if (nextIdentifierNamesScope && currentToken == t_identifier)
+		{
+			nextScope->setName(tok.getValue());
+			nextIdentifierNamesScope = false;
+		}
 	}
 	else if (becomesCurrentNodeToken(currentToken))
 	{
@@ -123,12 +141,21 @@ void AstBuilder::buildNode(FoundToken tok)
 	}
 	else if (currentToken == t_block_begin)
 	{
-		attachChildAsCurrent(new BfBlock());
+		BfBlock * block = new BfBlock();
+
+		scopeStack.back()->appendChild(nextScope);
+
+		block->attachScope(nextScope);
+
+		attachChildAsCurrent(block);
+		scopeStack.push_back(nextScope);
+		nextScope = new BfScopeNode();
 	}
 	else if (currentToken == t_block_end)
 	{
 		moveToParent();
 		moveToParent();
+		scopeStack.pop_back();
 	}
 	else if (currentToken == t_line_ending &&
 		 ignoreNewlineStack.size() == 0 &&
