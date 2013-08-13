@@ -22,5 +22,9 @@ using namespace std;
 
 int main()
 {
+	MiTester tester = MiTester();
+
+
+	tester.printResults();
 	return 0;
 }

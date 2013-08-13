@@ -19,5 +19,23 @@
 #ifndef BLOWFISH_EXECUTOR
 #define BLOWFISH_EXECUTOR
 
+#include "bfnodes.h"
+#include "bfscopenode.h"
+#include <string>
+#include <vector>
+using namespace std;
+
+class BfExecutor
+{
+public:
+	void executeAst(BfNode * astToExecute);
+
+private:
+	vector<BfScopeNode*> scopeStack;
+	BfNode * ast;
+	BfNode * astRoot;
+};
+
+void executorError(string message);
 
 #endif

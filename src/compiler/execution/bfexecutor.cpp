@@ -17,4 +17,26 @@
 */
 
 #include "bfexecutor.h"
+#include "bfnodechecker.h"
+#include "bfnodes.h"
+#include "bfscopenode.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
+
+void BfExecutor::executeAst(BfNode * astToExecute)
+{
+	ast = astToExecute;
+	astRoot = astToExecute;
+
+	scopeStack.push_back(astRoot->getScope());
+}
+
+void executorError(string message)
+{
+	cout << "blowfish execution error:" << endl;
+	cout << message;
+	exit(1);
+}
