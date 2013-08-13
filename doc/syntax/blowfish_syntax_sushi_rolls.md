@@ -58,3 +58,31 @@ The mighty blowfish believes in a sacred order. It does math in the following or
  3. Addition and subtraction
 
 Pretty standard stuff eh?
+
+Holders
+-------
+The mighty blowfish is a horder. He has a few different ways of holding his favorite posessions:
+
+Lists are the blowfish's favorite way to hold things. The blowfish likes lists because he can hold all sorts of things in a single list and also because it's easy for him to look through a list to find what he needs.
+
+The empty list:
+`l{ }`
+
+A list containing a few numbers:
+`l{ 1 2 3.4 -7 (sqrt 7) }`
+
+Aside from lists, the blowfish really likes sets. Sets are holders of a unique collection of objects.
+
+The empty set:
+`s{ }`
+
+A set containing a few numbers:
+`s{ 1 2 3.4 -9 5^7 }`
+
+The last holder that the blowfish likes are dictionaries. Dictionaries associate some value with another.
+
+The empty dictionary:
+`d{ }`
+
+A dictionary containing a few things:
+`{ "Food" -> "Sushi" "The answer" -> 42 }`
