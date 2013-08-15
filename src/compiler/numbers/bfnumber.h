@@ -27,12 +27,18 @@ class BfNumber
 public:
 	BfNumber();
 	BfNumber(string value);
+
+	BfNumber add(BfNumber other);
+	BfNumber subtract(BfNumber other);
+
 	void setFromString(string value);
 	void zeroMe();
 	void negate();
+	void setParts(long long wholePort, long long decimalPort);
 	bool isNegative();
 	long long wholePart();
 	long long decimalPart();
+	void extendLengthTo(int length);
 
 private:
 	void removeEndingZeros();
@@ -40,5 +46,9 @@ private:
 	long long decimal;
 	bool negative;
 };
+
+int numLength(long long a);
+int equalizeDecimalLengths(BfNumber * a, BfNumber * b);
+long long tenToThe(int power);
 
 #endif
