@@ -75,6 +75,30 @@ void given_a_non_negated_bfnumber_when_we_negate_it_then_it_is_negative(MiTester
 	tester.assertTrue(bfnumber.isNegative(), "Numbers can be negated");
 }
 
+void given_a_bfnumber_when_we_set_it_to_something_beginning_with_zeros_then_the_extra_zeros_on_the_whole_part_are_chopped_off(MiTester & tester)
+{
+	// Given
+	BfNumber number = BfNumber();
+
+	// When
+	number.setFromString("0032.12");
+
+	// Then
+	tester.assertTrue(number.wholePart() == 32, "Extra zeros are chopped off of the beginning of numbers");
+}
+
+void given_a_bfnumber_when_we_set_it_to_something_with_zeroes_on_the_end_of_the_decimal_part_then_the_extra_zeros_are_chopped_off(MiTester & tester)
+{
+	// Given
+	BfNumber number = BfNumber();
+
+	// When
+	number.setFromString("13100.1200");
+
+	// Then
+	tester.assertTrue(number.decimalPart() == 12, "Extra zeros are chopped off from the end of numbers");
+}
+
 void edge_case_bfnumbers_ending_or_beginning_with_decimals_are_parsed_properly(MiTester & tester)
 {
 	// Given
@@ -103,6 +127,8 @@ int main()
 	given_a_bfnumber_that_is_initialized_with_a_string_representing_an_integer_when_we_access_its_whole_and_decimal_values_then_the_whole_part_is_the_strings_value_and_the_decimal_is_zero(tester);
 	given_a_bfnumber_initialized_when_a_floatlike_string_when_we_access_its_parts_then_they_are_correct(tester);
 	given_a_non_negated_bfnumber_when_we_negate_it_then_it_is_negative(tester);
+	given_a_bfnumber_when_we_set_it_to_something_beginning_with_zeros_then_the_extra_zeros_on_the_whole_part_are_chopped_off(tester);
+	given_a_bfnumber_when_we_set_it_to_something_with_zeroes_on_the_end_of_the_decimal_part_then_the_extra_zeros_are_chopped_off(tester);
 	edge_case_bfnumbers_ending_or_beginning_with_decimals_are_parsed_properly(tester);
 
 	tester.printResults();

@@ -35,6 +35,7 @@ public:
 	long long decimalPart();
 
 private:
+	void removeEndingZeros();
 	long long whole;
 	long long decimal;
 	bool negative;

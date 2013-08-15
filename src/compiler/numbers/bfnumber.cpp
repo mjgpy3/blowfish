@@ -45,6 +45,8 @@ void BfNumber::setFromString(string value)
                 (*currentPart) *= 10;
                 (*currentPart) += int(value[i]) - 48;
         }
+
+	removeEndingZeros();
 }
 
 void BfNumber::zeroMe()
@@ -64,7 +66,6 @@ bool BfNumber::isNegative()
 	return negative;
 }
 
-
 long long BfNumber::wholePart()
 {
 	return whole;
@@ -73,4 +74,12 @@ long long BfNumber::wholePart()
 long long BfNumber::decimalPart()
 {
 	return decimal;
+}
+
+void BfNumber::removeEndingZeros()
+{
+	while (decimal != 0 && decimal % 10 == 0)
+	{
+		decimal /= 10;
+	}
 }
