@@ -19,139 +19,80 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include "bfliteraltypes.h"
 #include "bfnumber.h"
 using namespace std;
 
 BfNumber::BfNumber()
 {
-	zeroMe();
 }
 
-BfNumber::BfNumber(string value)
+void BfNumber::setNumType(LiteralType type)
 {
-	setFromString(value);
-}
-
-BfNumber BfNumber::add(BfNumber other)
-{
-	if (isNegative() == other.isNegative())
-	{
-		// Perform addition
-		BfNumber result = BfNumber();
-
-		if (isNegative())
-		{
-			result.negate();
-		}
-
-		// Normalize lengths, add, accomidate for floating overflow
-		int newLen = equalizeDecimalLengths(this, &other);
-		
-		long long newWhole = wholePart() + other.wholePart();
-		long long newDecimal = decimalPart() + other.decimalPart();
-
-		int decLen = numLength(newDecimal);
-
-		if (decLen > newLen)
-		{
-			newWhole += newDecimal / tenToThe(decLen-newLen+1);
-			newDecimal = newDecimal % tenToThe(decLen-newLen+1);
-		}
-
-		result.setParts(newWhole, newDecimal);
-
-		return result;
-	}
-
-	// Perform subtraction
-	return subtract(other);
-}
-
-BfNumber BfNumber::subtract(BfNumber other)
-{
-	other.negate();
-
-	if (isNegative() != other.isNegative())
-	{
-		// Perform subtraction
-		BfNumber result = BfNumber();
-
-		return result;
-	}
-
-	// Perform addition
-	return add(other);
-}
-
-void BfNumber::setFromString(string value)
-{
-	zeroMe();
-        long long * currentPart = &whole;
-
-        for (int i = 0; i < value.length(); i += 1)
-        {
-                if (value[i] == '.')
-                {
-                        currentPart = &decimal;
-                        continue;
-                }
-                (*currentPart) *= 10;
-                (*currentPart) += int(value[i]) - 48;
-        }
-
-	removeEndingZeros();
+	numType = type;
 }
 
 void BfNumber::zeroMe()
 {
-	negative = false;
-	whole = 0;
-	decimal = 0;
+	underFloat = 0.0;
+	underInt = 0;
 }
 
-void BfNumber::negate()
+long long BfIntegerNumber::getInt()
 {
-	negative = !negative;
+	return underInt;
 }
 
-bool BfNumber::isNegative()
+double BfIntegerNumber::getFloat()
 {
-	return negative;
+	return double(underInt);
 }
 
-long long BfNumber::wholePart()
+void BfIntegerNumber::setFromString(string value)
 {
-	return whole;
+        zeroMe();
+
+        for (int i = 0; i < value.length(); i += 1)
+        {
+                underInt *= 10;
+                underInt += int(value[i]) - 48;
+        }
 }
 
-long long BfNumber::decimalPart()
+BfIntegerNumber * negateNum(BfIntegerNumber num)
 {
-	return decimal;
+	long long resultVal = - num.getInt();
+	BfIntegerNumber * result = new BfIntegerNumber();
+	result->underInt = resultVal;
+
+	return result;
 }
 
-void BfNumber::removeEndingZeros()
+BfIntegerNumber * add(BfIntegerNumber num1, BfIntegerNumber num2)
 {
-	while (decimal != 0 && decimal % 10 == 0)
-	{
-		decimal /= 10;
-	}
+	long long resultVal = num1.getInt() + num2.getInt();
+	BfIntegerNumber * result = new BfIntegerNumber();
+	result->underInt = resultVal;
+
+	return result;
 }
 
-void BfNumber::extendLengthTo(int length)
+BfIntegerNumber * subtract(BfIntegerNumber num1, BfIntegerNumber num2)
 {
-	int numToAppend = length - numLength(decimal);
+	long long resultVal = num1.getInt() - num2.getInt();
+        BfIntegerNumber * result = new BfIntegerNumber();
+        result->underInt = resultVal;
 
-	while (numToAppend > 0)
-	{
-		decimal *= 10;
-		numToAppend -= 1;
-	}
+        return result;
 }
 
-void BfNumber::setParts(long long wholePort, long long decimalPort)
+BfIntegerNumber * multiply(BfIntegerNumber num1, BfIntegerNumber num2)
 {
-	whole = wholePort;
-	decimal = decimalPort;
+        long long resultVal = num1.getInt() * num2.getInt();
+        BfIntegerNumber * result = new BfIntegerNumber();
+        result->underInt = resultVal;
+
+        return result;
 }
 
 int numLength(long long a)
@@ -162,27 +103,4 @@ int numLength(long long a)
 	}
 
 	return floor(log10(a)) + 1;
-}
-
-int equalizeDecimalLengths(BfNumber * a, BfNumber * b)
-{
-        int maxLength = max( numLength(a->decimalPart()),
-                             numLength(b->decimalPart()) );
-
-        a->extendLengthTo(maxLength);
-	b->extendLengthTo(maxLength);
-
-	return maxLength;
-}
-
-long long tenToThe(int power)
-{
-	long long result = 1;
-
-	while (power > 0)
-	{
-		result *= 10;
-		power -= 1;
-	}
-	return result;
 }

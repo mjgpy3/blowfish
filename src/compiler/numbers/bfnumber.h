@@ -20,6 +20,7 @@
 #define BLOWFISH_NUMBER
 
 #include <string>
+#include "bfliteraltypes.h"
 using namespace std;
 
 class BfNumber
@@ -27,28 +28,60 @@ class BfNumber
 public:
 	BfNumber();
 	BfNumber(string value);
-
-	BfNumber add(BfNumber other);
-	BfNumber subtract(BfNumber other);
-
-	void setFromString(string value);
+	virtual void setFromString(string value) = 0;
+	virtual long long getInt() = 0;
+	virtual double getFloat() = 0;
+	void setNumType(LiteralType type);
+	double underFloat;
+	long long underInt;
 	void zeroMe();
-	void negate();
-	void setParts(long long wholePort, long long decimalPort);
-	bool isNegative();
-	long long wholePart();
-	long long decimalPart();
-	void extendLengthTo(int length);
+	LiteralType getTypeId()
+	{
+		return numType;
+	}
 
 private:
-	void removeEndingZeros();
-	long long whole;
-	long long decimal;
-	bool negative;
+	LiteralType numType;
+};
+
+class BfIntegerNumber : public BfNumber
+{
+public:
+	BfIntegerNumber() : BfNumber()
+	{
+		setNumType(type_int);
+	}
+
+	BfIntegerNumber(string value) : BfNumber()
+	{
+		setFromString(value);
+		setNumType(type_int);
+	}
+
+	long long getInt();
+	double getFloat();
+	void setFromString(string value);
+};
+
+class BfFloatNumber : public BfNumber
+{
+public:
+	BfFloatNumber() : BfNumber()
+	{
+		setNumType(type_float);
+	}
+
+	long long getInt();
+	double getFloat();
+	void setFromString(string value);
 };
 
 int numLength(long long a);
-int equalizeDecimalLengths(BfNumber * a, BfNumber * b);
-long long tenToThe(int power);
+
+BfIntegerNumber * negateNum(BfIntegerNumber num);
+BfIntegerNumber * add(BfIntegerNumber num1, BfIntegerNumber num2);
+BfIntegerNumber * subtract(BfIntegerNumber num1, BfIntegerNumber num2);
+BfIntegerNumber * multiply(BfIntegerNumber num1, BfIntegerNumber num2);
+
 
 #endif
