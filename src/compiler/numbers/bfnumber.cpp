@@ -43,9 +43,19 @@ long long BfIntegerNumber::getInt()
 	return underInt;
 }
 
+long long BfFloatNumber::getInt()
+{
+	return (long long)underFloat;
+}
+
 double BfIntegerNumber::getFloat()
 {
 	return double(underInt);
+}
+
+double BfFloatNumber::getFloat()
+{
+	return underFloat;
 }
 
 void BfIntegerNumber::setFromString(string value)
@@ -59,36 +69,153 @@ void BfIntegerNumber::setFromString(string value)
         }
 }
 
-BfIntegerNumber * negateNum(BfIntegerNumber num)
+void BfFloatNumber::setFromString(string value)
 {
-	long long resultVal = - num.getInt();
-	BfIntegerNumber * result = new BfIntegerNumber();
-	result->underInt = resultVal;
+	zeroMe();
+	bool decimalFound = false;
+	int tens = 10;
+
+	for (int i = 0; i < value.length(); i += 1)
+	{
+		if (value[i] == '.')
+		{
+			decimalFound = true;
+			continue;
+		}
+
+		if (!decimalFound)
+		{
+			underFloat *= 10;
+			underFloat += double(int(value[i]) - 48);
+		}
+		else
+		{
+			underFloat += double(int(value[i]) - 48)/tens;
+			tens *= 10;
+		}
+	}
+}
+
+BfNumber * negateNum(BfNumber * num)
+{
+	BfNumber * result;
+	
+	if (num->getTypeId() == type_int)
+	{
+       		result = new BfIntegerNumber();
+		result->underInt = -num->getInt();
+	}
+	else
+	{
+		result = new BfFloatNumber();
+		result->underFloat = -num->getFloat();
+	}
+
+       	return result;
+}
+
+BfNumber * add(BfNumber * num1, BfNumber * num2)
+{
+	BfNumber * result;
+
+	if (num1->getTypeId() == type_float || num1->getTypeId() == type_float)
+	{
+		result = new BfFloatNumber();
+		result->underFloat = num1->getFloat() + num2->getFloat();
+	}
+	else
+	{
+		result = new BfIntegerNumber();
+		result->underInt = num1->getInt() + num2->getInt();
+	}
 
 	return result;
 }
 
-BfIntegerNumber * add(BfIntegerNumber num1, BfIntegerNumber num2)
+BfNumber * subtract(BfNumber * num1, BfNumber * num2)
 {
-	long long resultVal = num1.getInt() + num2.getInt();
-	BfIntegerNumber * result = new BfIntegerNumber();
-	result->underInt = resultVal;
+        BfNumber * result;
 
-	return result;
+        if (num1->getTypeId() == type_float || num1->getTypeId() == type_float)
+        {
+                result = new BfFloatNumber();
+                result->underFloat = num1->getFloat() - num2->getFloat();
+        }
+        else
+        {
+                result = new BfIntegerNumber();
+                result->underInt = num1->getInt() - num2->getInt();
+        }
+
+        return result;
 }
 
-BfIntegerNumber * subtract(BfIntegerNumber num1, BfIntegerNumber num2)
+BfNumber * multiply(BfNumber * num1, BfNumber * num2)
 {
-	long long resultVal = num1.getInt() - num2.getInt();
-        BfIntegerNumber * result = new BfIntegerNumber();
+        BfNumber * result;
+
+        if (num1->getTypeId() == type_float || num1->getTypeId() == type_float)
+        {
+                result = new BfFloatNumber();
+                result->underFloat = num1->getFloat() * num2->getFloat();
+        }
+        else
+        {
+                result = new BfIntegerNumber();
+                result->underInt = num1->getInt() * num2->getInt();
+        }
+
+        return result;
+}
+
+BfNumber * divide(BfNumber * num1, BfNumber * num2)
+{
+        BfNumber * result;
+
+        if (num1->getTypeId() == type_float || num1->getTypeId() == type_float)
+        {
+                result = new BfFloatNumber();
+                result->underFloat = num1->getFloat() / num2->getFloat();
+        }
+        else
+        {
+                result = new BfIntegerNumber();
+                result->underInt = num1->getInt() / num2->getInt();
+        }
+
+        return result;
+}
+
+BfIntegerNumber * mod(BfIntegerNumber num1, BfIntegerNumber num2)
+{
+	long long resultVal = num1.getInt() % num2.getInt();
+	BfIntegerNumber * result = new BfIntegerNumber();
         result->underInt = resultVal;
 
         return result;
 }
 
-BfIntegerNumber * multiply(BfIntegerNumber num1, BfIntegerNumber num2)
+BfNumber * power(BfNumber * num1, BfNumber * num2)
 {
-        long long resultVal = num1.getInt() * num2.getInt();
+	BfNumber * result;
+
+        if (num1->getTypeId() == type_float || num1->getTypeId() == type_float)
+        {
+                result = new BfFloatNumber();
+                result->underFloat = pow(num1->getFloat(),  num2->getFloat());
+        }
+        else
+        {
+                result = new BfIntegerNumber();
+                result->underInt = pow(num1->getInt(), num2->getInt());
+        }
+        
+        return result;
+}
+
+BfIntegerNumber * power(BfIntegerNumber num1, BfIntegerNumber num2)
+{
+	long long resultVal = pow(num1.getInt(), num2.getInt());
         BfIntegerNumber * result = new BfIntegerNumber();
         result->underInt = resultVal;
 

@@ -71,6 +71,12 @@ public:
 		setNumType(type_float);
 	}
 
+	BfFloatNumber(string value) : BfNumber()
+	{
+		setFromString(value);
+		setNumType(type_float);
+	}
+
 	long long getInt();
 	double getFloat();
 	void setFromString(string value);
@@ -78,10 +84,12 @@ public:
 
 int numLength(long long a);
 
-BfIntegerNumber * negateNum(BfIntegerNumber num);
-BfIntegerNumber * add(BfIntegerNumber num1, BfIntegerNumber num2);
-BfIntegerNumber * subtract(BfIntegerNumber num1, BfIntegerNumber num2);
-BfIntegerNumber * multiply(BfIntegerNumber num1, BfIntegerNumber num2);
-
+BfNumber * negateNum(BfNumber * num);
+BfNumber * add(BfNumber * num1, BfNumber * num2);
+BfNumber * subtract(BfNumber * num1, BfNumber * num2);
+BfNumber * multiply(BfNumber * num1, BfNumber * num2);
+BfNumber * divide(BfNumber * num1, BfNumber * num2);
+BfIntegerNumber * mod(BfIntegerNumber num1, BfIntegerNumber num2);
+BfNumber * power(BfNumber * num1, BfNumber * num2);
 
 #endif
