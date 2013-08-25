@@ -152,6 +152,7 @@ void asts_with_differently_ordered_operations_are_handled_properly(MiTester & te
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Tree - addition then multiplication (scattered floats)");
 }
 
+
 void there_is_differentiation_between_negative_terms_when_there_are_no_spaces(MiTester & tester, BfLexer lexer)
 {
         // Given
@@ -449,6 +450,27 @@ void given_a_list_within_a_list_with_a_bunch_of_newlines_when_it_is_lexed_and_pa
         tester.assertTrue(haveSameNodeStructure(expected, ast), "Newlines are ignored in nested lists");
 }
 
+void given_a_string_with_a_comment_in_it_when_we_parse_it_then_it_is_recognized_as_a_string_and_the_comment_doesnt_break_anything(MiTester & tester, BfLexer lexer)
+{
+        // Given
+        string  code = "'# string with comment...'";
+        AstBuilder builder = AstBuilder();
+
+        write_temp_bf_file(code);
+
+	BfRoot * expected = new BfRoot();
+	BfString * str = new BfString("'# string with comment...'");
+
+	expected->appendChild(str);
+
+        // When
+        lexer.parseTokensFromFile(temp_file_name);
+        BfNode * ast = builder.buildAst(lexer.getTokens());
+
+        // Then
+        tester.assertTrue(haveSameNodeStructure(expected, ast), "Comments in strings don't matter");
+}
+
 void popping_a_child_works(MiTester & tester)
 {
 	// Given
@@ -485,6 +507,7 @@ int main()
 	given_a_string_with_single_quotes_and_a_string_with_double_quotes_when_they_are_lexed_and_parsed_then_they_are_the_same(tester, lex);
 	given_a_string_when_it_is_lexed_and_parsed_then_its_value_has_no_quotes(tester, lex);
 	given_a_list_within_a_list_with_a_bunch_of_newlines_when_it_is_lexed_and_parsed_then_all_newlines_are_ignored(tester, lex);
+	given_a_string_with_a_comment_in_it_when_we_parse_it_then_it_is_recognized_as_a_string_and_the_comment_doesnt_break_anything(tester, lex);
 	popping_a_child_works(tester);
 
 	tester.printResults();
