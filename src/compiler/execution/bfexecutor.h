@@ -20,6 +20,7 @@
 #define BLOWFISH_EXECUTOR
 
 #include "bfnodes.h"
+#include "bfnumber.h"
 #include "bfscopenode.h"
 #include <string>
 #include <vector>
@@ -29,11 +30,14 @@ class BfExecutor
 {
 public:
 	void executeAst(BfNode * astToExecute);
+	BfNumber * currentNumber;
 
 private:
 	vector<BfScopeNode*> scopeStack;
-	BfNode * ast;
+	BfNode * currentNode;
 	BfNode * astRoot;
+	BfNumber * leftNumber;
+	BfNumber * rightNumber;
 };
 
 void executorError(string message);

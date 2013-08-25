@@ -28,15 +28,34 @@ using namespace std;
 
 void BfExecutor::executeAst(BfNode * astToExecute)
 {
-	ast = astToExecute;
+	if ( !isRoot( astToExecute ) )
+	{
+		executorError( "AST must begin with a proper blowfish root node" );
+	}
+
 	astRoot = astToExecute;
 
-	scopeStack.push_back(astRoot->getScope());
+	scopeStack.push_back( astRoot->getScope() );
+
+	for (int i = 0; i < astRoot->numChildren(); i += 1)
+	{
+		currentNode = astRoot->child( i );
+
+		if ( isOperator( currentNode) )
+		{
+			// This is just a start
+			// TODO: Extend this...
+			leftNumber = new BfIntegerNumber( currentNode->child( 0 )->getValue() );
+			rightNumber = new BfIntegerNumber( currentNode->child( 1 )->getValue() );
+			currentNumber = add( leftNumber,
+					     rightNumber );
+		}
+	}
 }
 
 void executorError(string message)
 {
 	cout << "blowfish execution error:" << endl;
-	cout << message;
+	cout << message << endl;
 	exit(1);
 }

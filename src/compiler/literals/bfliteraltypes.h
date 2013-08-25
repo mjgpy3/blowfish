@@ -16,39 +16,14 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef BLOWFISH_NUMBER
-#define BLOWFISH_NUMBER
+#ifndef BLOWFISH_LITERAL_TYPES
+#define BLOWFISH_LITERAL_TYPES
 
-#include <string>
-using namespace std;
-
-class BfNumber
+enum LiteralType
 {
-public:
-	BfNumber();
-	BfNumber(string value);
-
-	BfNumber add(BfNumber other);
-	BfNumber subtract(BfNumber other);
-
-	void setFromString(string value);
-	void zeroMe();
-	void negate();
-	void setParts(long long wholePort, long long decimalPort);
-	bool isNegative();
-	long long wholePart();
-	long long decimalPart();
-	void extendLengthTo(int length);
-
-private:
-	void removeEndingZeros();
-	long long whole;
-	long long decimal;
-	bool negative;
+	type_int,
+	type_float,
+	type_string
 };
-
-int numLength(long long a);
-int equalizeDecimalLengths(BfNumber * a, BfNumber * b);
-long long tenToThe(int power);
 
 #endif

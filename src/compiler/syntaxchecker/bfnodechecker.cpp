@@ -173,3 +173,8 @@ bool haveSameNodeStructure(BfNode * aNode, BfNode * anotherNode)
 	}
 	return true;
 }
+
+bool isRoot(BfNode * node)
+{
+	return node->getTypeId() == t_root;
+}
