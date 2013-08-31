@@ -201,7 +201,7 @@ void given_two_bfintegers_when_we_modulus_them_then_their_result_is_the_modulus_
         BfIntegerNumber numTwo = BfIntegerNumber("5");
 
         // When
-        BfIntegerNumber * result = mod(numOne, numTwo);
+        BfNumber * result = mod(&numOne, &numTwo);
 
         // Then
         tester.assertTrue(numOne.getInt() % numTwo.getInt() == result->getInt(), "We can modulus two integers");
