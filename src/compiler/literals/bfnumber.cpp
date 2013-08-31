@@ -186,9 +186,9 @@ BfNumber * divide(BfNumber * num1, BfNumber * num2)
         return result;
 }
 
-BfIntegerNumber * mod(BfIntegerNumber num1, BfIntegerNumber num2)
+BfNumber * mod(BfNumber * num1, BfNumber * num2)
 {
-	long long resultVal = num1.getInt() % num2.getInt();
+	long long resultVal = num1->getInt() % num2->getInt();
 	BfIntegerNumber * result = new BfIntegerNumber();
         result->underInt = resultVal;
 

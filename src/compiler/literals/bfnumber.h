@@ -89,7 +89,7 @@ BfNumber * add(BfNumber * num1, BfNumber * num2);
 BfNumber * subtract(BfNumber * num1, BfNumber * num2);
 BfNumber * multiply(BfNumber * num1, BfNumber * num2);
 BfNumber * divide(BfNumber * num1, BfNumber * num2);
-BfIntegerNumber * mod(BfIntegerNumber num1, BfIntegerNumber num2);
+BfNumber * mod(BfNumber * num1, BfNumber * num2);
 BfNumber * power(BfNumber * num1, BfNumber * num2);
 
 #endif

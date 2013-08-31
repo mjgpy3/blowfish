@@ -42,11 +42,77 @@ void given_an_ast_with_a_root_an_addition_operation_and_two_numerical_children_w
 	tester.assertTrue( 66 == executor.currentNumber->getInt(), "We can execute a simple AST with just an addition operation under the root" );
 }
 
+void given_a_proper_ast_with_two_math_operations_when_we_execute_that_ast_the_result_is_stored(MiTester & tester)
+{
+	// Given
+        BfExecutor executor = BfExecutor();
+
+        BfRoot * root = new BfRoot();
+        BfPlus * firstPlus = new BfPlus();
+	BfPlus * secondPlus = new BfPlus();
+
+	secondPlus->appendChild( new BfInteger( "7" ) );
+	secondPlus->appendChild( new BfInteger( "21" ) );
+	
+	firstPlus->appendChild( new BfInteger("14") );
+	firstPlus->appendChild( secondPlus );
+
+	root->appendChild( firstPlus );
+
+        // When
+        executor.executeAst( root );
+
+        // Then
+        tester.assertTrue( 42 == executor.currentNumber->getInt(), "We can execute a simple AST with two addition operations under the root" );
+}
+
+void assert_that_math_op_works_for( 
+        BfInteger * firstNumber,
+        BfInteger * secondNumber,
+        BfBinaryOperator * op,
+        long long expected,
+        string opname,
+        MiTester & tester )
+{
+        BfExecutor executor = BfExecutor();
+        BfRoot * root = new BfRoot();
+        
+        op->appendChild( firstNumber );
+        op->appendChild( secondNumber );
+
+        root->appendChild( op );
+
+        executor.executeAst( root );
+
+        tester.assertTrue( expected == executor.currentNumber->getInt(), "The " + opname + " operator works" );
+}
+
+void all_math_operators_are_supported(MiTester & tester)
+{
+	BfInteger * aNumber = new BfInteger( "12" );
+	BfInteger * anotherNumber = new BfInteger( "5" );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfPlus(), 17, "plus", tester );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfMinus(), 7, "minus", tester );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfMultiply(), 60, "multiply", tester );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfDivide(), 2, "divide", tester );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfModulus(), 2, "modulus", tester );
+
+	assert_that_math_op_works_for( aNumber, anotherNumber, new BfPower(), 248832, "power", tester );
+}
+
 int main()
 {
 	MiTester tester = MiTester();
 
 	given_an_ast_with_a_root_an_addition_operation_and_two_numerical_children_when_we_execute_that_ast_the_result_is_stored(tester);
+	given_a_proper_ast_with_two_math_operations_when_we_execute_that_ast_the_result_is_stored(tester);
+
+	all_math_operators_are_supported( tester );
 
 	tester.printResults();
 	return 0;

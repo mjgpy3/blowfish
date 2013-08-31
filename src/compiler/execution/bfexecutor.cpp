@@ -64,6 +64,36 @@ BfNumber * BfExecutor::executeMathOperator(BfNode * node)
 			executeMathOperator( node->child(0) ),
 			executeMathOperator( node->child(1) ) );
 	}
+	else if (node->getTypeId() == t_op_minus)
+	{
+		return subtract(
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
+	}
+	else if (node->getTypeId() == t_op_times)
+	{
+		return multiply(
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
+	}
+	else if (node->getTypeId() == t_op_divide)
+	{
+		return divide(
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
+	}
+	else if (node->getTypeId() == t_op_modulus)
+	{
+		return mod(
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
+	}
+	else if (node->getTypeId() == t_op_pow)
+	{
+		return power(
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
+	}
 }
 
 void executorError(string message)
