@@ -43,13 +43,26 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 
 		if ( isOperator( currentNode) )
 		{
-			// This is just a start
-			// TODO: Extend this...
-			leftNumber = new BfIntegerNumber( currentNode->child( 0 )->getValue() );
-			rightNumber = new BfIntegerNumber( currentNode->child( 1 )->getValue() );
-			currentNumber = add( leftNumber,
-					     rightNumber );
+			currentNumber = executeMathOperator( currentNode );
 		}
+	}
+}
+
+BfNumber * BfExecutor::executeMathOperator(BfNode * node)
+{
+	if (node->getTypeId() == t_integer)
+	{
+		return new BfIntegerNumber(node->getValue());
+	}
+	else if (node->getTypeId() == t_float)
+	{
+		return new BfFloatNumber(node->getValue());
+	}
+	else if (node->getTypeId() == t_op_plus)
+	{
+		return add( 
+			executeMathOperator( node->child(0) ),
+			executeMathOperator( node->child(1) ) );
 	}
 }
 

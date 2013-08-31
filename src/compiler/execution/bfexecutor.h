@@ -33,11 +33,10 @@ public:
 	BfNumber * currentNumber;
 
 private:
+	BfNumber * executeMathOperator(BfNode * node);
 	vector<BfScopeNode*> scopeStack;
 	BfNode * currentNode;
 	BfNode * astRoot;
-	BfNumber * leftNumber;
-	BfNumber * rightNumber;
 };
 
 void executorError(string message);
