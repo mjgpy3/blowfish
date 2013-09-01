@@ -41,7 +41,7 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 	{
 		currentNode = astRoot->child( i );
 
-		if ( isOperator( currentNode) )
+		if ( isOperator( currentNode) || currentNode->getTypeId() == t_neg )
 		{
 			currentNumber = executeMathOperator( currentNode );
 		}
@@ -93,6 +93,11 @@ BfNumber * BfExecutor::executeMathOperator(BfNode * node)
 		return power(
 			executeMathOperator( node->child(0) ),
 			executeMathOperator( node->child(1) ) );
+	}
+	else if (node->getTypeId() == t_neg)
+	{
+		return negateNum(
+			executeMathOperator( node->child(0) ) );
 	}
 }
 
