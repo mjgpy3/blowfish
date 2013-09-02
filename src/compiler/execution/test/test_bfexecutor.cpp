@@ -84,6 +84,29 @@ void given_a_proper_ast_with_a_number_that_is_negated_when_we_execute_that_ast_t
 	tester.assertTrue( -42 == executor.currentNumber->getInt(), "We can execute a simple AST with a negation" );
 }
 
+void given_a_proper_ast_with_an_operation_that_is_under_parans_when_we_execute_that_ast_the_results_is_stored(MiTester & tester)
+{
+	// Given
+	BfExecutor executor = BfExecutor();
+
+        BfRoot * root = new BfRoot();
+	BfExpression * exp = new BfExpression();
+	BfModulus * modu = new BfModulus();
+
+	modu->appendChild( new BfInteger( "14" ) );
+	modu->appendChild( new BfInteger( "5" ) );
+
+	exp->appendChild( modu );
+
+        root->appendChild( exp );
+
+        // When
+        executor.executeAst( root );
+
+        // Then
+        tester.assertTrue( 4 == executor.currentNumber->getInt(), "We can execute a simple AST with paranthesis" );
+}
+
 void assert_that_math_op_works_for( 
         BfInteger * firstNumber,
         BfInteger * secondNumber,
@@ -130,6 +153,7 @@ int main()
 	given_an_ast_with_a_root_an_addition_operation_and_two_numerical_children_when_we_execute_that_ast_the_result_is_stored( tester );
 	given_a_proper_ast_with_two_math_operations_when_we_execute_that_ast_the_result_is_stored( tester );
 	given_a_proper_ast_with_a_number_that_is_negated_when_we_execute_that_ast_the_result_is_stored( tester );
+	given_a_proper_ast_with_an_operation_that_is_under_parans_when_we_execute_that_ast_the_results_is_stored( tester );
 
 	all_math_operators_are_supported( tester );
 

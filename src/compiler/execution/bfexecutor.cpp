@@ -41,7 +41,8 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 	{
 		currentNode = astRoot->child( i );
 
-		if ( isOperator( currentNode) || currentNode->getTypeId() == t_neg )
+		// PCFR: This will be incorrect very quickly
+		if ( isOperator( currentNode ) || currentNode->getTypeId() == t_neg || currentNode->getTypeId() == t_paran_begin)
 		{
 			currentNumber = executeMathOperator( currentNode );
 		}
@@ -98,6 +99,10 @@ BfNumber * BfExecutor::executeMathOperator(BfNode * node)
 	{
 		return negateNum(
 			executeMathOperator( node->child(0) ) );
+	}
+	else if (node->getTypeId() == t_paran_begin && node->numChildren() == 1)
+	{
+		return executeMathOperator( node->child(0) );
 	}
 }
 
