@@ -107,6 +107,31 @@ void given_a_proper_ast_with_an_operation_that_is_under_parans_when_we_execute_t
         tester.assertTrue( 4 == executor.currentNumber->getInt(), "We can execute a simple AST with paranthesis" );
 }
 
+void given_an_ast_with_multiple_paranthesis_embedding_some_number_when_we_execute_that_ast_the_result_is_stored(MiTester & tester)
+{
+	// Given
+        BfExecutor executor = BfExecutor();
+
+        BfRoot * root = new BfRoot();
+        BfExpression * exp1 = new BfExpression();
+	BfExpression * exp2 = new BfExpression();
+	BfExpression * exp3 = new BfExpression();
+	BfExpression * exp4 = new BfExpression();
+
+	exp4->appendChild( new BfInteger("42") );
+	exp3->appendChild( exp4 );
+	exp2->appendChild( exp3 );
+	exp1->appendChild( exp2 );
+
+        root->appendChild( exp1 );
+
+        // When
+        executor.executeAst( root );
+
+        // Then
+        tester.assertTrue( 42 == executor.currentNumber->getInt(), "We can execute a simple AST with many paranthesis" );
+}
+
 void assert_that_math_op_works_for( 
         BfInteger * firstNumber,
         BfInteger * secondNumber,
@@ -154,6 +179,7 @@ int main()
 	given_a_proper_ast_with_two_math_operations_when_we_execute_that_ast_the_result_is_stored( tester );
 	given_a_proper_ast_with_a_number_that_is_negated_when_we_execute_that_ast_the_result_is_stored( tester );
 	given_a_proper_ast_with_an_operation_that_is_under_parans_when_we_execute_that_ast_the_results_is_stored( tester );
+	given_an_ast_with_multiple_paranthesis_embedding_some_number_when_we_execute_that_ast_the_result_is_stored( tester );
 
 	all_math_operators_are_supported( tester );
 

@@ -62,6 +62,35 @@ bool isOperatorToken(TokenName name)
                 name == t_ellipsis;
 }
 
+bool operatesOnNumbers(BfNode * node)
+{
+	TokenName name = node->getTypeId();
+
+	if (name == name == t_kwd_or ||
+                name == t_kwd_and ||
+                name == t_op_plus ||
+                name == t_op_minus ||
+                name == t_op_pow ||
+                name == t_op_times ||
+                name == t_op_divide ||
+                name == t_op_modulus ||
+                name == t_op_gt ||
+                name == t_op_lt ||
+                name == t_op_geq ||
+                name == t_op_leq ||
+                name == t_op_noteq ||
+                name == t_op_eq ||
+		name == t_neg ||
+                name == t_ellipsis ||
+		name == t_integer ||
+		name == t_float)
+	{
+		return true;
+	}
+
+	return name == t_paran_begin && node->numChildren() == 1 && operatesOnNumbers( node->child(0) );
+}
+
 bool isLiteral(BfNode * node)
 {
 	return isLiteralToken(node->getTypeId());
