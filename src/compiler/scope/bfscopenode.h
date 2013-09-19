@@ -19,8 +19,10 @@
 #ifndef BLOWFISH_SCOPE_NODE
 #define BLOWFISH_SCOPE_NODE
 
+#include <map>
 #include <string>
 #include <vector>
+#include "bfnumber.h"
 using namespace std;
 
 class BfScopeNode
@@ -32,13 +34,16 @@ public:
 	void appendChild(BfScopeNode * n);
 	bool isNamed();
 	void setName(string n);
+	void addIdentifierAndValue( string ident, BfNumber * value );
 	string getName();
 	BfScopeNode * getParent() { return parent; }
+	bool containsIdentifier( string ident );
 
 private:
 	vector<BfScopeNode*> children;
 	BfScopeNode * parent;
 	string name;
+	map<string, BfNumber *> identToNumber;
 };
 
 #endif

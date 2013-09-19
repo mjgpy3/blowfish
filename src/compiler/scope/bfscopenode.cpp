@@ -17,8 +17,6 @@
 */
 
 #include "bfscopenode.h"
-#include <vector>
-#include <string>
 using namespace std;
 
 BfScopeNode::BfScopeNode()
@@ -34,6 +32,16 @@ BfScopeNode::BfScopeNode(string scopeName)
 int BfScopeNode::numChildren()
 {
 	children.size();
+}
+
+void BfScopeNode::addIdentifierAndValue( string ident, BfNumber * value )
+{
+	identToNumber[ ident ] = value;
+}
+
+bool BfScopeNode::containsIdentifier( string ident )
+{
+	return true;
 }
 
 void BfScopeNode::appendChild(BfScopeNode * n)

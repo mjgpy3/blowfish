@@ -31,6 +31,7 @@ class BfExecutor
 public:
 	void executeAst(BfNode * astToExecute);
 	BfNumber * currentNumber;
+	BfScopeNode * currentScope;
 
 private:
 	BfNumber * executeMathOperator(BfNode * node);

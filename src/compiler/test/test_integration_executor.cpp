@@ -134,6 +134,25 @@ void given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_
         tester.assertTrue( 3 == executor.currentNumber->getInt(), "3 == (-(5%3)^2 + 7*3 - 6) / 5" );
 }
 
+void given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier(MiTester & tester)
+{
+	// Given
+	string code = "a := 5\n";
+        BfLexer lexer = BfLexer();
+        AstBuilder builder = AstBuilder();
+        BfExecutor executor = BfExecutor();
+
+        write_temp_bf_file( code );
+
+        // When
+        lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+        // Then
+        tester.assertTrue( executor.currentScope->containsIdentifier( "a" ) , "When assignments happen, the identifier is added to the current scope" );
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -143,6 +162,7 @@ int main()
 	given_a_math_expression_with_a_negative_when_we_execute_it_then_the_expected_result_is_found( tester );
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect1( tester );
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect2( tester );
+	given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier( tester );
 
 	tester.printResults();
 	return 0;
