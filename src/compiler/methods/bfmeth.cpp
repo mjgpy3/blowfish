@@ -28,11 +28,15 @@ string BfMethod::calculateSigniture( BfNode * node )
 	{
 		TokenName currentType = node->child( i )->getTypeId();
 
-		if (currentType == t_param_ident)
+		if (currentType == t_block_begin)
+		{
+			break;
+		}
+		else if (currentType == t_param_ident)
 		{
 			result += getSignitureSeparator() + node->child( i )->getValue();
 		}
-		else if (currentType == t_identifier)
+		else
 		{
 			result += getSignitureSeparator() + "a";
 		}

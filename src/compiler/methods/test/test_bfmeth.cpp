@@ -112,7 +112,83 @@ void given_a_complex_BfMethodDef_ast_when_we_calculate_its_signiture_then_it_is_
                 "doStuff" + separator + "id:" + separator + "a" + separator + "a" + separator + "loss:" + separator + "a",
                 result,
                 "When a method has a paramIdent and a param, then its signiture is ident$paramIdent:$a");
+}
 
+void given_a_simple_method_call_when_we_calculate_its_signiture_then_its_just_the_methods_identifier( MiTester & tester )
+{
+	// Given
+        BfNode * callParts = new BfNode();
+
+	callParts->appendChild( new BfIdentifier( "someMethod" ) );
+        
+        // When
+        string result = BfMethod::calculateSigniture( callParts );
+
+        // Then
+        tester.assertEqual(
+		"someMethod",
+                result,
+                "Given a simple method call, the signiture should just be the method's name");
+}
+
+void given_a_complex_method_call_when_we_calculate_its_signiture_then_it_is_correct( MiTester & tester )
+{
+        // Given
+        BfNode * callParts = new BfNode();
+        callParts->appendChild( new BfIdentifier( "doStuff" ) );	// The method name
+	callParts->appendChild( new BfParameterIdentifier( "id:" ) );
+
+	BfPlus * plus = new BfPlus();
+	plus->appendChild( new BfInteger( "5" ) );
+	plus->appendChild( new BfFloat( "42.42" ) );
+
+	callParts->appendChild( plus );
+	callParts->appendChild( new BfIdentifier( "value" ) );
+	callParts->appendChild( new BfParameterIdentifier( "loss:" ) );
+	callParts->appendChild( new BfString( "Hi, I'm a string" ) );
+
+        
+        // When
+        string result = BfMethod::calculateSigniture( callParts );
+
+        // Then
+        tester.assertEqual(
+                "doStuff" + separator + "id:" + separator + "a" + separator + "a" + separator + "loss:" + separator + "a",
+                result,
+                "Given a simple method call, the signiture should just be the method's name");
+}
+
+void given_a_simple_BfMethodDef_and_a_matching_call_when_we_calculate_their_signitures_then_they_are_the_same( MiTester & tester )
+{
+	// Given
+	BfMethodDef * method = new BfMethodDef();
+	BfNode * call = new BfNode();
+
+	// The same method name
+	method->appendChild( new BfIdentifier( "sqrt" ) );
+	call->appendChild( new BfIdentifier( "sqrt" ) );
+
+	// The same parameter specifier
+	method->appendChild( new BfParameterIdentifier( "ofTheNumber:" ) );
+	call->appendChild( new BfParameterIdentifier( "ofTheNumber:" ) );
+
+	BfPlus * plus = new BfPlus();
+	plus->appendChild( new BfInteger( "5" ) );
+	plus->appendChild( new BfFloat( "42.42" ) );
+
+	// Argument name vs. passed param
+	method->appendChild( new BfIdentifier( "number" ) );
+	call->appendChild( plus );
+
+	// When
+        string methodSigniture = BfMethod::calculateSigniture( method );
+	string callSigniture = BfMethod::calculateSigniture( call );
+
+        // Then
+        tester.assertEqual(
+		methodSigniture,
+                callSigniture,
+                "Given a simple method call, the signiture should just be the method's name");
 }
 
 int main()
@@ -124,6 +200,9 @@ int main()
 	given_BfMethodDef_with_multiple_parameters_when_we_calculate_signiture_then_it_is_ident_followed_by_separated_generic_strings( tester );
 	given_a_BfMethodDef_with_a_paramIdent_and_and_ident_when_whe_calculate_its_signigure_then_it_is_correct( tester );
 	given_a_complex_BfMethodDef_ast_when_we_calculate_its_signiture_then_it_is_correct( tester );
+	given_a_simple_method_call_when_we_calculate_its_signiture_then_its_just_the_methods_identifier( tester );
+	given_a_complex_method_call_when_we_calculate_its_signiture_then_it_is_correct( tester );
+	given_a_simple_BfMethodDef_and_a_matching_call_when_we_calculate_their_signitures_then_they_are_the_same( tester );
 
 	tester.printResults();
 	return 0;
