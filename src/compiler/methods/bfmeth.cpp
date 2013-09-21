@@ -23,19 +23,20 @@
 string BfMethod::calculateSigniture( BfNode * node )
 {
 	string result = node->child(0)->getValue();
-	int argNum = 1;
 
 	for (int i = 1; i < node->numChildren(); i += 1)
 	{
-		if (node->child( i )->getTypeId() == t_block_begin)
+		TokenName currentType = node->child( i )->getTypeId();
+
+		if (currentType == t_param_ident)
 		{
-			return result;
+			result += getSignitureSeparator() + node->child( i )->getValue();
 		}
-		stringstream ss;
-		ss << argNum;
-		result += getSignitureSeparator() + "a" + ss.str();
-		argNum += 1;
+		else if (currentType == t_identifier)
+		{
+			result += getSignitureSeparator() + "a";
+		}
 	}
 
-	// TODO: Error here
+	return result;
 }
