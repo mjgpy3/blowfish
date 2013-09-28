@@ -23,6 +23,8 @@
 #include "bfnodes.h"
 using namespace std;
 
+class BfNode;
+
 class BfMethod
 {
 public:

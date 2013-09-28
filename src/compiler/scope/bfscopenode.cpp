@@ -34,9 +34,9 @@ int BfScopeNode::numChildren()
 	children.size();
 }
 
-void BfScopeNode::addIdentifierAndValue( string ident, BfNumber * value )
+void BfScopeNode::addIdentifierAndValue( string ident, BfObject * value )
 {
-	identToNumber[ ident ] = value;
+	variables[ ident ] = value;
 }
 
 bool BfScopeNode::containsIdentifier( string ident )

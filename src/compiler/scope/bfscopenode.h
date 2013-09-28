@@ -22,8 +22,10 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "bfnumber.h"
+#include "bfclass.h"
 using namespace std;
+
+class BfObject;
 
 class BfScopeNode
 {
@@ -34,7 +36,7 @@ public:
 	void appendChild(BfScopeNode * n);
 	bool isNamed();
 	void setName(string n);
-	void addIdentifierAndValue( string ident, BfNumber * value );
+	void addIdentifierAndValue( string ident, BfObject * value );
 	string getName();
 	BfScopeNode * getParent() { return parent; }
 	bool containsIdentifier( string ident );
@@ -43,7 +45,7 @@ private:
 	vector<BfScopeNode*> children;
 	BfScopeNode * parent;
 	string name;
-	map<string, BfNumber *> identToNumber;
+	map<string, BfObject *> variables;
 };
 
 #endif

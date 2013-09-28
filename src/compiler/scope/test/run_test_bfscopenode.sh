@@ -1,6 +1,6 @@
 #!/bin/bash
 
-c++ test_bfscopenode.cpp ../bfscopenode.cpp ../../../mitest/mitest.cpp ../../literals/bfnumber.cpp ../../semparser/bfnodes.cpp -I .. -I ../../../mitest -I ../../semparser -I ../../lexer -I ../../literals
+c++ test_bfscopenode.cpp ../../classes/bfobject.cpp ../../literals/bfnumber.cpp ../../classes/bfclass.cpp ../bfscopenode.cpp ../../../mitest/mitest.cpp ../../semparser/bfnodes.cpp -I .. -I ../../../mitest -I ../../semparser -I ../../lexer -I ../../classes -I ../../literals -I ../../methods
 
 ./a.out
 rm a.out

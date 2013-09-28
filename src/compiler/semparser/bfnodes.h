@@ -28,6 +28,8 @@
 #include <string>
 using namespace std;
 
+class BfScopeNode;
+
 //!
 //! The base class for all Blowfish nodes in the AST
 //!

@@ -26,6 +26,7 @@
 using namespace std;
 
 class BfClass;
+class BfMethod;
 
 class BfObject
 {
