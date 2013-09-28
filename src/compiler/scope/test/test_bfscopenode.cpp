@@ -120,6 +120,19 @@ void given_a_scope_when_it_is_given_a_name_then_it_is_considered_to_be_named(MiT
 	tester.assertTrue(node->isNamed(), "A node with a name is considered named");
 }
 
+void given_a_scope_when_we_add_an_new_variable_to_it_then_we_can_retrieve_that_object_by_that_identifier( MiTester & tester )
+{
+	// Given
+	BfScopeNode * node = new BfScopeNode();
+	BfObject * someObject = new BfObject();
+
+	// When
+	node->addIdentifierAndValue( "anIdent", someObject );
+
+	// Then
+	tester.assertTrue( someObject == node->getObjectByIdentifier( "anIdent" ), "We can access some variable added to a scope" );
+}
+
 int main()
 {
 	MiTester tester = MiTester();

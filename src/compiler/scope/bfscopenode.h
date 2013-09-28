@@ -41,6 +41,8 @@ public:
 	BfScopeNode * getParent() { return parent; }
 	bool containsIdentifier( string ident );
 
+	BfObject * getObjectByIdentifier( string ident );
+
 private:
 	vector<BfScopeNode*> children;
 	BfScopeNode * parent;

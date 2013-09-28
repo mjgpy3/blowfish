@@ -41,7 +41,12 @@ void BfScopeNode::addIdentifierAndValue( string ident, BfObject * value )
 
 bool BfScopeNode::containsIdentifier( string ident )
 {
-	return true;
+	return variables.find( ident ) != variables.end();
+}
+
+BfObject * BfScopeNode::getObjectByIdentifier( string ident )
+{
+	return variables[ ident ];
 }
 
 void BfScopeNode::appendChild(BfScopeNode * n)
