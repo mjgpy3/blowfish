@@ -16,35 +16,24 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "bfmeth.h"
-#include "bftokennames.h"
+#include "bfclass.h"
 
-BfMethod::BfMethod( BfNode * methodBody )
+BfClass * BfObject::getDefiningClass()
 {
-	body = methodBody;
+	return definingClass;
 }
 
-string BfMethod::calculateSigniture( BfNode * node )
+void BfObject::setDefiningClass( BfClass * defClass )
 {
-	string result = node->child(0)->getValue();
+	definingClass = defClass;
+}
 
-	for (int i = 1; i < node->numChildren(); i += 1)
-	{
-		TokenName currentType = node->child( i )->getTypeId();
+BfNumber * BfObject::getNumericValue()
+{
+	return numericValue;
+}
 
-		if (currentType == t_block_begin)
-		{
-			break;
-		}
-		else if (currentType == t_param_ident)
-		{
-			result += getSignitureSeparator() + node->child( i )->getValue();
-		}
-		else
-		{
-			result += getSignitureSeparator() + "a";
-		}
-	}
-
-	return result;
+void BfObject::setNumericValue( BfNumber * number )
+{
+	numericValue = number;
 }

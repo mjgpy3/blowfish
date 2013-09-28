@@ -28,6 +28,11 @@ class BfMethod
 public:
 	static string calculateSigniture( BfNode * node ); 
 	static string getSignitureSeparator() { return "$"; }
+
+	BfMethod( BfNode * methodBody );
+	
+private:
+	BfNode * body;
 };
 
 
