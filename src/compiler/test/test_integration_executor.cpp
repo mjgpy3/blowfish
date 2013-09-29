@@ -137,7 +137,7 @@ void given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_
 void given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier(MiTester & tester)
 {
 	// Given
-	string code = "a := 5\n";
+	string code = "food := 5\n";
         BfLexer lexer = BfLexer();
         AstBuilder builder = AstBuilder();
         BfExecutor executor = BfExecutor();
@@ -150,7 +150,26 @@ void given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that
         executor.executeAst( ast );
 
         // Then
-        tester.assertTrue( executor.currentScope->containsIdentifier( "a" ) , "When assignments happen, the identifier is added to the current scope" );
+        tester.assertTrue( executor.currentScope->containsIdentifier( "food" ) , "When assignments happen, the identifier is added to the current scope" );
+}
+
+void given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name(MiTester & tester)
+{
+	// Given
+	string code = "food := 42\n";
+	BfLexer lexer = BfLexer();
+	AstBuilder builder = AstBuilder();
+	BfExecutor executor = BfExecutor();
+
+	write_temp_bf_file( code );
+
+	// When
+	lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+	// Then
+	tester.assertTrue( 42 == executor.currentScope->getObjectByIdentifier( "food" )->getNumericValue()->getInt() ,"We can retrieve a variable's value from scope by using its name");
 }
 
 int main()
@@ -163,6 +182,7 @@ int main()
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect1( tester );
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect2( tester );
 	given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier( tester );
+	given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name( tester );
 
 	tester.printResults();
 	return 0;
