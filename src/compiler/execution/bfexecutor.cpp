@@ -129,6 +129,17 @@ BfNumber * BfExecutor::executeMathOperator(BfNode * node)
 	{
 		return executeMathOperator( node->child(0) );
 	}
+	else if (node->getTypeId() == t_identifier)
+	{
+		if ( currentScope->containsIdentifier( node->getValue() ) )
+		{
+			return currentScope->getObjectByIdentifier( node->getValue() )->getNumericValue();
+		}
+		else
+		{
+			// TODO: Error here, when looking up an identifier that does not exist
+		}
+	}
 }
 
 void executorError(string message)

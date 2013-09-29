@@ -172,6 +172,27 @@ void given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retriev
 	tester.assertTrue( 42 == executor.currentScope->getObjectByIdentifier( "food" )->getNumericValue()->getInt() ,"We can retrieve a variable's value from scope by using its name");
 }
 
+void given_a_an_assignment_and_then_an_expression_containing_that_assignement_when_we_execute_the_value_is_calculated_correctly(MiTester & tester)
+{
+	// Given
+        string code = 	"answer := 42\n"
+			"two_answers := 2 * answer";
+
+        BfLexer lexer = BfLexer();
+        AstBuilder builder = AstBuilder();
+        BfExecutor executor = BfExecutor();
+
+        write_temp_bf_file( code );
+
+        // When
+        lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+        // Then
+	tester.assertTrue( 84 == executor.currentScope->getObjectByIdentifier( "two_answers" )->getNumericValue()->getInt() ,"Vars can be used to make other vars");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -183,6 +204,7 @@ int main()
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect2( tester );
 	given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier( tester );
 	given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name( tester );
+	given_a_an_assignment_and_then_an_expression_containing_that_assignement_when_we_execute_the_value_is_calculated_correctly( tester );
 
 	tester.printResults();
 	return 0;
