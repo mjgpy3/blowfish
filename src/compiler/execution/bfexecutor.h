@@ -38,6 +38,8 @@ private:
 	vector<BfScopeNode*> scopeStack;
 	BfNode * currentNode;
 	BfNode * astRoot;
+
+	string getIdentifierName( BfNode * node );
 };
 
 void executorError(string message);

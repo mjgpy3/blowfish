@@ -36,6 +36,7 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 	astRoot = astToExecute;
 
 	scopeStack.push_back( astRoot->getScope() );
+	currentScope = astRoot->getScope();
 
 	for (int i = 0; i < astRoot->numChildren(); i += 1)
 	{
@@ -45,7 +46,32 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 		{
 			currentNumber = executeMathOperator( currentNode );
 		}
+		else if ( currentNode->getTypeId() == t_op_assign )
+		{
+			BfObject * value = new BfObject();
+
+			value->setNumericValue(
+				executeMathOperator( currentNode->child( 1 ) ) );
+
+			currentScope->addIdentifierAndValue(
+				getIdentifierName( currentNode->child( 0 ) ),
+                                value );
+		}
 	}
+}
+
+string BfExecutor::getIdentifierName( BfNode * node )
+{
+	if ( node->getTypeId() == t_identifier )
+	{
+		return node->getValue();
+	}
+	else if ( node->numChildren() != 0 )
+	{
+		return getIdentifierName( node->child( node->numChildren()-1 ) );
+	}
+
+	// TODO: Error here, when there is no identifer after a request
 }
 
 BfNumber * BfExecutor::executeMathOperator(BfNode * node)
