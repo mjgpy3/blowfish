@@ -233,6 +233,27 @@ void given_an_assignment_of_a_string_to_a_variable_when_we_execute_it_then_the_s
         tester.assertEqual( "Walt", executor.currentScope->getObjectByIdentifier( "name" )->getStringValue()->getString() ,"Variable's string value can be retrieved");
 }
 
+void given_an_assignment_to_a_type_then_a_reassignment_to_a_different_type_when_we_execute_it_then_the_second_type_holds(MiTester & tester)
+{
+	// Given
+	string code =   "name := 'Walt'\n"
+			"name := 5\n";
+
+        BfLexer lexer = BfLexer();
+        AstBuilder builder = AstBuilder();
+        BfExecutor executor = BfExecutor();
+
+        write_temp_bf_file( code );
+
+        // When
+        lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+        // Then
+        tester.assertEqual( "Number", executor.currentScope->getObjectByIdentifier( "name" )->getTypeName(),"Variables don't really care about type reassignment");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -247,6 +268,7 @@ int main()
 	given_an_assignment_and_then_an_expression_containing_that_assignement_when_we_execute_the_value_is_calculated_correctly( tester );
 	given_an_assignment_of_a_number_to_a_variable_when_we_execute_it_then_the_variables_type_is_number( tester );
 	given_an_assignment_of_a_string_to_a_variable_when_we_execute_it_then_the_string_value_can_be_gotten_by_the_identifier( tester );
+	given_an_assignment_to_a_type_then_a_reassignment_to_a_different_type_when_we_execute_it_then_the_second_type_holds( tester );
 
 	tester.printResults();
 	return 0;
