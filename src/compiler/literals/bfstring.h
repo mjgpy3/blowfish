@@ -16,45 +16,26 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "bfclass.h"
+#ifndef BLOWFISH_STRING
+#define BLOWFISH_STRING
 
-BfClass * BfObject::getDefiningClass()
+#include <string>
+#include "bfliteraltypes.h"
+using namespace std;
+
+class BfStringValue
 {
-	return definingClass;
-}
+public:
+	BfStringValue(string value) { underString = value; }
+        string getString() { return underString; }
+	void setString( string value ) { underString = value; }
+	LiteralType getTypeId()
+        {
+                return type_string;
+        }
 
-void BfObject::setDefiningClass( BfClass * defClass )
-{
-	definingClass = defClass;
-}
+private:
+	string underString;
+};
 
-BfNumber * BfObject::getNumericValue()
-{
-	return numericValue;
-}
-
-void BfObject::setNumericValue( BfNumber * number )
-{
-	numericValue = number;
-}
-
-BfStringValue * BfObject::getStringValue()
-{
-	return stringValue;
-}
-
-void BfObject::setStringValue( BfStringValue * aStringValue)
-{
-	stringValue = aStringValue;
-}
-
-
-string BfObject::getTypeName()
-{
-	return typeName;
-}
-
-void BfObject::setTypeName( string newTypeName )
-{
-	typeName = newTypeName;
-}
+#endif

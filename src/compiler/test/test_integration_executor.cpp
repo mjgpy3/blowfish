@@ -153,7 +153,7 @@ void given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that
         tester.assertTrue( executor.currentScope->containsIdentifier( "food" ) , "When assignments happen, the identifier is added to the current scope" );
 }
 
-void given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name(MiTester & tester)
+void given_a_numeric_assignment_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name(MiTester & tester)
 {
 	// Given
 	string code = "food := 42\n";
@@ -193,7 +193,7 @@ void given_an_assignment_and_then_an_expression_containing_that_assignement_when
 	tester.assertTrue( 84 == executor.currentScope->getObjectByIdentifier( "two_answers" )->getNumericValue()->getInt() ,"Vars can be used to make other vars");
 }
 
-void given_an_assignment_of_a_variable_to_a_number_when_we_execute_it_then_the_variables_type_is_number(MiTester & tester)
+void given_an_assignment_of_a_number_to_a_variable_when_we_execute_it_then_the_variables_type_is_number(MiTester & tester)
 {
 	// Given
 	string code = "variable := 42";
@@ -213,6 +213,26 @@ void given_an_assignment_of_a_variable_to_a_number_when_we_execute_it_then_the_v
         tester.assertEqual( "Number", executor.currentScope->getObjectByIdentifier( "variable" )->getTypeName() ,"Vars assigned to numeric literals can be found to be of type: Number");
 }
 
+void given_an_assignment_of_a_string_to_a_variable_when_we_execute_it_then_the_string_value_can_be_gotten_by_the_identifier(MiTester & tester)
+{
+	// Given
+	string code = "name := 'Walt'";
+
+        BfLexer lexer = BfLexer();
+        AstBuilder builder = AstBuilder();
+        BfExecutor executor = BfExecutor();
+
+        write_temp_bf_file( code );
+
+        // When
+        lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+        // Then
+        tester.assertEqual( "Walt", executor.currentScope->getObjectByIdentifier( "name" )->getStringValue()->getString() ,"Variable's string value can be retrieved");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -223,9 +243,10 @@ int main()
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect1( tester );
 	given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_we_would_expect2( tester );
 	given_an_assignment_when_we_execute_it_then_the_current_scope_contains_that_identifier( tester );
-	given_a_numeric_assignemnt_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name( tester );
+	given_a_numeric_assignment_when_we_execute_it_then_the_value_can_be_retrieved_by_providing_the_variable_name( tester );
 	given_an_assignment_and_then_an_expression_containing_that_assignement_when_we_execute_the_value_is_calculated_correctly( tester );
-	given_an_assignment_of_a_variable_to_a_number_when_we_execute_it_then_the_variables_type_is_number( tester );
+	given_an_assignment_of_a_number_to_a_variable_when_we_execute_it_then_the_variables_type_is_number( tester );
+	given_an_assignment_of_a_string_to_a_variable_when_we_execute_it_then_the_string_value_can_be_gotten_by_the_identifier( tester );
 
 	tester.printResults();
 	return 0;

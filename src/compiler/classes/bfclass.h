@@ -23,6 +23,7 @@
 #include <string>
 #include "bfmeth.h"
 #include "bfnumber.h"
+#include "bfstring.h"
 using namespace std;
 
 class BfClass;
@@ -36,12 +37,15 @@ public:
 
 	BfNumber * getNumericValue();
 	void setNumericValue( BfNumber * number );
+	BfStringValue * getStringValue();
+	void setStringValue( BfStringValue * aStringValue);
 
 	string getTypeName();
 	void setTypeName( string newTypeName );
 private:
 	BfClass * definingClass;
 	BfNumber * numericValue;
+	BfStringValue * stringValue;
 	string typeName;
 };
 

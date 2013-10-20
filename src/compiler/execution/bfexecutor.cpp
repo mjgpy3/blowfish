@@ -50,10 +50,18 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 		{
 			BfObject * value = new BfObject();
 
-			value->setTypeName( "Number" );
+			if ( operatesOnNumbers( currentNode->child( 1 ) ) )
+			{
+				value->setTypeName( "Number" );
+				value->setNumericValue(
+					executeMathOperator( currentNode->child( 1 ) ) );
+			}
+			else 
+			{
+				value->setTypeName( "String" );
+				value->setStringValue(new BfStringValue( currentNode->child( 1 )->getValue()));
+			}
 
-			value->setNumericValue(
-				executeMathOperator( currentNode->child( 1 ) ) );
 			currentScope->addIdentifierAndValue(
 				getIdentifierName( currentNode->child( 0 ) ),
                                 value );

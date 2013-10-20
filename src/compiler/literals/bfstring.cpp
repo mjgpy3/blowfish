@@ -16,45 +16,4 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "bfclass.h"
-
-BfClass * BfObject::getDefiningClass()
-{
-	return definingClass;
-}
-
-void BfObject::setDefiningClass( BfClass * defClass )
-{
-	definingClass = defClass;
-}
-
-BfNumber * BfObject::getNumericValue()
-{
-	return numericValue;
-}
-
-void BfObject::setNumericValue( BfNumber * number )
-{
-	numericValue = number;
-}
-
-BfStringValue * BfObject::getStringValue()
-{
-	return stringValue;
-}
-
-void BfObject::setStringValue( BfStringValue * aStringValue)
-{
-	stringValue = aStringValue;
-}
-
-
-string BfObject::getTypeName()
-{
-	return typeName;
-}
-
-void BfObject::setTypeName( string newTypeName )
-{
-	typeName = newTypeName;
-}
+#include "bfstring.h"
