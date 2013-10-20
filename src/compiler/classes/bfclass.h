@@ -36,9 +36,13 @@ public:
 
 	BfNumber * getNumericValue();
 	void setNumericValue( BfNumber * number );
+
+	string getTypeName();
+	void setTypeName( string newTypeName );
 private:
 	BfClass * definingClass;
 	BfNumber * numericValue;
+	string typeName;
 };
 
 class BfClass

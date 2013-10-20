@@ -25,12 +25,14 @@
 
 from sys import argv
 
+# Represents which section of the token file we are looking at
 PARSE_MODES = {
     "none": 0,
     "section_helpers:": 1,
     "section_tokens:": 2
 }
 
+# Things that can be said about a given token
 OPTIONS = [
     "save_text",
     "ignore",
@@ -50,6 +52,9 @@ class Token(object):
                self.match + " (" + ", ".join(self.options) + ")" + '"'
 
 def validate_args():
+    """
+        Makes sure that the correct number of arguments are provided
+    """
     if len(argv) < 2:
         usage()
         exit()

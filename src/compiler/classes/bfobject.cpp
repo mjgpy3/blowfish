@@ -37,3 +37,13 @@ void BfObject::setNumericValue( BfNumber * number )
 {
 	numericValue = number;
 }
+
+string BfObject::getTypeName()
+{
+	return typeName;
+}
+
+void BfObject::setTypeName( string newTypeName )
+{
+	typeName = newTypeName;
+}
