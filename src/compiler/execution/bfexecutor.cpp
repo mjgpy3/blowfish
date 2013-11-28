@@ -85,6 +85,9 @@ string BfExecutor::getIdentifierName( BfNode * node )
 
 BfNumber * BfExecutor::executeMathOperator(BfNode * node)
 {
+	// TODO: Create a builder that will construct numeric BfObjects
+	// TODO: Make this method operate on BfObjects
+	// TODO: Use special method lookups (*METH_NAME)
 	if (node->getTypeId() == t_integer)
 	{
 		return new BfIntegerNumber(node->getValue());

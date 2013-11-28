@@ -18,6 +18,7 @@
 
 #include "bfmeth.h"
 #include "bftokennames.h"
+#include "specialmethodnames.h"
 
 BfMethod::BfMethod( BfNode * methodBody )
 {
