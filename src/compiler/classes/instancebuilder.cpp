@@ -32,6 +32,7 @@ BfObject * InstanceBuilder::getBfObjectWithNumber( BfNumber * number )
 {
 	BfObject * result = new BfObject();
         result->setNumericValue( number );
+	// TODO: Create a namespace containing "primitive" classes
 	result->setDefiningClass( new BfClass( "Number" ) );
         return result;
 }
