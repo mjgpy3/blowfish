@@ -16,22 +16,16 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "instancebuilder.h"
-#include "bfprims.h"
+#ifndef BLOWFISH_PRIMITIVE_CLASSES
+#define BLOWFISH_PRIMITIVE_CLASSES
 
-BfObject * InstanceBuilder::buildInteger( string numericValue )
-{
-	return getBfObjectWithNumber( new BfIntegerNumber( numericValue ) );
-}
+#include <string>
+#include "bfclass.h"
+using namespace std;
 
-BfObject * InstanceBuilder::buildFloat( string numericValue )
+namespace PrimitiveClasses
 {
-	return getBfObjectWithNumber( new BfFloatNumber( numericValue ) );
-}
+	BfClass Number("Number");
+};
 
-BfObject * InstanceBuilder::getBfObjectWithNumber( BfNumber * number )
-{
-	BfObject * result = PrimitiveClasses::Number.getNewInstance();
-        result->setNumericValue( number );
-        return result;
-}
+#endif

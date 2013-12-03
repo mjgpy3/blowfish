@@ -16,22 +16,6 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "instancebuilder.h"
 #include "bfprims.h"
 
-BfObject * InstanceBuilder::buildInteger( string numericValue )
-{
-	return getBfObjectWithNumber( new BfIntegerNumber( numericValue ) );
-}
-
-BfObject * InstanceBuilder::buildFloat( string numericValue )
-{
-	return getBfObjectWithNumber( new BfFloatNumber( numericValue ) );
-}
-
-BfObject * InstanceBuilder::getBfObjectWithNumber( BfNumber * number )
-{
-	BfObject * result = PrimitiveClasses::Number.getNewInstance();
-        result->setNumericValue( number );
-        return result;
-}
+PrimitiveClasses::Number = BfClass( "Number" );

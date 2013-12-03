@@ -68,7 +68,19 @@ void given_a_built_float_when_its_defining_class_is_accessed_then_that_class_nam
         BfClass * definingClass = floatingNumber->getDefiningClass();
 
         // Then
-        tester.assertEqual( definingClass->getTypeName(), "Number", "When instantiating an integer, its type name is Number" );
+        tester.assertEqual( definingClass->getTypeName(), "Number", "When instantiating an float, its type name is Number" );
+}
+
+void given_an_instantiated_integer_when_an_instantiated_float_is_built_then_their_pointers_point_to_the_same_number_class( MiTester & tester )
+{
+	// Given
+	BfObject * anInteger = (new InstanceBuilder)->buildInteger( "42" );
+
+	// When
+	BfObject * aFloat = (new InstanceBuilder)->buildFloat( "523.23" );
+
+	// Then
+	tester.assertTrue( anInteger->getDefiningClass() == aFloat->getDefiningClass(), "Ints and Floats have the same base class" );
 }
 
 int main()
@@ -79,6 +91,7 @@ int main()
 	given_a_float_in_string_form_when_a_Float_instance_is_generated_from_it_then_that_instances_float_value_is_the_float_defined_in_the_string(tester);
 	given_a_built_integer_when_its_defining_class_is_accessed_then_that_class_name_is_Number(tester);
 	given_a_built_float_when_its_defining_class_is_accessed_then_that_class_name_is_Number(tester);
+	given_an_instantiated_integer_when_an_instantiated_float_is_built_then_their_pointers_point_to_the_same_number_class( tester );
 
 	tester.printResults();
 	return 0;
