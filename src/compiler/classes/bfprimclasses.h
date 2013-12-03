@@ -19,13 +19,8 @@
 #ifndef BLOWFISH_PRIMITIVE_CLASSES
 #define BLOWFISH_PRIMITIVE_CLASSES
 
-#include <string>
 #include "bfclass.h"
-using namespace std;
 
-namespace PrimitiveClasses
-{
-	BfClass Number("Number");
-};
+BfClass * getNumberClass();
 
 #endif

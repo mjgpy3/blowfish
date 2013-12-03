@@ -17,7 +17,7 @@
 */
 
 #include "instancebuilder.h"
-#include "bfprims.h"
+#include "bfprimclasses.h"
 
 BfObject * InstanceBuilder::buildInteger( string numericValue )
 {
@@ -31,7 +31,7 @@ BfObject * InstanceBuilder::buildFloat( string numericValue )
 
 BfObject * InstanceBuilder::getBfObjectWithNumber( BfNumber * number )
 {
-	BfObject * result = PrimitiveClasses::Number.getNewInstance();
+	BfObject * result = getNumberClass()->getNewInstance();
         result->setNumericValue( number );
         return result;
 }

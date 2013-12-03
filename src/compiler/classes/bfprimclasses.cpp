@@ -16,6 +16,18 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "bfprims.h"
+#include "bfprimclasses.h"
 
-PrimitiveClasses::Number = BfClass( "Number" );
+#ifndef BLOWFISH_PRIMITIVE_CLASS_DETAILS
+#define BLOWFISH_PRIMITIVE_CLASS_DETAILS
+
+BfClass NUMBER_CLASS( "Number" );
+
+#endif
+
+extern BfClass Number;
+
+BfClass * getNumberClass()
+{
+	return &NUMBER_CLASS;
+}
