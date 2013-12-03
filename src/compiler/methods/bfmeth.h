@@ -21,9 +21,11 @@
 
 #include <string>
 #include "bfnodes.h"
+#include "bfclass.h"
 using namespace std;
 
 class BfNode;
+class BfObject;
 
 class BfMethod
 {
@@ -32,9 +34,15 @@ public:
 	static string getSignitureSeparator() { return "$"; }
 
 	BfMethod( BfNode * methodBody );
+	// TODO: "callable" should accept BfParams (whatever those look like)
+	BfMethod( BfObject* (*callable)(void) );
+
+	// TODO: Add a "provide parameters" method
+	// TODO: Add a "call" method
 	
 private:
 	BfNode * body;
+	BfObject* (*apiFunction)(void);
 };
 
 

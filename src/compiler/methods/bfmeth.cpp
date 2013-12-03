@@ -25,6 +25,11 @@ BfMethod::BfMethod( BfNode * methodBody )
 	body = methodBody;
 }
 
+BfMethod::BfMethod( BfObject* (*callable)(void) )
+{
+	apiFunction = callable;
+}
+
 string BfMethod::calculateSigniture( BfNode * node )
 {
 	string result = node->child(0)->getValue();
