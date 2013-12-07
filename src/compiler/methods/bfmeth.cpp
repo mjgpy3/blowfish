@@ -55,7 +55,7 @@ string BfMethod::calculateSigniture( BfNode * node )
 	return result;
 }
 
-void provideParams( BfParams * someParams )
+void BfMethod::provideParams( BfParams * someParams )
 {
 	params = someParams;
 }
