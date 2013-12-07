@@ -65,6 +65,17 @@ void given_BfParams_with_a_param_when_another_param_is_added_then_there_are_two(
 	// Then
 	tester.assertTrue( 2 == params.count(), "1+1=2 haha" );
 }
+void given_BfParams_when_three_BfObjects_are_added_to_it_using_fluent_syntax_then_there_are_three(MiTester & tester)
+{
+	// Given
+	BfParams * params = new BfParams();
+
+	// When
+	params->addParam( new BfObject() )->addParam( new BfObject() )->addParam( new BfObject() );
+
+	// Then
+	tester.assertTrue( 3 == params->count(), "Fluent syntax works for adding params");
+}
 
 int main()
 {
@@ -73,6 +84,7 @@ int main()
 	given_BfParams_when_a_param_is_added_to_the_collection_then_there_is_one_param( tester );
 	given_BfParams_when_a_param_is_added_to_the_collection_then_the_first_param_gotten_is_that_param( tester );
 	given_BfParams_with_a_param_when_another_param_is_added_then_there_are_two( tester );
+	given_BfParams_when_three_BfObjects_are_added_to_it_using_fluent_syntax_then_there_are_three( tester );
 
 	tester.printResults();
 	return 0;

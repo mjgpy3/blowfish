@@ -25,7 +25,7 @@ BfMethod::BfMethod( BfNode * methodBody )
 	body = methodBody;
 }
 
-BfMethod::BfMethod( BfObject* (*callable)(void) )
+BfMethod::BfMethod( BfObject* (*callable)(BfParams) )
 {
 	apiFunction = callable;
 }
@@ -53,4 +53,9 @@ string BfMethod::calculateSigniture( BfNode * node )
 	}
 
 	return result;
+}
+
+void provideParams( BfParams * someParams )
+{
+	params = someParams;
 }

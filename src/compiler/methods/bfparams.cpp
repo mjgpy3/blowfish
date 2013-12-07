@@ -23,9 +23,10 @@ BfObject * BfParams::getParam( int index )
 	return params[index];
 }
 
-void BfParams::addParam( BfObject * param )
+BfParams * BfParams::addParam( BfObject * param )
 {
 	params.push_back( param );
+	return this;
 }
 
 int BfParams::count()

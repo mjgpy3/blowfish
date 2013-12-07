@@ -23,11 +23,14 @@
 #include "bfclass.h"
 using namespace std;
 
+class BfClass;
+class BfObject;
+
 class BfParams
 {
 public:
 	BfObject * getParam( int index );
-	void addParam( BfObject * param );
+	BfParams * addParam( BfObject * param );
 	int count();
 
 private:

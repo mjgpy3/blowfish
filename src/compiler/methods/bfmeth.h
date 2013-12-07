@@ -20,12 +20,14 @@
 #define BLOWFISH_METHOD
 
 #include <string>
-#include "bfnodes.h"
 #include "bfclass.h"
+#include "bfnodes.h"
+#include "bfparams.h"
 using namespace std;
 
 class BfNode;
 class BfObject;
+class BfParams;
 
 class BfMethod
 {
@@ -34,16 +36,18 @@ public:
 	static string getSignitureSeparator() { return "$"; }
 
 	BfMethod( BfNode * methodBody );
-	// TODO: "callable" should accept BfParams (whatever those look like)
-	BfMethod( BfObject* (*callable)(void) );
-	BfMethod( void (*callable)(void) );
+	BfMethod( BfObject* (*callable)(BfParams) );
+	BfMethod( void (*callable)(BfParams) );
+
+	void provideParams( BfParams * someParams );
 
 	// TODO: Add a "provide parameters" method
 	// TODO: Add a "call" method
 	
 private:
 	BfNode * body;
-	BfObject* (*apiFunction)(void);
+	BfObject* (*apiFunction)(BfParams);
+	BfParams * params;
 };
 
 
