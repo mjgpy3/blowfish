@@ -254,6 +254,26 @@ void given_an_assignment_to_a_type_then_a_reassignment_to_a_different_type_when_
         tester.assertEqual( "Number", executor.currentScope->getObjectByIdentifier( "name" )->getTypeName(),"Variables don't really care about type reassignment");
 }
 
+void given_some_code_describing_a_show_method_being_called_on_a_number_when_that_code_is_executed_then_the_resultant_object_has_a_type_of_string(MiTester & tester)
+{
+	// Given
+        string code =   "a_string := 42.show\n";
+
+        BfLexer lexer = BfLexer();
+        AstBuilder builder = AstBuilder();
+        BfExecutor executor = BfExecutor();
+
+        write_temp_bf_file( code );
+
+        // When
+        lexer.parseTokensFromFile( temp_file_name );
+        BfNode * ast = builder.buildAst( lexer.getTokens() );
+        executor.executeAst( ast );
+
+        // Then
+        tester.assertEqual( "String", executor.currentScope->getObjectByIdentifier( "a_string" )->getTypeName(),"Calling a type converting method works");
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -269,6 +289,7 @@ int main()
 	given_an_assignment_of_a_number_to_a_variable_when_we_execute_it_then_the_variables_type_is_number( tester );
 	given_an_assignment_of_a_string_to_a_variable_when_we_execute_it_then_the_string_value_can_be_gotten_by_the_identifier( tester );
 	given_an_assignment_to_a_type_then_a_reassignment_to_a_different_type_when_we_execute_it_then_the_second_type_holds( tester );
+	given_some_code_describing_a_show_method_being_called_on_a_number_when_that_code_is_executed_then_the_resultant_object_has_a_type_of_string( tester );
 
 	tester.printResults();
 	return 0;
