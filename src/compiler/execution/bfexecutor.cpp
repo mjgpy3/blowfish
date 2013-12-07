@@ -76,7 +76,7 @@ string BfExecutor::getIdentifierName( BfNode * node )
 
 BfObject * BfExecutor::executeOperator(BfNode * node)
 {
-	cout << "Executing " << node->toString() << endl;
+	//cout << "Executing " << node->toString() << endl;
 
 	if (node->getTypeId() == t_integer)
 	{

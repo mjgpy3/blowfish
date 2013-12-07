@@ -34,16 +34,17 @@ ellipsis     -> '..'
 param_ident -> {ident}':'
 [save_text]
 
-integer      -> {int}
-[save_text]
-
-neg_integer  -> '-'{int}
-[save_text]
-
 neg_float    -> '-'{flt}
 [save_text]
 
 float        -> {flt}
+[save_text]
+
+
+integer      -> {int}
+[save_text]
+
+neg_integer  -> '-'{int}
 [save_text]
 
 string       -> ('"'.*'"')|('\''.*'\'')

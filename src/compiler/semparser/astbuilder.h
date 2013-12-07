@@ -44,6 +44,7 @@ public:
 	void currentChildIsChildOf(BfNode * n);
 	void currentChildrenAreChildrenOf(BfNode * n, TokenName until);
 	void currentBlockDefinesNewScope();
+	void fixFloatErrors(vector<FoundToken> tokens, int i);
 
 private:
 	BfNode * root;
@@ -53,6 +54,7 @@ private:
 	vector<BfScopeNode*> scopeStack;
 	BfScopeNode * nextScope;
 	bool nextIdentifierNamesScope;
+	bool isMissInformedFloat(vector<FoundToken> tokens, int i);
 };
 
 #endif

@@ -41,10 +41,36 @@ AstBuilder::AstBuilder()
 	nextIdentifierNamesScope = false;
 }
 
+void AstBuilder::fixFloatErrors(vector<FoundToken> tokens, int i)
+{
+	Token newToken;
+	newToken.type = tokens[i].getTokenValue() == t_float ? t_integer : t_neg_integer;
+
+	string value  = tokens[i].getValue().substr(0, tokens[i].getValue().length()-1);
+	
+	FoundToken newIntToken = FoundToken(newToken, value);
+
+	buildNode(newIntToken);
+}
+
+bool AstBuilder::isMissInformedFloat(vector<FoundToken> tokens, int i)
+{
+	return (tokens[i].getTokenValue() == t_neg_float || tokens[i].getTokenValue() == t_float) &&
+		tokens.size() > i+1 &&
+		tokens[i+1].getTokenValue() == t_identifier &&
+		*(tokens[i].getValue()).rbegin() == '.';
+}
+
 BfNode * AstBuilder::buildAst(vector<FoundToken> tokens)
 {
 	for (int i = 0; i < tokens.size(); i += 1)
 	{
+		if (isMissInformedFloat(tokens, i))
+		{
+			fixFloatErrors(tokens, i);
+			i += 1;
+		}
+
 		buildNode(tokens[i]);
 	}
 
