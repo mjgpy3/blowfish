@@ -36,17 +36,16 @@ public:
 	static string getSignitureSeparator() { return "$"; }
 
 	BfMethod( BfNode * methodBody );
-	BfMethod( BfObject* (*callable)(BfParams) );
-	BfMethod( void (*callable)(BfParams) );
+	BfMethod( BfObject * (*callable)(BfParams*) );
 
-	void provideParams( BfParams * someParams );
+	BfMethod * provideParams( BfParams * someParams );
+	bool hasParams();
 
-	// TODO: Add a "provide parameters" method
-	// TODO: Add a "call" method
-	
+	BfObject * call();
+
 private:
 	BfNode * body;
-	BfObject* (*apiFunction)(BfParams);
+	BfObject* (*apiFunction)(BfParams*);
 	BfParams * params;
 };
 

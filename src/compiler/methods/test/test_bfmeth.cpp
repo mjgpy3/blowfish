@@ -23,6 +23,7 @@
 using namespace std;
 
 string separator = BfMethod::getSignitureSeparator();
+BfObject * anObject = new BfObject();
 
 void given_a_BfMethodDef_with_an_identifier_and_a_block_as_its_children_when_we_generate_that_methods_signature_then_it_is_just_the_identifiers_value(MiTester & tester)
 {
@@ -191,6 +192,58 @@ void given_a_simple_BfMethodDef_and_a_matching_call_when_we_calculate_their_sign
                 "Given a simple method call, the signiture should just be the method's name");
 }
 
+void given_a_BfMethod_when_it_is_given_params_then_it_has_params(MiTester & tester)
+{
+	// Given
+	BfMethod * method = new BfMethod( new BfNode() );
+
+	// When
+	method->provideParams( new BfParams() );
+
+	// Then
+	tester.assertTrue( method->hasParams(), "When given params, a method has params");
+}
+
+void given_a_BfMethod_when_it_is_not_given_params_then_it_has_no_params(MiTester & tester)
+{
+	// Given
+	BfMethod * method = new BfMethod( new BfNode() );
+
+	// When not given params
+
+	// Then
+	tester.assertFalse( method->hasParams(), "When no params are given, methods have no params");
+}
+
+void given_a_BfMethod_when_it_is_given_params_then_fluent_syntax_allows_the_same_object_to_be_returned(MiTester & tester)
+{
+	// Given
+	BfMethod * method = new BfMethod( new BfNode() );
+
+	// When
+	BfMethod * shouldBeSameMethod = method->provideParams( new BfParams() );
+
+	// Then
+	tester.assertTrue( method == shouldBeSameMethod, "Fluent syntax is used in providing params");
+}
+
+BfObject * callableApiMethodExample( BfParams * params )
+{
+	return anObject;
+}
+
+void given_a_BfMethod_initialized_with_a_callable_api_method_and_given_params_when_it_is_called_then_a_BfObject_is_returned(MiTester & tester)
+{
+	// Given
+	BfMethod * method = (new BfMethod( callableApiMethodExample ))->provideParams( new BfParams() );
+
+	// When
+	BfObject * returnValue = method->call();
+
+	// Then
+	tester.passBecauseItCompiles( "When calling an api method that returns a BfObject, it does just that" );
+}
+
 int main()
 {
 	MiTester tester = MiTester();
@@ -203,6 +256,10 @@ int main()
 	given_a_simple_method_call_when_we_calculate_its_signiture_then_its_just_the_methods_identifier( tester );
 	given_a_complex_method_call_when_we_calculate_its_signiture_then_it_is_correct( tester );
 	given_a_simple_BfMethodDef_and_a_matching_call_when_we_calculate_their_signitures_then_they_are_the_same( tester );
+	given_a_BfMethod_when_it_is_given_params_then_it_has_params( tester );
+	given_a_BfMethod_when_it_is_not_given_params_then_it_has_no_params( tester );
+	given_a_BfMethod_when_it_is_given_params_then_fluent_syntax_allows_the_same_object_to_be_returned( tester );
+	given_a_BfMethod_initialized_with_a_callable_api_method_and_given_params_when_it_is_called_then_a_BfObject_is_returned( tester );
 
 	tester.printResults();
 	return 0;

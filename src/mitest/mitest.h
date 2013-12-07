@@ -29,6 +29,7 @@ public:
 	void assertEqual(string a, string b, string message);
         void assertTrue(bool a, string message);
 	void assertFalse(bool a, string message);
+	void passBecauseItCompiles(string message);
         void printResults();
 private:
 	int numTestsRun;

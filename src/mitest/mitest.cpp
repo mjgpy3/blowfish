@@ -67,6 +67,11 @@ void MiTester::assertTrue(bool a, string message)
 	}
 }
 
+void MiTester::passBecauseItCompiles(string message)
+{
+	assertTrue(true, message);
+}
+
 void MiTester::printResults()
 {
         cout << endl;

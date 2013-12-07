@@ -23,11 +23,14 @@
 BfMethod::BfMethod( BfNode * methodBody )
 {
 	body = methodBody;
+	apiFunction = NULL;
+	params = NULL;
 }
 
-BfMethod::BfMethod( BfObject* (*callable)(BfParams) )
+BfMethod::BfMethod( BfObject * (*callable)(BfParams*) )
 {
 	apiFunction = callable;
+	params = NULL;
 }
 
 string BfMethod::calculateSigniture( BfNode * node )
@@ -55,7 +58,22 @@ string BfMethod::calculateSigniture( BfNode * node )
 	return result;
 }
 
-void BfMethod::provideParams( BfParams * someParams )
+BfMethod * BfMethod::provideParams( BfParams * someParams )
 {
 	params = someParams;
+	return this;
+}
+
+bool BfMethod::hasParams()
+{
+	return params;
+}
+
+BfObject * BfMethod::call()
+{
+	if (apiFunction != NULL)
+	{
+		return apiFunction( params );
+	}
+	// TODO: Code here to execute a method body
 }
