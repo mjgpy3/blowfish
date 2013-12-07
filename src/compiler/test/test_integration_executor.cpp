@@ -130,8 +130,6 @@ void given_a_complex_math_expression_when_we_execute_it_then_the_result_is_what_
         BfNode * ast = builder.buildAst( lexer.getTokens() );
         executor.executeAst( ast );
 
-	cout << endl << ast->toString() << endl;
-
         // Then
         tester.assertTrue( 3 == executor.currentNumber->getInt(), "3 == (-(5%3)^2 + 7*3 - 6) / 5" );
 }
