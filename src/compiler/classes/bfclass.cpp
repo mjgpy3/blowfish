@@ -21,6 +21,7 @@
 BfClass::BfClass( string name )
 {
 	typeName = name;
+	selfObject = NULL;
 }
 
 void BfClass::addClassVariable( string ident, BfObject * variable )
@@ -60,4 +61,20 @@ BfObject * BfClass::getNewInstance()
 	anObject->setDefiningClass( this );
 
 	return anObject;
+}
+
+BfObject * BfClass::callMethod( string methodName, BfParams * params )
+{
+	if (selfObject == NULL)
+	{
+		return methods[methodName]->provideParams(params)->call();
+	}
+
+	return methods[methodName]->provideParams(params->selfAs( selfObject ))->call();
+}
+
+BfClass * BfClass::provideSelf( BfObject * self )
+{
+	selfObject = self;
+	return this;
 }

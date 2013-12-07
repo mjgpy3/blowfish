@@ -51,7 +51,7 @@ void BfObject::setStringValue( BfStringValue * aStringValue)
 
 string BfObject::getTypeName()
 {
-	return typeName;
+	return getDefiningClass()->getTypeName();
 }
 
 void BfObject::setTypeName( string newTypeName )

@@ -19,7 +19,7 @@
 #ifndef BLOWFISH_PARAMETERS
 #define BLOWFISH_PARAMETERS
 
-#include <vector>
+#include <deque>
 #include "bfclass.h"
 using namespace std;
 
@@ -31,10 +31,11 @@ class BfParams
 public:
 	BfObject * getParam( int index );
 	BfParams * addParam( BfObject * param );
+	BfParams * selfAs( BfObject * self );
 	int count();
 
 private:
-	vector<BfObject*> params;
+	deque<BfObject*> params;
 };
 
 #endif

@@ -19,9 +19,12 @@
 #ifndef BLOWFISH_EXECUTOR
 #define BLOWFISH_EXECUTOR
 
+#include "bfclass.h"
 #include "bfnodes.h"
 #include "bfnumber.h"
+#include "bfparams.h"
 #include "bfscopenode.h"
+#include "instancebuilder.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -32,12 +35,14 @@ public:
 	void executeAst(BfNode * astToExecute);
 	BfNumber * currentNumber;
 	BfScopeNode * currentScope;
+	BfObject * tryPerformCall(BfObject * obj, string methodName, BfParams * params);
 
 private:
-	BfNumber * executeMathOperator(BfNode * node);
+	BfObject * executeOperator(BfNode * node);
 	vector<BfScopeNode*> scopeStack;
 	BfNode * currentNode;
 	BfNode * astRoot;
+	InstanceBuilder * instanceBuilder;
 
 	string getIdentifierName( BfNode * node );
 };

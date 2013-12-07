@@ -23,6 +23,7 @@
 #include <string>
 #include "bfmeth.h"
 #include "bfnumber.h"
+#include "bfparams.h"
 #include "bfstring.h"
 using namespace std;
 
@@ -64,6 +65,8 @@ public:
 	string getTypeName();
 
 	BfObject * getNewInstance();
+	BfObject * callMethod( string methodName, BfParams * params );
+	BfClass * provideSelf( BfObject * self );
 
 private:
 	map<string, BfObject*> variables;
@@ -71,6 +74,7 @@ private:
 	map<string, BfClass*> parents;
 
 	string typeName;
+	BfObject * selfObject;
 };
 
 #endif

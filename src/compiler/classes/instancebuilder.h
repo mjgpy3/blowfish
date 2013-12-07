@@ -28,7 +28,7 @@ class InstanceBuilder
 public:
 	BfObject * buildInteger( string numericValue );
 	BfObject * buildFloat( string numericValue );
-	static BfClass * numberClass;
+	BfObject * buildString( string stringValue );
 private:
 	BfObject * getBfObjectWithNumber( BfNumber * number );
 };

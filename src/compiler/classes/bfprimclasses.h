@@ -22,5 +22,6 @@
 #include "bfclass.h"
 
 BfClass * getNumberClass();
+BfClass * getStringClass();
 
 #endif

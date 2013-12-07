@@ -33,3 +33,9 @@ int BfParams::count()
 {
 	return params.size();
 }
+
+BfParams * BfParams::selfAs( BfObject * self )
+{
+	params.push_front( self );
+	return this;
+}

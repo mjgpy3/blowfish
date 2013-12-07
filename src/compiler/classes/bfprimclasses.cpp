@@ -24,9 +24,19 @@ using namespace std;
 #ifndef BLOWFISH_PRIMITIVE_CLASS_DETAILS
 #define BLOWFISH_PRIMITIVE_CLASS_DETAILS
 
+// Blowfish string class
+BfClass * STRING_CLASS = new BfClass( "String" );
+
+void defineStringClass()
+{
+}
+
+// Blowfish number class
+BfClass * NUMBER_CLASS = new BfClass( "Number" );
+
 BfObject * numericMathOperation( BfNumber * (*mathOp)(BfNumber*, BfNumber*), BfObject * op1, BfObject * op2 )
 {
-	BfObject * result = new BfObject();
+	BfObject * result = NUMBER_CLASS->getNewInstance();
 
         result->setNumericValue(
                 mathOp(
@@ -37,7 +47,7 @@ BfObject * numericMathOperation( BfNumber * (*mathOp)(BfNumber*, BfNumber*), BfO
 }
 
 BfObject * numberClassAdd( BfParams * params )
-{
+{	
 	return numericMathOperation( add, params->getParam( 0 ), params->getParam( 1 ) );
 }
 BfObject * numberClassSubtract( BfParams * params )
@@ -62,15 +72,12 @@ BfObject * numberClassPower( BfParams * params )
 }
 BfObject * numberClassNegate( BfParams * params )
 {
-	BfObject * result = new BfObject();
+	BfObject * result = NUMBER_CLASS->getNewInstance();
 	
 	result->setNumericValue( negateNum( params->getParam( 0 )->getNumericValue() ) );
 
 	return result;
 }
-
-// Blowfish number class
-BfClass * NUMBER_CLASS = new BfClass( "Number" );
 
 void defineNumberClass()
 {
@@ -84,6 +91,7 @@ void defineNumberClass()
 }
 
 bool NUMBER_DEFINED = false;
+bool STRING_DEFINED = false;
 
 #endif
 
@@ -95,4 +103,14 @@ BfClass * getNumberClass()
 		NUMBER_DEFINED = true;
 	}
 	return NUMBER_CLASS;
+}
+
+BfClass * getStringClass()
+{
+	if (!STRING_DEFINED)
+	{
+		defineStringClass();
+		STRING_DEFINED = true;
+	}
+	return STRING_CLASS;
 }

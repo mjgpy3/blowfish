@@ -29,6 +29,15 @@ BfObject * InstanceBuilder::buildFloat( string numericValue )
 	return getBfObjectWithNumber( new BfFloatNumber( numericValue ) );
 }
 
+BfObject * InstanceBuilder::buildString( string stringValue )
+{
+	BfObject * result = getStringClass()->getNewInstance();
+	
+	result->setStringValue( new BfStringValue( stringValue ) );
+
+	return result;
+}
+
 BfObject * InstanceBuilder::getBfObjectWithNumber( BfNumber * number )
 {
 	BfObject * result = getNumberClass()->getNewInstance();

@@ -16,10 +16,12 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include "bfclass.h"
 #include "bfexecutor.h"
 #include "bfnodechecker.h"
 #include "bfnodes.h"
 #include "bfscopenode.h"
+#include "specialmethodnames.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -38,33 +40,22 @@ void BfExecutor::executeAst(BfNode * astToExecute)
 	scopeStack.push_back( astRoot->getScope() );
 	currentScope = astRoot->getScope();
 
+	instanceBuilder = new InstanceBuilder();
+
 	for (int i = 0; i < astRoot->numChildren(); i += 1)
 	{
 		currentNode = astRoot->child( i );
 
 		if ( operatesOnNumbers( currentNode ) )
 		{
-			currentNumber = executeMathOperator( currentNode );
+			currentNumber = executeOperator( currentNode )->getNumericValue();
 		}
 		else if ( currentNode->getTypeId() == t_op_assign )
 		{
-			BfObject * value = new BfObject();
-
-			if ( operatesOnNumbers( currentNode->child( 1 ) ) )
-			{
-				value->setTypeName( "Number" );
-				value->setNumericValue(
-					executeMathOperator( currentNode->child( 1 ) ) );
-			}
-			else 
-			{
-				value->setTypeName( "String" );
-				value->setStringValue(new BfStringValue( currentNode->child( 1 )->getValue()));
-			}
-
+			BfObject * result = executeOperator( currentNode->child( 1 ) );
 			currentScope->addIdentifierAndValue(
 				getIdentifierName( currentNode->child( 0 ) ),
-                                value );
+                                executeOperator( currentNode->child( 1 ) ));
 		}
 	}
 }
@@ -83,75 +74,97 @@ string BfExecutor::getIdentifierName( BfNode * node )
 	// TODO: Error here, when there is no identifer after a request
 }
 
-BfNumber * BfExecutor::executeMathOperator(BfNode * node)
+BfObject * BfExecutor::executeOperator(BfNode * node)
 {
-	// TODO: Create a builder that will construct numeric BfObjects
-	// TODO: Make this method operate on BfObjects
-	// TODO: Use special method lookups (*METH_NAME)
 	if (node->getTypeId() == t_integer)
 	{
-		return new BfIntegerNumber(node->getValue());
+		return instanceBuilder->buildInteger( node->getValue() );
 	}
 	else if (node->getTypeId() == t_float)
 	{
-		return new BfFloatNumber(node->getValue());
+		return instanceBuilder->buildFloat( node->getValue() );
+	}
+	else if (node->getTypeId() == t_string)
+	{
+		return instanceBuilder->buildString( node->getValue() );
 	}
 	else if (node->getTypeId() == t_op_plus)
 	{
-		return add( 
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+			executeOperator( node->child(0) ),
+			ADD_METH_NAME,
+			(new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_op_minus)
 	{
-		return subtract(
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        SUBTRACT_METH_NAME,
+			(new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_op_times)
 	{
-		return multiply(
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        MULTIPLY_METH_NAME,
+                        (new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_op_divide)
 	{
-		return divide(
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        DIVIDE_METH_NAME,
+			(new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_op_modulus)
 	{
-		return mod(
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        MODULUS_METH_NAME,
+                        (new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_op_pow)
 	{
-		return power(
-			executeMathOperator( node->child(0) ),
-			executeMathOperator( node->child(1) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        POWER_METH_NAME,
+                        (new BfParams())->addParam( executeOperator( node->child(1) ) ));
 	}
 	else if (node->getTypeId() == t_neg)
 	{
-		return negateNum(
-			executeMathOperator( node->child(0) ) );
+		return tryPerformCall(
+                        executeOperator( node->child(0) ),
+                        NEGATE_METH_NAME,
+                        new BfParams() );
 	}
 	else if (node->getTypeId() == t_paran_begin && node->numChildren() == 1)
 	{
-		return executeMathOperator( node->child(0) );
+		return executeOperator( node->child(0) );
 	}
 	else if (node->getTypeId() == t_identifier)
 	{
 		if ( currentScope->containsIdentifier( node->getValue() ) )
 		{
-			return currentScope->getObjectByIdentifier( node->getValue() )->getNumericValue();
+			return currentScope->getObjectByIdentifier( node->getValue() );
 		}
 		else
 		{
 			// TODO: Error here, when looking up an identifier that does not exist
 		}
 	}
+}
+
+BfObject * BfExecutor::tryPerformCall(BfObject * obj, string methodName, BfParams * params)
+{
+	BfClass * objectsClass = obj->getDefiningClass();
+
+	if (!objectsClass->containsMethod(methodName))
+	{
+		// TODO: Error here
+		executorError( "Method: " + methodName + " not defined for " + objectsClass->getTypeName() );
+	}
+
+	return obj->getDefiningClass()->provideSelf(obj)->callMethod( methodName, params );
 }
 
 void executorError(string message)
