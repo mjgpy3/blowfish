@@ -16,18 +16,83 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include "bfnumber.h"
 #include "bfprimclasses.h"
+#include "specialmethodnames.h"
+using namespace std;
 
 #ifndef BLOWFISH_PRIMITIVE_CLASS_DETAILS
 #define BLOWFISH_PRIMITIVE_CLASS_DETAILS
 
-BfClass NUMBER_CLASS( "Number" );
+BfObject * numericMathOperation( BfNumber * (*mathOp)(BfNumber*, BfNumber*), BfObject * op1, BfObject * op2 )
+{
+	BfObject * result = new BfObject();
+
+        result->setNumericValue(
+                mathOp(
+			op1->getNumericValue(),
+                     	op2->getNumericValue() ) );
+
+        return result;
+}
+
+BfObject * numberClassAdd( BfParams * params )
+{
+	return numericMathOperation( add, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassSubtract( BfParams * params )
+{
+	return numericMathOperation( subtract, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassMultiply( BfParams * params )
+{
+	return numericMathOperation( multiply, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassDivide( BfParams * params )
+{
+	return numericMathOperation( divide, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassModulus( BfParams * params )
+{
+	return numericMathOperation( mod, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassPower( BfParams * params )
+{
+	return numericMathOperation( power, params->getParam( 0 ), params->getParam( 1 ) );
+}
+BfObject * numberClassNegate( BfParams * params )
+{
+	BfObject * result = new BfObject();
+	
+	result->setNumericValue( negateNum( params->getParam( 0 )->getNumericValue() ) );
+
+	return result;
+}
+
+// Blowfish number class
+BfClass * NUMBER_CLASS = new BfClass( "Number" );
+
+void defineNumberClass()
+{
+	NUMBER_CLASS->addClassMethod( ADD_METH_NAME, new BfMethod( numberClassAdd ) );
+	NUMBER_CLASS->addClassMethod( SUBTRACT_METH_NAME, new BfMethod( numberClassSubtract ) );
+	NUMBER_CLASS->addClassMethod( MULTIPLY_METH_NAME, new BfMethod( numberClassMultiply ) );
+	NUMBER_CLASS->addClassMethod( DIVIDE_METH_NAME, new BfMethod( numberClassDivide ) );
+	NUMBER_CLASS->addClassMethod( MODULUS_METH_NAME, new BfMethod( numberClassModulus ) );
+	NUMBER_CLASS->addClassMethod( POWER_METH_NAME, new BfMethod( numberClassPower ) );
+	NUMBER_CLASS->addClassMethod( NEGATE_METH_NAME, new BfMethod( numberClassNegate ) );
+}
+
+bool NUMBER_DEFINED = false;
 
 #endif
 
-extern BfClass Number;
-
 BfClass * getNumberClass()
 {
-	return &NUMBER_CLASS;
+	if (!NUMBER_DEFINED)
+	{
+		defineNumberClass();
+		NUMBER_DEFINED = true;
+	}
+	return NUMBER_CLASS;
 }
