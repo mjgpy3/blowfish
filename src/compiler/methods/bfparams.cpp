@@ -16,35 +16,19 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef BLOWFISH_METHOD
-#define BLOWFISH_METHOD
+#include "bfparams.h"
 
-#include <string>
-#include "bfnodes.h"
-#include "bfclass.h"
-using namespace std;
-
-class BfNode;
-class BfObject;
-
-class BfMethod
+BfObject * BfParams::getParam( int index )
 {
-public:
-	static string calculateSigniture( BfNode * node ); 
-	static string getSignitureSeparator() { return "$"; }
+	return params[index];
+}
 
-	BfMethod( BfNode * methodBody );
-	// TODO: "callable" should accept BfParams (whatever those look like)
-	BfMethod( BfObject* (*callable)(void) );
-	BfMethod( void (*callable)(void) );
+void BfParams::addParam( BfObject * param )
+{
+	params.push_back( param );
+}
 
-	// TODO: Add a "provide parameters" method
-	// TODO: Add a "call" method
-	
-private:
-	BfNode * body;
-	BfObject* (*apiFunction)(void);
-};
-
-
-#endif
+int BfParams::count()
+{
+	return params.size();
+}
