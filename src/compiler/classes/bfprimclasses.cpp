@@ -78,6 +78,14 @@ BfObject * numberClassNegate( BfParams * params )
 
 	return result;
 }
+BfObject * numberClassShow( BfParams * params )
+{
+	BfObject * result = STRING_CLASS->getNewInstance();
+
+	result->setStringValue( new BfStringValue( params->getParam(0)->getNumericValue()->toString() ) );
+
+	return result;
+}
 
 void defineNumberClass()
 {
@@ -88,6 +96,7 @@ void defineNumberClass()
 	NUMBER_CLASS->addClassMethod( MODULUS_METH_NAME, new BfMethod( numberClassModulus ) );
 	NUMBER_CLASS->addClassMethod( POWER_METH_NAME, new BfMethod( numberClassPower ) );
 	NUMBER_CLASS->addClassMethod( NEGATE_METH_NAME, new BfMethod( numberClassNegate ) );
+	NUMBER_CLASS->addClassMethod( "show", new BfMethod( numberClassShow ) );
 }
 
 bool NUMBER_DEFINED = false;

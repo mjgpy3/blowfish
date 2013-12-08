@@ -54,6 +54,7 @@ private:
 	vector<BfScopeNode*> scopeStack;
 	BfScopeNode * nextScope;
 	bool nextIdentifierNamesScope;
+	bool nextNewlineJumpsUp;
 	bool isMissInformedFloat(vector<FoundToken> tokens, int i);
 };
 

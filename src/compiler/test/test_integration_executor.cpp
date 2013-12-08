@@ -271,7 +271,7 @@ void given_some_code_describing_a_show_method_being_called_on_a_number_when_that
         executor.executeAst( ast );
 
         // Then
-        tester.assertEqual( "String", executor.currentScope->getObjectByIdentifier( "a_string" )->getTypeName(),"Calling a type converting method works");
+        tester.assertEqual( "String", executor.currentScope->getObjectByIdentifier( "a_string" )->getTypeName(), "Calling a type converting method works");
 }
 
 int main()

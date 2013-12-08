@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include "bfliteraltypes.h"
 #include "bfnumber.h"
@@ -67,6 +68,20 @@ void BfIntegerNumber::setFromString(string value)
                 underInt *= 10;
                 underInt += int(value[i]) - 48;
         }
+}
+
+string BfFloatNumber::toString()
+{
+	ostringstream ss;
+	ss << underFloat;
+	return ss.str();
+}
+
+string BfIntegerNumber::toString()
+{
+	ostringstream ss;
+	ss << underInt;
+	return ss.str();
 }
 
 void BfFloatNumber::setFromString(string value)

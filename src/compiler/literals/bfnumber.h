@@ -31,6 +31,7 @@ public:
 	virtual void setFromString(string value) = 0;
 	virtual long long getInt() = 0;
 	virtual double getFloat() = 0;
+	virtual string toString() = 0;
 	void setNumType(LiteralType type);
 	double underFloat;
 	long long underInt;
@@ -61,6 +62,7 @@ public:
 	long long getInt();
 	double getFloat();
 	void setFromString(string value);
+	string toString();
 };
 
 class BfFloatNumber : public BfNumber
@@ -80,6 +82,7 @@ public:
 	long long getInt();
 	double getFloat();
 	void setFromString(string value);
+	string toString();
 };
 
 int numLength(long long a);

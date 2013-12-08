@@ -39,18 +39,27 @@ AstBuilder::AstBuilder()
 
 	nextScope = new BfScopeNode();
 	nextIdentifierNamesScope = false;
+	nextNewlineJumpsUp = false;
 }
 
 void AstBuilder::fixFloatErrors(vector<FoundToken> tokens, int i)
 {
-	Token newToken;
-	newToken.type = tokens[i].getTokenValue() == t_float ? t_integer : t_neg_integer;
+	Token newIntToken;
+	Token newDotToken;
+	newIntToken.type = tokens[i].getTokenValue() == t_float ? t_integer : t_neg_integer;
+	newDotToken.type = t_op_dot;
 
 	string value  = tokens[i].getValue().substr(0, tokens[i].getValue().length()-1);
 	
-	FoundToken newIntToken = FoundToken(newToken, value);
+	FoundToken intTokToBuild = FoundToken(newIntToken, value);
+	FoundToken dotTokToBuild = FoundToken(newDotToken, "");
 
-	buildNode(newIntToken);
+	current->appendChild( new BfExpression() );
+	moveToCurrentChild();
+
+	buildNode(intTokToBuild);
+	buildNode(dotTokToBuild);
+	nextNewlineJumpsUp = true;
 }
 
 bool AstBuilder::isMissInformedFloat(vector<FoundToken> tokens, int i)
@@ -187,6 +196,16 @@ void AstBuilder::buildNode(FoundToken tok)
 		 ignoreNewlineStack.size() == 0 &&
 		 lastToken != t_line_ending)
 	{
+		if (nextNewlineJumpsUp)
+		{
+			moveToParent();
+			while (!current->canHoldMoreChildren())
+		        {
+               			 moveToParent();
+        		}
+
+			nextNewlineJumpsUp = false;
+		}
                 attachChild(new BfNewline());
 	}
 	else if (currentToken != t_line_ending)

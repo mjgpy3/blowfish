@@ -76,8 +76,6 @@ string BfExecutor::getIdentifierName( BfNode * node )
 
 BfObject * BfExecutor::executeOperator(BfNode * node)
 {
-	//cout << "Executing " << node->toString() << endl;
-
 	if (node->getTypeId() == t_integer)
 	{
 		return instanceBuilder->buildInteger( node->getValue() );
@@ -142,6 +140,16 @@ BfObject * BfExecutor::executeOperator(BfNode * node)
 	else if (node->getTypeId() == t_paran_begin && node->numChildren() == 1)
 	{
 		return executeOperator( node->child(0) );
+	}
+	else if (node->getTypeId() == t_paran_begin && node->numChildren() == 3)
+	{
+		if (node->child(1)->getTypeId() == t_op_dot)
+		{
+			return tryPerformCall(
+				executeOperator( node->child( 0 ) ),
+				node->child(2)->getValue(),
+				new BfParams() );
+		}
 	}
 	else if (node->getTypeId() == t_identifier)
 	{
