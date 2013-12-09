@@ -69,6 +69,8 @@ BfObject * BfClass::callMethod( string methodName, BfParams * params )
 	{
 		return methods[methodName]->provideParams(params)->call();
 	}
+	// TODO: Really consider whether this is what you want to do
+	selfObject = NULL;
 
 	return methods[methodName]->provideParams(params->selfAs( selfObject ))->call();
 }
